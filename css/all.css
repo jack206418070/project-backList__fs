@@ -1,0 +1,327 @@
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  background-color: lightblue;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 80px;
+}
+
+.container-lg {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px 80px;
+}
+
+.login {
+  margin-top: 200px;
+}
+
+.login .btn-login {
+  width: 40%;
+  background-color: green;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.form-control {
+  width: 30%;
+  margin: 0 auto;
+}
+
+.form-control label {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.form-control input {
+  width: 100%;
+  padding: 5px 3px 5px 3px;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.list .add {
+  display: block;
+  padding: 6px 20px;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  width: 15%;
+  font-weight: bold;
+  margin-right: 0;
+  margin-left: auto;
+  margin-bottom: 20px;
+}
+
+.list .add:hover {
+  opacity: 0.6;
+}
+
+.list li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-bottom: 1px solid black;
+  padding: 5px 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.list li .type {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.list li .date, .list li .name, .list li .carId, .list li .staging, .list li .money, .list li .dieLine, .list li .month, .list li .extra, .list li .lineId {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 8%;
+          flex: 0 0 8%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.list li .btn-control {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 15%;
+          flex: 0 0 15%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.list li .phone {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 10%;
+          flex: 0 0 10%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.list li .type {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 5%;
+          flex: 0 0 5%;
+  padding: 0 3px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.list li .btn-control {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.list li .btn-control .edit {
+  background-color: green;
+  margin-right: 3px;
+}
+
+.list li .btn-control .delete {
+  background-color: red;
+}
+
+.list li .btn-control .edit, .list li .btn-control .delete {
+  color: white;
+  font-weight: bold;
+  display: block;
+  padding: 6px 15px;
+}
+
+.list li .btn-control .edit:hover, .list li .btn-control .delete:hover {
+  opacity: 0.7;
+}
+
+.add-modal, .edit-modal {
+  position: absolute;
+  width: 50%;
+  top: -200%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  background-color: #ddd;
+  padding-bottom: 20px;
+  z-index: -1;
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.add-modal.show, .edit-modal.show {
+  z-index: 100;
+  top: 10%;
+}
+
+.add-modal .title, .edit-modal .title {
+  text-align: center;
+  padding: 10px 0;
+  background-color: blue;
+  color: white;
+}
+
+.add-modal .content, .edit-modal .content {
+  padding: 10px 20px;
+}
+
+.add-modal .form-group, .edit-modal .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.add-modal .form-control, .edit-modal .form-control {
+  margin: 0;
+}
+
+.add-modal label, .edit-modal label {
+  font-size: 16px;
+}
+
+.add-modal input, .edit-modal input {
+  padding: 0;
+  font-size: 16px;
+  padding: 3px;
+}
+
+.add-modal .type input, .edit-modal .type input {
+  display: inline-block;
+  width: 20%;
+}
+
+.add-modal textarea, .edit-modal textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.add-modal .btn-group, .edit-modal .btn-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 20px;
+}
+
+.add-modal .btn-group .add, .add-modal .btn-group .close, .edit-modal .btn-group .add, .edit-modal .btn-group .close {
+  width: 15%;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+.add-modal .btn-group .add:hover, .add-modal .btn-group .close:hover, .edit-modal .btn-group .add:hover, .edit-modal .btn-group .close:hover {
+  opacity: 0.7;
+}
+
+.add-modal .btn-group .add, .edit-modal .btn-group .add {
+  background-color: green;
+}
+
+.add-modal .btn-group .close, .edit-modal .btn-group .close {
+  background-color: red;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.delete-modal {
+  position: absolute;
+  width: 40%;
+  top: -200%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: #ccc;
+  z-index: -1;
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.delete-modal.show {
+  z-index: 100;
+  top: 20%;
+}
+
+.delete-modal .title {
+  background-color: red;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  padding: 4px 0;
+}
+
+.delete-modal .content {
+  padding: 20px;
+}
+
+.delete-modal .content p {
+  letter-spacing: 3px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.delete-modal .content .btn-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 20px;
+}
+
+.delete-modal .content .btn-group .close, .delete-modal .content .btn-group .delete {
+  display: block;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px 8px;
+  width: 20%;
+}
+
+.delete-modal .content .btn-group .close:hover, .delete-modal .content .btn-group .delete:hover {
+  opacity: 0.7;
+}
+
+.delete-modal .content .btn-group .close {
+  background-color: green;
+}
+
+.delete-modal .content .btn-group .delete {
+  background-color: red;
+}
+/*# sourceMappingURL=all.css.map */

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理頁面</title>
+    <link rel="stylesheet" href="./css/all.css" class="css">
+</head>
+<body>
+    <div id="app">
+        <div class="container-lg">
+            <div class="list">
+                <div class="add__list">
+                    <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {}">新增訂單</a>
+                </div>
+                <ul>
+                    <li>
+                        <div class="date">日期</div>
+                        <div class="name">姓名</div>
+                        <div class="carId">車牌</div>
+                        <div class="phone">電話</div>
+                        <div class="lineId">LINE</div>
+                        <div class="type">
+                            <p>汽</p>
+                            <p>機</p>
+                        </div>
+                        <div class="staging">期數</div>
+                        <div class="money">貸款金額</div>
+                        <div class="dieLine">應繳日</div>
+                        <div class="month">月付款</div>
+                        <div class="extra">備註</div>
+                        <div class="btn-control">編輯 / 刪除</div>
+                    </li>
+                    <li v-for="item in orderList" :key="item.id">
+                        <div class="date">{{ item.date }}</div>
+                        <div class="name">{{ item.name }}</div>
+                        <div class="carId">{{ item.carId }}</div>
+                        <div class="phone">{{ item.phone }}</div>
+                        <div class="lineId">{{ item.lineId }}</div>
+                        <div class="type">
+                            <p>{{ item.type == '汽' ? 'V' : ''}}</p>
+                            <p>{{ item.type == '機' ? 'V' : ''}}</p>
+                        </div>
+                        <div class="staging">{{ item.staging }}</div>
+                        <div class="money">{{ item.money }}</div>
+                        <div class="dieLine">{{ item.dieLine }}</div>
+                        <div class="month">{{ item.month }}</div>
+                        <div class="extra">{{ item.extra }}</div>
+                        <div class="btn-control">
+                            <a class="edit" href="#" @click.prevent="modalControl.is_edit = true; tempOrderList = {...item}">編輯</a>
+                            <a class="delete" href="#" @click.prevent="modalControl.is_delete = true; tempOrderList = {...item}">刪除</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+    
+        <div class="add-modal" :class="{'show': modalControl.is_add === true}">
+            <div class="title">
+                <h2>新增訂單</h2>
+            </div>
+            <div class="content">
+                <form action="#">
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="date">日期</label>
+                            <input type="text" id="date" v-model="tempOrderList.date">
+                        </div>
+                        <div class="form-control">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" v-model = "tempOrderList.name">
+                        </div>
+                        <div class="form-control">
+                            <label for="carId">車牌</label>
+                            <input type="text" id="carId" v-model = "tempOrderList.carId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="phone">電話</label>
+                            <input type="phone" id="phone" v-model="tempOrderList.phone">
+                            <label for="line">LineID</label>
+                            <input type="text" id="line" v-model = "tempOrderList.lineId">
+                        </div>
+                        <div class="form-control type">
+                            <label for="type">分期類別</label>
+                            汽<input type="radio" value="汽" v-model="tempOrderList.type">
+                            機<input type="radio" value="機" v-model="tempOrderList.type">
+                        </div>
+                        <div class="form-control">
+                            <label for="staging">期數</label>
+                            <input type="text" id="staging" v-model = "tempOrderList.staging">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="money">貸款金額</label>
+                            <input type="text" id="money" v-model = "tempOrderList.money">
+                        </div>
+                        <div class="form-control">
+                            <label for="dieLine">應繳日</label>
+                            <input type="text" id="dieLine" v-model = "tempOrderList.dieLine">
+                        </div>
+                        <div class="form-control">
+                            <label for="month">月付款</label>
+                            <input type="number" id="month" v-model = "tempOrderList.month">
+                        </div>
+                    </div>
+                    <div class="form-control w-100">
+                        <label for="extra">備註</label>
+                        <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <a class="close" href="#" @click.prevent="modalControl.is_add = false; tempOrderList = {}">取消</a>
+                        <a class="add" href="#" @click.prevent="add">增加訂單</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+        <div class="edit-modal" :class="{'show': modalControl.is_edit === true}">
+            <div class="title">
+                <h2>修改訂單</h2>
+            </div>
+            <div class="content">
+                <form action="#">
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="date">日期</label>
+                            <input type="text" id="date" v-model = "tempOrderList.date">
+                        </div>
+                        <div class="form-control">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" v-model = "tempOrderList.name">
+                        </div>
+                        <div class="form-control">
+                            <label for="carId">車牌</label>
+                            <input type="text" id="carId" v-model = "tempOrderList.carId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="phone">電話</label>
+                            <input type="phone" id="phone" v-model="tempOrderList.phone">
+                            <label for="line">LineID</label>
+                            <input type="text" id="line" v-model= "tempOrderList.lineId">
+                        </div>
+                        <div class="form-control type">
+                            <label for="type">分期類別</label>
+                            汽<input type="radio" v-model="tempOrderList.type" value="汽" :checked="tempOrderList.type === '汽'">
+                            機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'">
+                        </div>
+                        <div class="form-control">
+                            <label for="staging">期數</label>
+                            <input type="text" id="staging" v-model = "tempOrderList.staging">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-control">
+                            <label for="money">貸款金額</label>
+                            <input type="text" id="money" v-model = "tempOrderList.money">
+                        </div>
+                        <div class="form-control">
+                            <label for="dieLine">應繳日</label>
+                            <input type="text" id="dieLine" v-model = "tempOrderList.dieLine">
+                        </div>
+                        <div class="form-control">
+                            <label for="month">月付款</label>
+                            <input type="number" id="month" v-model="tempOrderList.month">
+                        </div>
+                    </div>
+                    <div class="form-control w-100">
+                        <label for="extra">備註</label>
+                        <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <a class="close" href="#" @click="modalControl.is_edit = false; tempOrderList = {}">取消</a>
+                        <a class="add" href="#" @click.prevent="editOrder">修改訂單</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+        <div class="delete-modal" :class="{'show': modalControl.is_delete === true}">
+            <div class="title">
+                <h3>刪除訂單</h3>
+            </div>
+            <div class="content">
+                <p>確定要刪除  <span style="color: red">{{ tempOrderList.name }} 的 {{ tempOrderList.carId }}</span> 訂單嗎 ？</p>
+                <div class="btn-group">
+                    <a class="close"  href="#" @click.prevent="modalControl.is_delete = false; tempOrderList = {}">取消</a>
+                    <a class="delete" href="#" @click.prevent="deleteOrder">確定刪除</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+
+
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
+            authDomain: "project-list-1bd84.firebaseapp.com",
+            projectId: "project-list-1bd84",
+            storageBucket: "project-list-1bd84.appspot.com",
+            messagingSenderId: "636865072797",
+            appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
+        });
+        const db = firebase.firestore();
+        const app = Vue.createApp({
+            data(){
+                return{
+                    orderList:[],
+                    uid: '',
+                    displayName: '',
+                    tempOrderList: {},
+                    modalControl:{
+                        is_edit: false,
+                        is_add: false,
+                        is_delete: false
+                    }
+                }
+            },
+            methods:{
+                async getOrderList(){
+                    this.orderList = [];
+                    if(this.displayName !== '管理'){
+                            // 員工
+                            let data = await db.collection('MEMBER').doc(this.uid).collection('order').get();
+                            data.forEach( item => {
+                                this.orderList.push({
+                                    ...item.data(),
+                                    id: item.id
+                                })
+                            })
+                        }else{
+                            // 管理
+                            let data = await db.collection('ORDER').get();
+                            data.forEach( item => {
+                                this.orderList.push({
+                                    ...item.data(),
+                                    id: item.id
+                                })
+                            })
+                    }
+                },
+                checkLogin(){
+                    if(localStorage.getItem("cookie")){
+                        let {uid, displayName} = JSON.parse(localStorage.getItem("cookie"));
+                        this.uid = uid;
+                        this.displayName = displayName;
+                        this.getOrderList();
+                    }else{
+                        console.log('驗證失敗');
+                        window.location = './index.html'
+                    }
+                },
+                editOrder(){
+                    db.collection('MEMBER').doc(this.uid).collection('order').doc(this.tempOrderList.oId).set({
+                        ...this.tempOrderList
+                    });
+                    db.collection('ORDER').doc(this.tempOrderList.oId).set({
+                        ...this.tempOrderList
+                    });
+                    this.modalControl.is_edit = false;
+                    this.tempOrderList = {};
+                    this.getOrderList();
+                    
+                },
+                deleteOrder(){
+                    db.collection('MEMBER').doc(this.uid).collection('order').doc(this.tempOrderList.oId).delete();
+                    db.collection('ORDER').doc(this.tempOrderList.oId).delete();
+                    this.modalControl.is_delete = false;
+                    this.tempOrderList = {};
+                    this.getOrderList();
+                },
+                async add(){
+                    console.log(this.tempOrderList);
+                    let data = await db.collection('ORDER').get();
+                    let length = data.docs.length + 1;
+                    db.collection('ORDER').doc(`o${length}`).set({
+                        ...this.tempOrderList,
+                        oId: `o${length}`
+                    })
+                    db.collection('MEMBER').doc(this.uid).collection('order').doc(`o${length}`).set({
+                        ...this.tempOrderList,
+                        oId: `o${length}`
+                    })
+
+                    this.tempOrderList = {};
+                    this.modalControl.is_add = false;
+
+                    this.getOrderList();
+                }
+                
+            },
+            mounted(){
+                this.checkLogin();
+            }
+        })
+        app.mount('#app');
+
+    </script>
+</body>
+</html>
