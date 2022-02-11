@@ -60,7 +60,16 @@ body {
   font-size: 20px;
 }
 
-.list .add {
+.list .add__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.list .add__list .add {
   display: block;
   padding: 6px 20px;
   background-color: blue;
@@ -68,12 +77,10 @@ body {
   text-align: center;
   width: 15%;
   font-weight: bold;
-  margin-right: 0;
-  margin-left: auto;
   margin-bottom: 20px;
 }
 
-.list .add:hover {
+.list .add__list .add:hover {
   opacity: 0.6;
 }
 
@@ -322,6 +329,82 @@ body {
 }
 
 .delete-modal .content .btn-group .delete {
+  background-color: red;
+}
+
+.add-member {
+  position: absolute;
+  width: 50%;
+  top: -200%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding-bottom: 20px;
+  z-index: -10;
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.add-member.show {
+  top: 30%;
+  z-index: 100;
+}
+
+.add-member .title {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.add-member form {
+  padding: 20px 0;
+}
+
+.add-member .form-control {
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 0 70px;
+}
+
+.add-member .form-control label {
+  display: inline;
+  width: 20%;
+}
+
+.add-member .form-control input {
+  display: inline-block;
+  width: 80%;
+}
+
+.add-member .btn-group {
+  padding: 0 60px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.add-member .btn-group a {
+  display: block;
+  padding: 8px 20px;
+  color: white;
+}
+
+.add-member .btn-group a:hover {
+  opacity: .7;
+}
+
+.add-member .btn-group .add {
+  background-color: orange;
+}
+
+.add-member .btn-group .close {
   background-color: red;
 }
 /*# sourceMappingURL=all.css.map */

@@ -56,19 +56,21 @@ body{
 
 
 .list{
-    .add{
-        display: block;
-        padding: 6px 20px;
-        background-color: blue;
-        color: white;
-        text-align: center;
-        width: 15%;
-        font-weight: bold;
-        margin-right: 0;
-        margin-left: auto;
-        margin-bottom: 20px;
-        &:hover{
-            opacity: 0.6;
+    .add__list{
+        display: flex;
+        justify-content: space-between;
+        .add{
+            display: block;
+            padding: 6px 20px;
+            background-color: blue;
+            color: white;
+            text-align: center;
+            width: 15%;
+            font-weight: bold;
+            margin-bottom: 20px;
+            &:hover{
+                opacity: 0.6;
+            }
         }
     }
     li{
@@ -251,6 +253,65 @@ body{
                 background-color: red;
             }
 
+        }
+    }
+}
+
+.add-member{
+    position: absolute;
+    width: 50%;
+    top: -200%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding-bottom: 20px;
+    z-index: -10;
+    transition: .5s;
+    &.show{
+        top: 30%;
+        z-index: 100;
+    }
+    .title{
+        background-color: orange;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        font-size: 24px;
+        padding: 10px 0;
+    }
+    form{
+        padding: 20px 0;
+    }
+    .form-control{
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 0 70px;
+        label{
+            display: inline;
+            width: 20%;
+        }
+        input{
+            display: inline-block;
+            width: 80%;
+        }
+    }
+    .btn-group{
+        padding: 0 60px;
+        display: flex;
+        justify-content: space-between;
+        a{
+            display: block;
+            padding: 8px 20px;
+            color: white;
+            &:hover{
+                opacity: .7;
+            }
+        }
+        .add{
+            background-color: orange;
+        }
+        .close{
+            background-color: red;
         }
     }
 }

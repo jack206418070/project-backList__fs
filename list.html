@@ -12,6 +12,7 @@
         <div class="container-lg">
             <div class="list">
                 <div class="add__list">
+                    <a v-if="displayName === '管理'" class="add" href="#" @click.prevent="modalControl.is_add_member = true">增加員工帳號</a>
                     <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {}">新增訂單</a>
                 </div>
                 <ul>
@@ -55,7 +56,25 @@
                 </ul>
             </div>
         </div>
-    
+        <div class="add-member" v-if="displayName === '管理' && modalControl.is_add_member === true" :class="{'show': modalControl.is_add_member === true}">
+            <div class="title">
+                <h3>新增員工帳號</h3>
+            </div>
+            <form action="#">
+                <div class="form-control">
+                    <label for="account">新增帳號</label>
+                    <input type="text" v-model="member.account">
+                </div>
+                <div class="form-control">
+                    <label for="password">新增密碼</label>
+                    <input type="text" v-model="member.password">
+                </div>
+            </form>
+            <div class="btn-group">
+                <a class="add" href="#" @click.prevent="modalControl.is_add_member = false; member={}">取消</a>
+                <a class="close" href="#" @click.prevent="addMember">新增</a>
+            </div>
+        </div>
     
         <div class="add-modal" :class="{'show': modalControl.is_add === true}">
             <div class="title">
@@ -223,8 +242,13 @@
                     modalControl:{
                         is_edit: false,
                         is_add: false,
-                        is_delete: false
-                    }
+                        is_delete: false,
+                        is_add_member: false
+                    },
+                    member:{
+                        account: '',
+                        password: '',
+                    },
                 }
             },
             methods:{
@@ -257,7 +281,7 @@
                         this.displayName = displayName;
                         this.getOrderList();
                     }else{
-                        console.log('驗證失敗');
+                        alert('驗證失敗');
                         window.location = './index.html'
                     }
                 },
@@ -280,23 +304,38 @@
                     this.tempOrderList = {};
                     this.getOrderList();
                 },
-                async add(){
-                    console.log(this.tempOrderList);
-                    let data = await db.collection('ORDER').get();
-                    let length = data.docs.length + 1;
-                    db.collection('ORDER').doc(`o${length}`).set({
+                add(){
+                    let id = "" + new Date().getTime();
+                    db.collection('ORDER').doc(id).set({
                         ...this.tempOrderList,
-                        oId: `o${length}`
+                        oId: id
                     })
-                    db.collection('MEMBER').doc(this.uid).collection('order').doc(`o${length}`).set({
+                    db.collection('MEMBER').doc(this.uid).collection('order').doc(id).set({
                         ...this.tempOrderList,
-                        oId: `o${length}`
+                        oId: id
                     })
 
                     this.tempOrderList = {};
                     this.modalControl.is_add = false;
 
                     this.getOrderList();
+                },
+                addMember(){
+                    firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
+                    .then((res) => {
+                        let data = {
+                            account: res.user.email,
+                            displayName: '員工',
+                            uid: res.user.uid
+                        }
+                        db.collection('MEMBER').doc(res.user.uid).set(data);
+                        this.member = {};
+                        this.modalControl.is_add_member = false;
+                    })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                    }); 
                 }
                 
             },
