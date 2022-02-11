@@ -22,7 +22,7 @@
                         <input type="password" id="password" v-model="password">
                     </div>
                     <div class="form-control">
-                        <a class="btn-login" href="#" @click.prevent="signin">登入</a>
+                        <button class="btn-login" href="#" @keyup.enter="signin" @click.prevent="signin">登入</button>
                     </div>
                 </form>
             </div>
