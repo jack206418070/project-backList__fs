@@ -363,7 +363,7 @@ body {
 }
 
 .add-member.show {
-  top: 30%;
+  top: 50%;
   z-index: 100;
 }
 
@@ -380,10 +380,46 @@ body {
   padding: 20px 0;
 }
 
+.add-member .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 20px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.add-member .form-group .form-control {
+  width: 33%;
+  padding: 0 10px;
+}
+
+.add-member .form-group .form-control input {
+  width: 100%;
+}
+
+.add-member .form-group .form-control textarea {
+  padding: 10px;
+  font-size: 20px;
+}
+
+.add-member .form-group .form-control select {
+  width: 100%;
+  display: block;
+  padding: 8px 0;
+  font-size: 20px;
+}
+
 .add-member .form-control {
   margin-bottom: 20px;
   width: 100%;
   padding: 0 70px;
+  margin: 0;
+  margin-bottom: 10px;
 }
 
 .add-member .form-control label {
@@ -422,5 +458,52 @@ body {
 
 .add-member .btn-group .close {
   background-color: red;
+}
+
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.jy-content-between {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.align-items-center {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header {
+  background-color: #fff;
+}
+
+.header .container-lg {
+  padding: 10px 40px;
+}
+
+.menu a {
+  display: block;
+  padding: 8px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+
+.menu a:hover {
+  color: blue;
+}
+
+.account-list li div {
+  -webkit-box-flex: 0 !important;
+      -ms-flex: 0 0 14% !important;
+          flex: 0 0 14% !important;
+  text-align: center;
+  font-weight: bold;
 }
 /*# sourceMappingURL=all.css.map */

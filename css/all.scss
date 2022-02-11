@@ -285,7 +285,7 @@ body{
     z-index: -10;
     transition: .5s;
     &.show{
-        top: 30%;
+        top: 50%;
         z-index: 100;
     }
     .title{
@@ -299,10 +299,37 @@ body{
     form{
         padding: 20px 0;
     }
+
+    .form-group{
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        justify-content: space-between;
+        .form-control{
+            width: 33%;
+            padding: 0 10px;
+            input{
+                width: 100%;
+            }
+            textarea{
+                padding: 10px;
+                font-size: 20px;
+            }
+            select{
+                width: 100%;
+                display: block;
+                padding: 8px 0;
+                font-size: 20px;
+            }
+        }
+    }
+
     .form-control{
         margin-bottom: 20px;
         width: 100%;
         padding: 0 70px;
+        margin: 0;
+        margin-bottom: 10px;
         label{
             display: inline;
             width: 20%;
@@ -329,6 +356,47 @@ body{
         }
         .close{
             background-color: red;
+        }
+    }
+}
+
+.d-flex{
+    display: flex;
+}
+.jy-content-between{
+    justify-content: space-between;
+}
+.align-items-center{
+    align-items: center;
+}
+
+.header{
+    background-color: #fff;
+    .container-lg{
+        padding: 10px 40px;
+    }
+}
+
+.menu{
+    a{
+        display: block;
+        padding: 8px 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+        cursor: pointer;
+        &:hover{
+            color: blue;
+        }
+    }
+}
+
+.account-list{
+    li{
+        div{
+            flex: 0 0 14% !important;
+            text-align: center;
+            font-weight: bold;
         }
     }
 }
