@@ -286,7 +286,7 @@
                     }
                 },
                 editOrder(){
-                    db.collection('MEMBER').doc(this.uid).collection('order').doc(this.tempOrderList.oId).set({
+                    db.collection('MEMBER').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList
                     });
                     db.collection('ORDER').doc(this.tempOrderList.oId).set({
@@ -298,7 +298,7 @@
                     
                 },
                 deleteOrder(){
-                    db.collection('MEMBER').doc(this.uid).collection('order').doc(this.tempOrderList.oId).delete();
+                    db.collection('MEMBER').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
                     db.collection('ORDER').doc(this.tempOrderList.oId).delete();
                     this.modalControl.is_delete = false;
                     this.tempOrderList = {};
@@ -308,11 +308,13 @@
                     let id = "" + new Date().getTime();
                     db.collection('ORDER').doc(id).set({
                         ...this.tempOrderList,
-                        oId: id
+                        oId: id,
+                        uId: this.uid
                     })
                     db.collection('MEMBER').doc(this.uid).collection('order').doc(id).set({
                         ...this.tempOrderList,
-                        oId: id
+                        oId: id,
+                        uId: this.uid
                     })
 
                     this.tempOrderList = {};
