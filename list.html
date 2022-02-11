@@ -9,14 +9,14 @@
 </head>
 <body>
     <div id="app">
-        <div class="header" v-if="displayName === '管理'">
+        <div class="header">
             <div class="container-lg d-flex jy-content-between align-items-center">
                 <div class="logo">
                     <h1>LOGO</h1>
                 </div>
                 <div class="menu">
                     <ul class="d-flex">
-                        <li>
+                        <li v-if="displayName === '管理'">
                             <a class="account-control" href="./admin.html">帳號管理</a>
                         </li>
                         <li>
