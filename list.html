@@ -32,7 +32,18 @@
         <div class="container-lg">
             <div class="list">
                 <div class="add__list">
-                    <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {}">新增訂單</a>
+                    <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12'}">新增訂單</a>
+                    <div class="search">
+                        <select name="search" id="search" v-model="search.staging">
+                            <option value="全部訂單" selected>全部訂單</option>
+                            <option value="期數大於">期數大於</option>
+                            <option value="期數小於">期數小於</option>
+                            <option value="期數等於">期數等於</option>
+                        </select>
+                        <input type="text" v-model="search.search_text">
+                        <a class="search-btn" href="#" 
+                        @click.prevent="searchBtn(search.staging,search.search_text)">搜尋</a>
+                    </div>
                 </div>
                 <ul>
                     <li>
@@ -62,7 +73,7 @@
                             <p>{{ item.type == '汽' ? 'V' : ''}}</p>
                             <p>{{ item.type == '機' ? 'V' : ''}}</p>
                         </div>
-                        <div class="staging">{{ item.staging }}</div>
+                        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
                         <div class="money">{{ item.money }}</div>
                         <div class="dieLine">{{ item.dieLine }}</div>
                         <div class="month">{{ item.month }}</div>
@@ -109,8 +120,20 @@
                             機<input type="radio" value="機" v-model="tempOrderList.type">
                         </div>
                         <div class="form-control">
-                            <label for="staging">期數</label>
-                            <input type="text" id="staging" v-model = "tempOrderList.staging">
+                            <label for="staging_number">已繳期數</label>
+                            <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
+                            <label for="staging.allNumber">總期數</label>
+                            <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
+                                <option value="12" selected>12期</option>
+                                <option value="18">18期</option>
+                                <option value="24">24期</option>
+                                <option value="36">36期</option>
+                                <option value="48">48期</option>
+                                <option value="54">54期</option>
+                                <option value="60">60期</option>
+                                <option value="72">72期</option>
+                                <option value="84">84期</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -172,8 +195,20 @@
                             機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'">
                         </div>
                         <div class="form-control">
-                            <label for="staging">期數</label>
-                            <input type="text" id="staging" v-model = "tempOrderList.staging">
+                            <label for="staging_number">已繳期數</label>
+                            <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
+                            <label for="staging.allNumber">總期數</label>
+                            <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
+                                <option value="12">12期</option>
+                                <option value="18">18期</option>
+                                <option value="24">24期</option>
+                                <option value="36">36期</option>
+                                <option value="48">48期</option>
+                                <option value="54">54期</option>
+                                <option value="60">60期</option>
+                                <option value="72">72期</option>
+                                <option value="84">84期</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -238,12 +273,18 @@
                     orderList:[],
                     uid: '',
                     displayName: '',
-                    tempOrderList: {},
+                    tempOrderList: {
+                        staging_allNumber: '12' 
+                    },
                     modalControl:{
                         is_edit: false,
                         is_add: false,
                         is_delete: false,
                     },
+                    search:{
+                        staging:'全部訂單',
+                        search_text: '',
+                    }
                 }
             },
             methods:{
@@ -276,7 +317,6 @@
                         this.displayName = displayName;
                         this.getOrderList();
                     }else{
-                        alert('驗證失敗');
                         window.location = './index.html'
                     }
                 },
@@ -337,6 +377,29 @@
                 logout(){
                     localStorage.removeItem('cookie');
                     window.location = './index.html'
+                },
+                async searchBtn(type ,input = null){
+                    await this.getOrderList();
+                    if(type == '期數大於'){
+                        this.searchHandler('staging_number', '>', input);
+                    }else if(type == '期數小於'){
+                        this.searchHandler('staging_number', '<', input);
+                    }else if(type == '期數等於'){
+                        this.searchHandler('staging_number', '=', input);
+                    }else{
+                        this.getOrderList();
+                    }
+                },
+                searchHandler(category, type, input){
+                    this.orderList = this.orderList.filter(item => {
+                        if(type == '='){
+                            return item[`${category}`] == input;
+                        }else if(type = '>'){
+                            return item[`${category}`] > input;
+                        }else if(type = '<'){
+                            return item[`${category}`] < input;
+                        }
+                    })
                 }
                 
             },

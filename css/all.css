@@ -83,6 +83,10 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
 }
 
 .list .add__list .add {
@@ -98,6 +102,16 @@ body {
 
 .list .add__list .add:hover {
   opacity: 0.6;
+}
+
+.list .add__list .search select, .list .add__list .search input, .list .add__list .search .search-btn {
+  padding: 8px 10px;
+  margin-left: 5px;
+}
+
+.list .add__list .search .search-btn {
+  background: blue;
+  color: white;
 }
 
 .list li {
@@ -234,6 +248,11 @@ body {
   padding: 0;
   font-size: 16px;
   padding: 3px;
+}
+
+.add-modal select, .edit-modal select {
+  padding: 6px;
+  width: 100%;
 }
 
 .add-modal .type input, .edit-modal .type input {
@@ -505,5 +524,24 @@ body {
           flex: 0 0 14% !important;
   text-align: center;
   font-weight: bold;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.flex-wrap {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 /*# sourceMappingURL=all.css.map */

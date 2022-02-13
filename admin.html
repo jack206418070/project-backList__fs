@@ -32,6 +32,12 @@
         <div class="container-lg">
             <div class="list">
                 <div class="add__list">
+                    <div class="search">
+                        <select name="search" id="search">
+                            <option value="staging" selected>期數</option>
+                        </select>
+                        <input type="text">
+                    </div>
                     <a v-if="displayName === '管理'" class="add" href="#" @click.prevent="modalControl.is_add_member = true; member = {}">增加員工帳號</a>
                 </div>
                 <ul class="account-list">
@@ -214,7 +220,6 @@
                         this.displayName = displayName;
                         this.getMember();
                     }else{
-                        alert('驗證失敗');
                         window.location = './index.html'
                     }
                 },
