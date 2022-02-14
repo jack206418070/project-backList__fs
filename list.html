@@ -393,11 +393,11 @@
                 searchHandler(category, type, input){
                     this.orderList = this.orderList.filter(item => {
                         if(type == '='){
-                            return item[`${category}`] == input;
+                            return item[`${category}`] == +input;
                         }else if(type = '>'){
-                            return item[`${category}`] > input;
+                            return item[`${category}`] > +input;
                         }else if(type = '<'){
-                            return item[`${category}`] < input;
+                            return item[`${category}`] < +input;
                         }
                     })
                 }
