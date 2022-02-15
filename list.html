@@ -75,7 +75,7 @@
                             <p>{{ item.type == '機' ? 'V' : ''}}</p>
                         </div>
                         <div class="before">{{ item.before }}</div>
-                        <div class="staging">{{ item.staging_number }} {{ item.staging_allNumber != 'N/A' ? '/' : '' }} {{ item.staging_allNumber }}</div>
+                        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
                         <div class="money">{{ item.money }}</div>
                         <div class="dieLine">{{ item.dieLine }}</div>
                         <div class="month">{{ item.month }}</div>
@@ -435,11 +435,16 @@
                     })
                 },
                 add_Before(){
-                    db.collection('BEFORE').add({
+                    if(this.tempBefore == ''){
+                        this.modalControl.is_add_before = 0;
+                        return;
+                    } else {
+                        db.collection('BEFORE').add({
                             title: this.tempBefore
-                    })
-                    this.modalControl.is_add_before = 0;
-                    this.getBefore();
+                        })
+                        this.modalControl.is_add_before = 0;
+                        this.getBefore();
+                    }
                 }                
             },
             mounted(){
