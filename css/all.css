@@ -24,9 +24,9 @@ body {
 }
 
 .container-lg {
-  max-width: 1440px;
+  max-width: 1480px;
   margin: 0 auto;
-  padding: 40px 80px;
+  padding: 40px 0;
 }
 
 .login {
@@ -87,6 +87,7 @@ body {
       -ms-flex-align: center;
           align-items: center;
   margin-bottom: 10px;
+  padding: 0 30px;
 }
 
 .list .add__list .add {
@@ -144,16 +145,16 @@ body {
 
 .list li .btn-control {
   -webkit-box-flex: 0;
-      -ms-flex: 0 0 15%;
-          flex: 0 0 15%;
+      -ms-flex: 0 0 9%;
+          flex: 0 0 9%;
   text-align: center;
   font-weight: bold;
 }
 
 .list li .phone {
   -webkit-box-flex: 0;
-      -ms-flex: 0 0 10%;
-          flex: 0 0 10%;
+      -ms-flex: 0 0 9%;
+          flex: 0 0 9%;
   text-align: center;
   font-weight: bold;
 }
@@ -167,13 +168,13 @@ body {
   font-weight: bold;
 }
 
-.list li .btn-control {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.list li .before {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 7%;
+          flex: 0 0 7%;
+  padding: 0 3px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .list li .btn-control .edit {
@@ -189,7 +190,10 @@ body {
   color: white;
   font-weight: bold;
   display: block;
+  width: 50%;
   padding: 6px 15px;
+  margin: 0 auto;
+  margin-bottom: 5px;
 }
 
 .list li .btn-control .edit:hover, .list li .btn-control .delete:hover {

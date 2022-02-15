@@ -56,12 +56,13 @@
                             <p>汽</p>
                             <p>機</p>
                         </div>
+                        <div class="before">前貸</div>
                         <div class="staging">期數</div>
                         <div class="money">貸款金額</div>
                         <div class="dieLine">應繳日</div>
                         <div class="month">月付款</div>
                         <div class="extra">備註</div>
-                        <div class="btn-control">編輯 / 刪除</div>
+                        <div class="btn-control">操作</div>
                     </li>
                     <li v-for="item in orderList" :key="item.id">
                         <div class="date">{{ item.date }}</div>
@@ -73,7 +74,8 @@
                             <p>{{ item.type == '汽' ? 'V' : ''}}</p>
                             <p>{{ item.type == '機' ? 'V' : ''}}</p>
                         </div>
-                        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
+                        <div class="before">{{ item.before }}</div>
+                        <div class="staging">{{ item.staging_number }} {{ item.staging_allNumber != 'N/A' ? '/' : '' }} {{ item.staging_allNumber }}</div>
                         <div class="money">{{ item.money }}</div>
                         <div class="dieLine">{{ item.dieLine }}</div>
                         <div class="month">{{ item.month }}</div>
@@ -117,14 +119,24 @@
                         <div class="form-control type">
                             <label for="type">分期類別</label>
                             汽<input type="radio" value="汽" v-model="tempOrderList.type">
-                            機<input type="radio" value="機" v-model="tempOrderList.type">
+                            機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
+                            <label for="before">前貸</label>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <select v-if="modalControl.is_add_before === 0" name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                                    <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
+                                </select>
+                                <input v-else type="text" v-model="tempBefore" style="width: 60%; padding: 4px 0">
+                                <a v-if="modalControl.is_add_before === 0" href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="modalControl.is_add_before = 1">新增</a>
+                                <a v-else href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="add_Before">增加</a>
+                            </div>
                         </div>
                         <div class="form-control">
                             <label for="staging_number">已繳期數</label>
                             <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                             <label for="staging.allNumber">總期數</label>
                             <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
-                                <option value="12" selected>12期</option>
+                                <option value="null" selected>N/A</option>
+                                <option value="12">12期</option>
                                 <option value="18">18期</option>
                                 <option value="24">24期</option>
                                 <option value="36">36期</option>
@@ -192,13 +204,23 @@
                         <div class="form-control type">
                             <label for="type">分期類別</label>
                             汽<input type="radio" v-model="tempOrderList.type" value="汽" :checked="tempOrderList.type === '汽'">
-                            機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'">
+                            機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'" style="margin-bottom: 13px;">
+                            <label for="before">前貸</label>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <select v-if="modalControl.is_add_before === 0" name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                                    <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
+                                </select>
+                                <input v-else type="text" v-model="tempBefore" style="width: 60%; padding: 4px 0">
+                                <a v-if="modalControl.is_add_before === 0" href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="modalControl.is_add_before = 1">新增</a>
+                                <a v-else href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="add_Before">增加</a>
+                            </div>
                         </div>
                         <div class="form-control">
                             <label for="staging_number">已繳期數</label>
                             <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                             <label for="staging.allNumber">總期數</label>
                             <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
+                                <option value="N/A" selected>N/A</option>
                                 <option value="12">12期</option>
                                 <option value="18">18期</option>
                                 <option value="24">24期</option>
@@ -274,17 +296,20 @@
                     uid: '',
                     displayName: '',
                     tempOrderList: {
-                        staging_allNumber: '12' 
+                        staging_allNumber: 'N/A' 
                     },
                     modalControl:{
                         is_edit: false,
                         is_add: false,
                         is_delete: false,
+                        is_add_before: 0
                     },
                     search:{
                         staging:'全部訂單',
                         search_text: '',
-                    }
+                    },
+                    beforeList:[],
+                    tempBefore: ''
                 }
             },
             methods:{
@@ -316,6 +341,7 @@
                         this.uid = uid;
                         this.displayName = displayName;
                         this.getOrderList();
+                        this.getBefore();
                     }else{
                         window.location = './index.html'
                     }
@@ -394,14 +420,27 @@
                     this.orderList = this.orderList.filter(item => {
                         if(type == '='){
                             return item[`${category}`] == +input;
-                        }else if(type = '>'){
+                        }else if(type == '>'){
                             return item[`${category}`] > +input;
-                        }else if(type = '<'){
+                        }else if(type == '<'){
                             return item[`${category}`] < +input;
                         }
                     })
-                }
-                
+                },
+                async getBefore(){
+                    this.beforeList = [];
+                    let data = await db.collection('BEFORE').get();
+                    data.forEach(item => {
+                        this.beforeList.push(item.data().title);
+                    })
+                },
+                add_Before(){
+                    db.collection('BEFORE').add({
+                            title: this.tempBefore
+                    })
+                    this.modalControl.is_add_before = 0;
+                    this.getBefore();
+                }                
             },
             mounted(){
                 this.checkLogin();
