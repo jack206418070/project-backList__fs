@@ -81,7 +81,8 @@
                         <div class="month">{{ item.month }}</div>
                         <div class="extra">{{ item.extra }}</div>
                         <div class="btn-control">
-                            <a class="edit" href="#" @click.prevent="modalControl.is_edit = true; tempOrderList = {...item}">編輯</a>
+                            <a class="edit" href="#" @click.prevent="openEdit($event,item)">編輯</a>
+                            <!-- <a class="edit" href="#" @click.prevent="getone">編輯</a> -->
                             <a class="delete" href="#" @click.prevent="modalControl.is_delete = true; tempOrderList = {...item}">刪除</a>
                         </div>
                     </li>
@@ -252,7 +253,7 @@
                         <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
                     </div>
                     <div class="btn-group">
-                        <a class="close" href="#" @click="modalControl.is_edit = false; tempOrderList = {}">取消</a>
+                        <a class="close" href="#" @click.prevent="closeEdit">取消</a>
                         <a class="add" href="#" @click.prevent="editOrder">修改訂單</a>
                     </div>
                 </form>
@@ -454,7 +455,17 @@
                         this.modalControl.is_add_before = 0;
                         this.getBefore();
                     }
-                },            
+                },
+                openEdit(event, item){
+                    document.querySelector('.edit-modal').style.zIndex = 100;
+                    document.querySelector('.edit-modal').style.top = `${event.pageY - event.screenY + 120}px`;
+                    this.tempOrderList = {...item}
+                },
+                closeEdit(){
+                    this.tempOrderList = {};
+                    document.querySelector('.edit-modal').style.zIndex = -10;
+                    document.querySelector('.edit-modal').style.top = `-1200px`;
+                },
             },
             mounted(){
                 this.checkLogin();
