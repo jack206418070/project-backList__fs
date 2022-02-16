@@ -404,7 +404,7 @@
                     localStorage.removeItem('cookie');
                     window.location = './index.html'
                 },
-                async searchBtn(type ,input = null){
+                async searchBtn(type ,input = ''){
                     await this.getOrderList();
                     if(type == '期數大於'){
                         this.searchHandler('staging_number', '>', input);
