@@ -12,7 +12,7 @@
         <div class="header">
             <div class="container-lg d-flex jy-content-between align-items-center">
                 <div class="logo">
-                    <h1>LOGO</h1>
+                    <img src="https://static.wixstatic.com/media/a30359_51ace8f8de8143019b8d6b64011f9216~mv2.png/v1/fill/w_412,h_194,al_c,q_85,usm_0.66_1.00_0.01/%E6%96%B0logo-removebg-preview.webp" alt="" style="height: 100px">
                 </div>
                 <div class="menu">
                     <ul class="d-flex">
@@ -65,7 +65,7 @@
                         <div class="btn-control">操作</div>
                     </li>
                     <li v-for="item in orderList" :key="item.id">
-                        <div class="date">{{ item.date }}</div>
+                        <div class="date">{{ item.date }} <br> ( {{ item.mname }} )</div>
                         <div class="name">{{ item.name }}</div>
                         <div class="carId">{{ item.carId }}</div>
                         <div class="phone">{{ item.phone }}</div>
@@ -309,7 +309,8 @@
                         search_text: '',
                     },
                     beforeList:[],
-                    tempBefore: ''
+                    tempBefore: '',
+                    windowH: ''
                 }
             },
             methods:{
@@ -327,12 +328,20 @@
                         }else{
                             // 管理
                             let data = await db.collection('ORDER').get();
+                            let temp = [];
                             data.forEach( item => {
-                                this.orderList.push({
+                                temp.push({
                                     ...item.data(),
                                     id: item.id
                                 })
                             })
+                            temp.forEach( async (item) => {
+                                let name = await db.collection('MEMBER').doc(item.uId).get();
+                                item.mname = name.data().name;
+                                this.orderList.push(item);
+                            })
+                            
+
                     }
                 },
                 checkLogin(){
@@ -445,7 +454,7 @@
                         this.modalControl.is_add_before = 0;
                         this.getBefore();
                     }
-                }                
+                },            
             },
             mounted(){
                 this.checkLogin();
