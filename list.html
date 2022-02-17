@@ -510,6 +510,7 @@
                             }
                             if(this.checkIp === false){
                                 localStorage.removeItem('cookie');
+                                window.location = './index.html';
                             }
                         })
                         .catch(err => {
