@@ -73,6 +73,10 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
+                            db.collection('IP').add({
+                                text: ip,
+                                time: new Date().getTime()
+                            })
                             for(let i = 0; i < this.currentIp.length; i++){
                                 if(this.currentIp[i] == ip){
                                     this.checkIp = true;
@@ -94,7 +98,7 @@
             },
             created(){
                 this.getIp();
-            }
+            },
         })
         app.mount('#app');
 
