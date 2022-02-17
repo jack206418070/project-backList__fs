@@ -10,7 +10,7 @@
 <body>
     <div id="app">
         <div class="container">
-            <div class="login">
+            <div class="login" v-if="checkIp == true">
                 <form action="#">
                     <div class="form-control">
                         <label for="account">帳號</label>
@@ -25,12 +25,11 @@
                     </div>
                 </form>
             </div>
-            <!-- <div v-else class="err-page">
-                <p>404 error! not a right dns</p>
-            </div> -->
+            <div v-else class="err-page">
+                <p>404 error! not a right IP</p>
+            </div>
         </div>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -51,7 +50,8 @@
                 return{
                     account: '',
                     password: '',
-                    ip: '',
+                    checkIp: false,
+                    currentIp: ['59.127.121.35','58.114.179.93'],
                    
                 }
             },
@@ -72,8 +72,16 @@
                 getIp(){
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
-                            this.ip = res.data.ip;
-                            if(this.ip !== this.currentIp){
+                            let ip = res.data.ip;
+                            for(let i = 0; i < this.currentIp.length; i++){
+                                if(this.currentIp[i] == ip){
+                                    this.checkIp = true;
+                                    break;
+                                }else{
+                                    this.checkIp = false;
+                                }
+                            }
+                            if(this.checkIp === false){
                                 localStorage.removeItem('cookie');
                             }
                         })
