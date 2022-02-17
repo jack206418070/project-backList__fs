@@ -551,4 +551,10 @@ body {
   display: -ms-flexbox;
   display: flex;
 }
+
+@media print {
+  .print {
+    display: none;
+  }
+}
 /*# sourceMappingURL=all.css.map */

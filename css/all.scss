@@ -440,3 +440,9 @@ body{
 .d-flex{
     display: flex;
 }
+
+.print{
+    @media print {
+        display: none;
+    }
+}

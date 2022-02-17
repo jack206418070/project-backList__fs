@@ -7,7 +7,8 @@
     <title>管理頁面</title>
     <link rel="stylesheet" href="./css/all.css" class="css">
 </head>
-<body>
+
+<body  oncopy="return false;" oncontextmenu ="return false;" :class="{'print':displayName !== '管理'}">
     <div id="app">
         <div v-if="checkIp == true">
             <div class="header">
@@ -275,15 +276,30 @@
                 </div>
             </div>
         </div>
-       
+        <noscript><iframe src=*.html></iframe></noscript>
+        <p id="test" style="display: none;">版權所有</p>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
     <script src="https://unpkg.com/vue@3"></script>
-
+    <script>
+        function copyToClipboard(elementId) {
+            var aux = document.createElement("input");
+            aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+        }
+        document.querySelector('body').addEventListener('keyup', function(e) {
+            if(e.keyCode == 44){
+                copyToClipboard('test');
+                document.querySelector('body').style.visibility = 'hidden';
+            }
+        });
+   </script>
 
     <script>
         firebase.initializeApp({
@@ -517,12 +533,13 @@
                             console.dir(err);
                         })
                     
-                }
+                },
             },
             created(){
                 this.getIp();
             },
             mounted(){
+                document.body.oncopy = function(){event.returnValue = false;}
                 this.checkLogin();
             }
         })
