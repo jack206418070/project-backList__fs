@@ -394,6 +394,9 @@ body{
 .jy-content-between{
     justify-content: space-between;
 }
+.jy-content-center{
+    justify-content: center;
+}
 .align-items-center{
     align-items: center;
 }
@@ -444,5 +447,22 @@ body{
 .print{
     @media print {
         display: none;
+    }
+}
+
+.pagnation{
+    margin-top: 20px;
+    li{
+        a{
+            font-size: 20px;
+            padding: 8px 12px;
+            display: block;
+            color: white;
+            background: #999;
+            border-right: 2px solid #ccc;
+            &:hover, &.active{
+                background: blue;
+            }
+        }
     }
 }
