@@ -35,7 +35,7 @@
             <div class="container-lg">
                 <div class="list">
                     <div class="add__list">
-                        <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12'}">新增訂單</a>
+                        <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
                         <div class="search">
                             <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 0">顯示全部資料{{ modalControl.is_page == 0 ? '( 使用中 )' : '' }}</a>
                             <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 1">以分頁顯示{{ modalControl.is_page == 1 ? '( 使用中 )' : '' }}</a>
@@ -165,7 +165,7 @@
                         <div class="form-group">
                             <div class="form-control">
                                 <label for="phone">電話</label>
-                                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkForm('phone')">
+                                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
                                 <label for="line">LineID</label>
                                 <input type="text" id="line" v-model = "tempOrderList.lineId">
                             </div>
@@ -250,7 +250,7 @@
                         <div class="form-group">
                             <div class="form-control">
                                 <label for="phone">電話</label>
-                                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkForm('phone')">
+                                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
                                 <label for="line">LineID</label>
                                 <input type="text" id="line" v-model= "tempOrderList.lineId">
                             </div>
@@ -448,9 +448,17 @@
                     this.getOrderList();
                 },
                 add(){
-                    this.tempOrderList.phone = '';
                     if(this.checkList.phone == false || this.tempOrderList.phone == ''){
                         alert('請填寫正確電話號碼');
+                        return;
+                    }else if(this.tempOrderList.name == ''){
+                        alert('請填入姓名');
+                        return;
+                    }else if(this.tempOrderList.staging_number == ''){
+                        alert('請填入期數');
+                        return;
+                    }else if(this.tempOrderList.date == ''){
+                        alert('請填入日期');
                         return;
                     }
                     let id = "" + new Date().getTime();
@@ -550,11 +558,13 @@
                     document.querySelector('.edit-modal').style.zIndex = -10;
                     document.querySelector('.edit-modal').style.top = `-1200px`;
                 },
-                checkForm(type){
+                checkFormOrder(type){
                     if(type == 'phone'){
                         const reg = /^09[0-9]{8}$/;
                         if(this.tempOrderList.phone.match(reg)){
                             this.checkList.phone = true;
+                        }else if(this.tempOrderList.phone == ''){
+                            this.checkList.phone = false;
                         }else{
                             this.checkList.phone = false;
                         }
