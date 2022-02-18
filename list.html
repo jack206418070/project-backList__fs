@@ -448,6 +448,7 @@
                     this.getOrderList();
                 },
                 add(){
+                    this.tempOrderList.phone = '';
                     if(this.checkList.phone == false || this.tempOrderList.phone == ''){
                         alert('請填寫正確電話號碼');
                         return;
