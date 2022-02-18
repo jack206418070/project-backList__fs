@@ -480,6 +480,7 @@
                     window.location = './index.html'
                 },
                 async searchBtn(type ,input = ''){
+                    this.modalControl.is_page = 0;
                     await this.getOrderList();
                     if(type == '期數大於'){
                         this.searchHandler('staging_number', '>', input);
