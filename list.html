@@ -351,7 +351,7 @@
                     uid: '',
                     displayName: '',
                     mname: '',
-                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','27.240.192.195'],
+                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','27.51.18.183','39.13.134.100'],
                     checkIp: false,
                     tempOrderList: {
                         staging_allNumber: 'N/A' 
@@ -519,7 +519,11 @@
                 searchHandler(category, type, input){
                     this.orderList = this.orderList.filter(item => {
                         if(type == '='){
-                            return item[`${category}`] == +input;
+                            if(isNaN(+input)){
+                                return item[`${category}`] == input;
+                            }else{
+                                return item[`${category}`] == +input;
+                            }
                         }else if(type == '>'){
                             return item[`${category}`] > +input;
                         }else if(type == '<'){
@@ -605,9 +609,9 @@
                     let page = 0;
                     this.pageLists[page] = [];
                     this.orderList.forEach((item, index) => {
-                        if((index + 1 ) % 6 !== 0){
+                        if((index + 1 ) % 10 !== 0){
                             this.pageLists[page].push(item);
-                        }else if((index + 1) % 6 == 0){
+                        }else if((index + 1) % 10 == 0){
                             this.pageLists[page].push(item);
                             page += 1;
                             this.pageLists[page] = [];
