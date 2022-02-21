@@ -608,10 +608,13 @@
                 getPage(){
                     let page = 0;
                     this.pageLists[page] = [];
+                    this.orderList.sort((a,b) => {
+                        return b.oId - a.oId;
+                    })
                     this.orderList.forEach((item, index) => {
-                        if((index + 1 ) % 10 !== 0){
+                        if((index + 1 ) % 15 !== 0){
                             this.pageLists[page].push(item);
-                        }else if((index + 1) % 10 == 0){
+                        }else if((index + 1) % 15 == 0){
                             this.pageLists[page].push(item);
                             page += 1;
                             this.pageLists[page] = [];
