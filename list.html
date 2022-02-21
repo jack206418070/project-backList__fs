@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
 </head>
 
-<body  oncopy="return false;" oncontextmenu="return false;">
+<body  oncopy="return false;">
     <div id="app">
         <div v-if="checkIp == true">
             <div class="header">
@@ -121,6 +121,7 @@
                                 </div>
                             </li>
                         </template>
+                        
                     </ul>
                 </div>
 
@@ -502,7 +503,6 @@
                     window.location = './index.html'
                 },
                 async searchBtn(type ,input = ''){
-                    this.modalControl.is_page = 0;
                     await this.getOrderList();
                     if(type == '期數大於'){
                         this.searchHandler('staging_number', '>', input);
@@ -531,7 +531,9 @@
                         }else if(type == 'searchName'){
                             return item[`${category}`] == input;
                         }
-                    })
+                    });
+                    let data = [...this.orderList]
+                    this.getPage(data)
                 },
                 async getBefore(){
                     this.beforeList = [];
@@ -575,7 +577,6 @@
                     }
                 },
                 changePhone(val){
-                    console.log(val)
                     return `${val.slice(0,4)}-${val.slice(4,7)}-${val.slice(7,10)}`
                 },
                 getIp(){
@@ -605,13 +606,14 @@
                     this.pageList = this.pageLists[page - 1];
                     this.currentPage = page;
                 },
-                getPage(){
+                getPage(data = this.orderList){
+                    this.pageLists = [];
                     let page = 0;
                     this.pageLists[page] = [];
-                    this.orderList.sort((a,b) => {
+                    data.sort((a,b) => {
                         return b.oId - a.oId;
                     })
-                    this.orderList.forEach((item, index) => {
+                    data.forEach((item, index) => {
                         if((index + 1 ) % 15 !== 0){
                             this.pageLists[page].push(item);
                         }else if((index + 1) % 15 == 0){
@@ -620,6 +622,7 @@
                             this.pageLists[page] = [];
                         }
                     })
+                    this.paginationHandler(1);
                 }
             },
             computed:{
