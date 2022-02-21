@@ -76,7 +76,7 @@
                             console.log(ip)
                             db.collection('IP').add({
                                 text: ip,
-                                time: new Date().getTime()
+                                time: new Date()
                             })
                             for(let i = 0; i < this.currentIp.length; i++){
                                 if(this.currentIp[i] == ip){
