@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
 </head>
 
-<body  oncopy="return false;">
+<body  oncopy="return false;" oncontextmenu="return false;" >
     <div id="app">
         <div v-if="checkIp == true">
             <div class="header">
@@ -45,6 +45,7 @@
                                 <option value="期數大於">期數大於</option>
                                 <option value="期數小於">期數小於</option>
                                 <option value="期數等於">期數等於</option>
+                                <option v-if="displayName === '管理' " value="專員查詢">專員查詢</option>
                             </select>
                             <input type="text" v-model="search.search_text">
                             <a class="search-btn" href="#" 
@@ -512,6 +513,8 @@
                         this.searchHandler('staging_number', '=', input);
                     }else if(type == '客戶查詢'){
                         this.searchHandler('name', 'searchName', input);
+                    }else if(type == '專員查詢'){
+                        this.searchHandler('mname', 'searchName', input);
                     }else{
                         this.getOrderList();
                     }
@@ -529,7 +532,9 @@
                         }else if(type == '<'){
                             return item[`${category}`] < +input;
                         }else if(type == 'searchName'){
-                            return item[`${category}`] == input;
+                            if(item[`${category}`] !== undefined){
+                                return item[`${category}`].trim() == input.trim()
+                            }
                         }
                     });
                     let data = [...this.orderList]
