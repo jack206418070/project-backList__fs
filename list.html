@@ -132,10 +132,12 @@
                             <a href="#" @click.prevent="paginationHandler
                             (currentPage - 1)">上一頁</a>
                         </li>
-                        <li v-for="page in pageLists.length" :key="page">
-                            <a href="#" :class="{'active': currentPage == page}" @click.prevent="paginationHandler
-                            (page)">{{ page }}</a>
-                        </li>
+                        <template v-for="page in pageLists.length" :key="page">
+                            <li v-if="pageLists[page - 1].length > 0">
+                                <a href="#" :class="{'active': currentPage == page}" @click.prevent="paginationHandler
+                                (page)">{{ page }}</a>
+                            </li>
+                        </template>
                         <li>
                             <a href="#" @click.prevent="paginationHandler
                             (currentPage + 1)">下一頁</a>
@@ -353,7 +355,7 @@
                     uid: '',
                     displayName: '',
                     mname: '',
-                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','111.241.172.164','39.13.134.100','118.170.61.233','118.170.10.8'],
+                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','111.241.172.164','39.13.134.100','118.170.61.233','118.170.10.8','27.53.48.249'],
                     checkIp: false,
                     tempOrderList: {
                         staging_allNumber: 'N/A' 
