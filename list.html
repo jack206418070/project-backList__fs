@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
 </head>
 
-<body  oncopy="return false;" oncontextmenu="return false;" >
+<body  oncopy="return false;" oncontextmenu="return false;">
     <div id="app">
         <div v-if="checkIp == true">
             <div class="header">
@@ -36,6 +36,7 @@
                 <div class="list">
                     <div class="add__list">
                         <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
+                        <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a>
                         <div class="search">
                             <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 0">顯示全部資料{{ modalControl.is_page == 0 ? '( 使用中 )' : '' }}</a>
                             <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 1">以分頁顯示{{ modalControl.is_page == 1 ? '( 使用中 )' : '' }}</a>
@@ -355,7 +356,7 @@
                     uid: '',
                     displayName: '',
                     mname: '',
-                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','111.241.172.164','39.13.134.100','118.170.61.233','118.170.10.8','27.53.48.249'],
+                    currentIp: ['59.127.121.35','58.114.179.93','118.170.7.144','27.247.193.47','116.241.172.18','111.241.172.164','39.13.134.100','118.170.61.233','118.170.10.8','27.240.217.92','118.170.0.27','210.66.250.213'],
                     checkIp: false,
                     tempOrderList: {
                         staging_allNumber: 'N/A' 
@@ -388,7 +389,7 @@
                     this.currentPage = 1;
                     if(this.displayName !== '管理'){
                             // 員工
-                            let data = await db.collection('MEMBER').doc(this.uid).collection('order').get();
+                            let data = await db.collection('MEMBERP').doc(this.uid).collection('order').get();
                             data.forEach( item => {
                                 this.orderList.push({
                                     ...item.data(),
@@ -434,7 +435,7 @@
                         alert('請填寫正確電話號碼');
                         return;
                     }
-                    db.collection('MEMBER').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
+                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList,
                     });
                     db.collection('ORDER').doc(this.tempOrderList.oId).set({
@@ -445,7 +446,7 @@
                     
                 },
                 deleteOrder(){
-                    db.collection('MEMBER').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
+                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
                     db.collection('ORDER').doc(this.tempOrderList.oId).delete();
                     this.modalControl.is_delete = false;
                     this.tempOrderList = {};
@@ -472,7 +473,7 @@
                         uId: this.uid,
                         mname: this.mname
                     })
-                    db.collection('MEMBER').doc(this.uid).collection('order').doc(id).set({
+                    db.collection('MEMBERP').doc(this.uid).collection('order').doc(id).set({
                         ...this.tempOrderList,
                         oId: id,
                         uId: this.uid,
@@ -492,7 +493,7 @@
                             displayName: '員工',
                             uid: res.user.uid
                         }
-                        db.collection('MEMBER').doc(res.user.uid).set(data);
+                        db.collection('MEMBERP').doc(res.user.uid).set(data);
                         this.member = {};
                         this.modalControl.is_add_member = false;
                     })
@@ -630,6 +631,50 @@
                         }
                     })
                     this.paginationHandler(1);
+                },
+                async updateS(){
+                  let update = await db.collection('ORDER').get();
+                  let data = [];
+                  let newData = [];
+
+                  update.forEach((item, index) =>{
+                    data.push(item.data())
+                  })
+                  // console.log(data)
+                  // data.forEach((item, index) =>{
+                  //   console.log(index)
+                  //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
+                  //     ...item
+                  //   })
+                  // })
+
+                  // data.forEach(item => {
+                  //   db.collection('ORDER').doc(item.oId).set({
+                  //     ...item
+                  //   })
+                  // })
+
+
+                  // data.forEach(item => {
+                  //   if(+item.staging_number >= 0){
+                  //     newData.push(item)
+                  //   }
+                  // })
+                
+
+
+                  // console.log(newData)
+                  // newData.forEach((item, index) => {
+                  //   console.log(index);
+                  //   db.collection('ORDER').doc(item.oId).set({
+                  //     ...item,
+                  //     staging_number: +item.staging_number + 1
+                  //   })
+                  //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
+                  //     ...item,
+                  //     staging_number: +item.staging_number + 1
+                  //   })
+                  // })
                 }
             },
             computed:{

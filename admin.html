@@ -219,7 +219,7 @@
                 },
                 async getMember(){
                     this.memberList = [];
-                    let data = await db.collection('MEMBER').get();
+                    let data = await db.collection('MEMBERP').get();
                     data.forEach(item => {
                         this.memberList.push(item.data());
                     })
@@ -231,7 +231,7 @@
                             ...this.member,
                             uid: res.user.uid
                         }
-                        db.collection('MEMBER').doc(res.user.uid).set(data);
+                        db.collection('MEMBERP').doc(res.user.uid).set(data);
                         this.member = {};
                         this.modalControl.is_add_member = false;
                         this.getMember();
@@ -242,7 +242,7 @@
                     }); 
                 },
                 editMember(){
-                    db.collection('MEMBER').doc(this.member.uid).set({
+                    db.collection('MEMBERP').doc(this.member.uid).set({
                         ...this.member
                     })
                     this.modalControl.is_edit_member = false;
@@ -252,7 +252,7 @@
                 deleteMember(){
                     firebase.auth().signInWithEmailAndPassword(this.member.account, this.member.password)
                     .then( (res) => {
-                        db.collection('MEMBER').doc(this.member.uid).delete();
+                        db.collection('MEMBERP').doc(this.member.uid).delete();
                         const user = firebase.auth().currentUser;
                         user.delete().then(res => {
                             alert('刪除成功');
