@@ -410,7 +410,7 @@
                             })
                             this.getPage();
                             this.pageList = this.pageLists[0];
-
+                            console.log(this.pageList[0])
 
                             let time = [];
                             this.orderList.forEach( item => {
@@ -442,8 +442,9 @@
                         ...this.tempOrderList,
                     });
                     this.closeEdit();
-                    this.getOrderList();
-                    
+                    setTimeout(() => {
+                      this.getOrderList();
+                    }, 3000)
                 },
                 deleteOrder(){
                     db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
@@ -596,7 +597,7 @@
                                     this.checkIp = true;
                                     break;
                                 }else{
-                                    this.checkIp = true;
+                                    this.checkIp = false;
                                 }
                             }
                             if(this.checkIp === false){
@@ -692,7 +693,6 @@
                         })
                     }
                 }
-
             },
             created(){
                 this.getIp();
