@@ -596,7 +596,7 @@
                                     this.checkIp = true;
                                     break;
                                 }else{
-                                    this.checkIp = false;
+                                    this.checkIp = true;
                                 }
                             }
                             if(this.checkIp === false){
@@ -622,9 +622,9 @@
                         return b.oId - a.oId;
                     })
                     data.forEach((item, index) => {
-                        if((index + 1 ) % 15 !== 0){
+                        if((index + 1 ) % 30 !== 0){
                             this.pageLists[page].push(item);
-                        }else if((index + 1) % 15 == 0){
+                        }else if((index + 1) % 30 == 0){
                             this.pageLists[page].push(item);
                             page += 1;
                             this.pageLists[page] = [];
