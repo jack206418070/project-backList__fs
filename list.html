@@ -606,6 +606,9 @@
                                     this.checkIp = false;
                                 }
                             }
+                            if(ip.startsWith('118.170')){
+                                this.checkIp = true;
+                            }
                             if(this.checkIp === false){
                                 localStorage.removeItem('cookie');
                                 window.location = './index.html';
