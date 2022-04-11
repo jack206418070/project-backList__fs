@@ -598,16 +598,10 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            for(let i = 0; i < this.currentIp.length; i++){
-                                if(this.currentIp[i] == ip){
-                                    this.checkIp = true;
-                                    break;
-                                }else{
-                                    this.checkIp = false;
-                                }
-                            }
-                            if(ip.startsWith('118.170')){
+                            if( ip.startsWith('27.52') || ip.startsWith('118.170') ){
                                 this.checkIp = true;
+                            } else {
+                                this.checkIp = false;
                             }
                             if(this.checkIp === false){
                                 localStorage.removeItem('cookie');
