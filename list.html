@@ -598,7 +598,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('27.52') || ip.startsWith('118.170') || || ip.startsWith('116.241.172.18')){
+                            if( ip.startsWith('27.52') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;
