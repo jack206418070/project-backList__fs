@@ -155,11 +155,11 @@
                     <form action="#">
                         <div class="form-group">
                             <div class="form-control">
-                                <label for="date">日期</label>
+                                <label for="date">日期(必填)</label>
                                 <input type="date" id="date" v-model="tempOrderList.date">
                             </div>
                             <div class="form-control">
-                                <label for="name">姓名</label>
+                                <label for="name">姓名(必填)</label>
                                 <input type="text" id="name" v-model = "tempOrderList.name">
                             </div>
                             <div class="form-control">
@@ -169,7 +169,7 @@
                         </div>
                         <div class="form-group">
                             <div class="form-control">
-                                <label for="phone">電話</label>
+                                <label for="phone">電話(必填)</label>
                                 <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
                                 <label for="line">LineID</label>
                                 <input type="text" id="line" v-model = "tempOrderList.lineId">
@@ -189,7 +189,7 @@
                                 </div>
                             </div>
                             <div class="form-control">
-                                <label for="staging_number">已繳期數</label>
+                                <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
                                 <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                                 <label for="staging.allNumber">總期數</label>
                                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
@@ -243,11 +243,11 @@
                     <form action="#">
                         <div class="form-group">
                             <div class="form-control">
-                                <label for="date">日期</label>
+                                <label for="date">日期(必填)</label>
                                 <input type="date" id="date" v-model = "tempOrderList.date">
                             </div>
                             <div class="form-control">
-                                <label for="name">姓名</label>
+                                <label for="name">姓名(必填)</label>
                                 <input type="text" id="name" v-model = "tempOrderList.name">
                             </div>
                             <div class="form-control">
@@ -257,7 +257,7 @@
                         </div>
                         <div class="form-group">
                             <div class="form-control">
-                                <label for="phone">電話</label>
+                                <label for="phone">電話(必填)</label>
                                 <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
                                 <label for="line">LineID</label>
                                 <input type="text" id="line" v-model= "tempOrderList.lineId">
@@ -277,7 +277,7 @@
                                 </div>
                             </div>
                             <div class="form-control">
-                                <label for="staging_number">已繳期數</label>
+                                <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
                                 <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                                 <label for="staging.allNumber">總期數</label>
                                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
@@ -598,7 +598,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
+                            if( ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;
