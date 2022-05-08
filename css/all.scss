@@ -466,3 +466,100 @@ body{
         }
     }
 }
+.list-title{
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 500;
+  width: 30%;
+  padding: 30px 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+.before-modal, .allNumber-modal{
+  position: absolute;
+    width: 40%;
+    top: -200%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ccc;
+    z-index: -1;
+    transition: .5s;
+    &.show{
+        z-index: 100;
+        top: 50%;
+    }
+    .title{
+        background-color: blue;
+        text-align: center;
+        font-weight: bold;
+        color: white;
+        padding: 4px 0;
+    }
+    .content{
+        padding: 20px;
+        &-list{
+          background-color: #fff;
+          width: 100%;
+          margin: 0 auto;
+          padding: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          height: 400px;
+          overflow:auto;
+        }
+        .before-item{
+          flex: 0 0 35%;
+          margin-bottom: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          a{
+            &:hover{
+              color: red;
+            }
+          }
+        }
+        p{
+            letter-spacing: 3px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .btn-group{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            input{
+              width: 70%;
+              padding: 8px;
+              outline:none;
+              border: 0;
+              &:focus{
+                outline:none;
+                border: 0;
+              }
+            }
+            .close, .delete{
+                display: block;
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                padding: 4px 8px;
+                width: 20%;
+                &:hover{
+                    opacity: 0.7;
+                }
+            }
+            .close{
+                background-color: green;
+            }
+            .delete{
+                background-color: red;
+            }
+
+        }
+    }
+}

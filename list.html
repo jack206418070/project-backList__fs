@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理頁面</title>
+    <title>增量頁面</title>
     <link rel="stylesheet" href="./css/all.css" class="css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
 </head>
 
-<body  oncopy="return false;" oncontextmenu="return false;">
+<body>
     <div id="app">
         <div v-if="checkIp == true">
             <div class="header">
@@ -19,11 +19,14 @@
                     </div>
                     <div class="menu">
                         <ul class="d-flex">
-                            <li v-if="displayName === '管理'">
-                                <a class="account-control" href="./admin.html">帳號管理</a>
+                            <li>
+                              <a class="list-control" href="./normal.html">一般頁面</a>
                             </li>
                             <li>
-                                <a class="list-control" href="./list.html">訂單管理</a>
+                              <a class="list-control" href="./list.html">增量頁面</a>
+                            </li>
+                            <li v-if="displayName === '管理'">
+                                <a class="account-control" href="./admin.html">帳號管理</a>
                             </li>
                             <li>
                                 <a class="list-control" @click.prevent="logout">登出</a>
@@ -34,12 +37,13 @@
             </div>
             <div class="container-lg">
                 <div class="list">
+                    <div class="list-title">增量頁面</div>
                     <div class="add__list">
                         <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
+                        <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
+                        <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
                         <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a>
                         <div class="search">
-                            <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 0">顯示全部資料{{ modalControl.is_page == 0 ? '( 使用中 )' : '' }}</a>
-                            <a class="search-btn" href="#" @click.prevent="modalControl.is_page = 1">以分頁顯示{{ modalControl.is_page == 1 ? '( 使用中 )' : '' }}</a>
                             <select name="search" id="search" v-model="search.staging">
                                 <option value="全部訂單" selected>全部訂單</option>
                                 <option value="客戶查詢">客戶查詢</option>
@@ -75,59 +79,20 @@
                             <div class="extra">備註</div>
                             <div class="btn-control">操作</div>
                         </li>
-                        <template v-if="modalControl.is_page == 0">
-                            <li v-for="item in filterData" :key="item.id">
-                                <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理'">( {{ item.mname }} )</span> </div>
-                                <div class="name">{{ item.name }}</div>
-                                <div class="carId">{{ item.carId }}</div>
-                                <div class="phone">{{ item.phone }}</div>
-                                <div class="lineId">{{ item.lineId }}</div>
-                                <div class="type">
-                                    <p>{{ item.type == '汽' ? 'V' : ''}}</p>
-                                    <p>{{ item.type == '機' ? 'V' : ''}}</p>
-                                </div>
-                                <div class="before">{{ item.before }}</div>
-                                <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
-                                <div class="money">{{ item.money }}</div>
-                                <div class="dieLine">{{ item.dieLine }}</div>
-                                <div class="month">{{ item.month }}</div>
-                                <div class="extra">{{ item.extra }}</div>
-                                <div class="btn-control">
-                                    <a class="edit" href="#" @click.prevent="openEdit($event,item)">編輯</a>
-                                    <!-- <a class="edit" href="#" @click.prevent="getone">編輯</a> -->
-                                    <a class="delete" href="#" @click.prevent="modalControl.is_delete = true; tempOrderList = {...item}">刪除</a>
-                                </div>
-                            </li>
-                        </template>
-                        <template v-else-if="modalControl.is_page == 1">
-                            <li v-for="item in pageList" :key="item.id">
-                                <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理'">( {{ item.mname }} )</span> </div>
-                                <div class="name">{{ item.name }}</div>
-                                <div class="carId">{{ item.carId }}</div>
-                                <div class="phone">{{ item.phone }}</div>
-                                <div class="lineId">{{ item.lineId }}</div>
-                                <div class="type">
-                                    <p>{{ item.type == '汽' ? 'V' : ''}}</p>
-                                    <p>{{ item.type == '機' ? 'V' : ''}}</p>
-                                </div>
-                                <div class="before">{{ item.before }}</div>
-                                <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
-                                <div class="money">{{ item.money }}</div>
-                                <div class="dieLine">{{ item.dieLine }}</div>
-                                <div class="month">{{ item.month }}</div>
-                                <div class="extra">{{ item.extra }}</div>
-                                <div class="btn-control">
-                                    <a class="edit" href="#" @click.prevent="openEdit($event,item)">編輯</a>
-                                    <!-- <a class="edit" href="#" @click.prevent="getone">編輯</a> -->
-                                    <a class="delete" href="#" @click.prevent="modalControl.is_delete = true; tempOrderList = {...item}">刪除</a>
-                                </div>
-                            </li>
-                        </template>
+                        <list 
+                          v-for="item in orderList"
+                          :key="item.id"
+                          :item="item"
+                          :display-name="displayName"
+                          @delete-order="deleteOrder"
+                          @edit-order="editOrder"
+                        >
+                        </list>
                         
                     </ul>
                 </div>
 
-                <div class="pagnation" v-if="modalControl.is_page == 1">
+                <!-- <div class="pagnation" v-if="modalControl.is_page == 1">
                     <ul class="d-flex jy-content-center">
                         <li>
                             <a href="#" @click.prevent="paginationHandler
@@ -144,7 +109,7 @@
                             (currentPage + 1)">下一頁</a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         
             <div class="add-modal" :class="{'show': modalControl.is_add === true}">
@@ -180,12 +145,9 @@
                                 機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
                                 <label for="before">前貸</label>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <select v-if="modalControl.is_add_before === 0" name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                                    <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
                                         <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
                                     </select>
-                                    <input v-else type="text" v-model="tempBefore" style="width: 60%; padding: 4px 0">
-                                    <a v-if="modalControl.is_add_before === 0" href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="modalControl.is_add_before = 1">新增</a>
-                                    <a v-else href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="add_Before">增加</a>
                                 </div>
                             </div>
                             <div class="form-control">
@@ -193,19 +155,7 @@
                                 <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                                 <label for="staging.allNumber">總期數</label>
                                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
-                                    <option value="N/A" selected>N/A</option>
-                                    <option value="12">12期</option>
-                                    <option value="18">18期</option>
-                                    <option value="24">24期</option>
-                                    <option value="30">30期</option>
-                                    <option value="36">36期</option>
-                                    <option value="42">42期</option>
-                                    <option value="48">48期</option>
-                                    <option value="50">50期</option>
-                                    <option value="54">54期</option>
-                                    <option value="60">60期</option>
-                                    <option value="72">72期</option>
-                                    <option value="84">84期</option>
+                                    <option v-for="item in allNumberList" :value="item">{{item}}期</option>
                                 </select>
                             </div>
                         </div>
@@ -268,12 +218,9 @@
                                 機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'" style="margin-bottom: 13px;">
                                 <label for="before">前貸</label>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <select v-if="modalControl.is_add_before === 0" name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                                    <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
                                         <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
                                     </select>
-                                    <input v-else type="text" v-model="tempBefore" style="width: 60%; padding: 4px 0">
-                                    <a v-if="modalControl.is_add_before === 0" href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="modalControl.is_add_before = 1">新增</a>
-                                    <a v-else href="#" style="width:35%; display: block; padding: 3px; background:blue; color: white; text-align:center" @click.prevent="add_Before">增加</a>
                                 </div>
                             </div>
                             <div class="form-control">
@@ -281,19 +228,7 @@
                                 <input type="text" id="staging_number" v-model = "tempOrderList.staging_number">
                                 <label for="staging.allNumber">總期數</label>
                                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
-                                    <option value="N/A" selected>N/A</option>
-                                    <option value="12">12期</option>
-                                    <option value="18">18期</option>
-                                    <option value="24">24期</option>
-                                    <option value="30">30期</option>
-                                    <option value="36">36期</option>
-                                    <option value="42">42期</option>
-                                    <option value="48">48期</option>
-                                    <option value="50">50期</option>
-                                    <option value="54">54期</option>
-                                    <option value="60">60期</option>
-                                    <option value="72">72期</option>
-                                    <option value="84">84期</option>
+                                  <option v-for="item in allNumberList" :value="item">{{item}}期</option>
                                 </select>
                             </div>
                         </div>
@@ -317,7 +252,7 @@
                         </div>
                         <div class="btn-group">
                             <a class="close" href="#" @click.prevent="closeEdit">取消</a>
-                            <a class="add" href="#" @click.prevent="editOrder">修改訂單</a>
+                            <a class="add" href="#" @click.prevent="editModal">修改訂單</a>
                         </div>
                     </form>
                 </div>
@@ -330,10 +265,60 @@
                 <div class="content">
                     <p>確定要刪除  <span style="color: red">{{ tempOrderList.name }} 的 {{ tempOrderList.carId }}</span> 訂單嗎 ？</p>
                     <div class="btn-group">
-                        <a class="close"  href="#" @click.prevent="modalControl.is_delete = false; tempOrderList = {}">取消</a>
-                        <a class="delete" href="#" @click.prevent="deleteOrder">確定刪除</a>
+                        <a class="close"  href="#" @click.prevent="delModal(false)">取消</a>
+                        <a class="delete" href="#" @click.prevent="delModal(true)">確定刪除</a>
                     </div>
                 </div>
+            </div>
+
+            <div class="before-modal" :class="{'show': modalControl.is_before === true}">
+              <div class="title">
+                  <h3>前貸管理</h3>
+              </div>
+              <div class="content">
+                  <div class="content-list">
+                    <div 
+                      class="before-item"
+                      v-for="(item, index) in beforeList"
+                      :key="index"
+                    >
+                      <p>{{  item  }}</p>
+                      <a href="javascript:;" @click="deleteBefore(item)">刪除</a>
+                    </div>
+                  </div>
+                  <div class="btn-group">
+                    <input type="text" placeholder="請輸入新增的前貸" v-model.trim="tempBefore">
+                    <a class="close" style="background: blue" href="#" @click.prevent="add_Before">新增前貸</a>
+                  </div>
+                  <div class="btn-group">
+                    <a class="close"  href="#" @click.prevent="modalControl.is_before = false">取消</a>
+                  </div>
+              </div>
+            </div>
+
+            <div class="allNumber-modal" :class="{'show': modalControl.is_allNumber === true}">
+              <div class="title">
+                  <h3>總期數管理</h3>
+              </div>
+              <div class="content">
+                  <div class="content-list">
+                    <div 
+                      class="before-item"
+                      v-for="(item, index) in allNumberList"
+                      :key="index"
+                    >
+                      <p>{{  item  }}</p>
+                      <a href="javascript:;" @click="deleteAllNumber(item)">刪除</a>
+                    </div>
+                  </div>
+                  <div class="btn-group">
+                    <input type="text" placeholder="請輸入新增的總期數" v-model.trim="tempAllNumber">
+                    <a class="close" style="background: blue" href="#" @click.prevent="add_AllNumber">新增總期數</a>
+                  </div>
+                  <div class="btn-group">
+                    <a class="close"  href="#" @click.prevent="modalControl.is_allNumber = false">取消</a>
+                  </div>
+              </div>
             </div>
         </div>
         <noscript><iframe src=*.html></iframe></noscript>
@@ -344,7 +329,30 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
     <script src="https://unpkg.com/vue@3"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/x-template" id="list">
+      <li>
+        <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理'">( {{ item.mname }} )</span> </div>
+        <div class="name">{{ item.name }}</div>
+        <div class="carId">{{ item.carId }}</div>
+        <div class="phone">{{ item.phone }}</div>
+        <div class="lineId">{{ item.lineId }}</div>
+        <div class="type">
+            <p>{{ item.type == '汽' ? 'V' : ''}}</p>
+            <p>{{ item.type == '機' ? 'V' : ''}}</p>
+        </div>
+        <div class="before">{{ item.before }}</div>
+        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
+        <div class="money">{{ item.money }}</div>
+        <div class="dieLine">{{ item.dieLine }}</div>
+        <div class="month">{{ item.month }}</div>
+        <div class="extra">{{ item.extra }}</div>
+        <div class="btn-control">
+            <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
+            <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
+        </div>
+      </li>
+    </script>
     <script>
         firebase.initializeApp({
             apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
@@ -358,7 +366,9 @@
         const app = Vue.createApp({
             data(){
                 return{
+                    allData: [],
                     orderList:[],
+                    scrollCount: 1,
                     uid: '',
                     displayName: '',
                     mname: '',
@@ -372,56 +382,73 @@
                         is_add: false,
                         is_delete: false,
                         is_add_before: 0,
-                        is_page: 1,
-                        is_order_dec: 0
+                        is_order_dec: 0,
+                        is_before: false,
+                        is_allNumber: false
                     },
                     search:{
                         staging:'全部訂單',
                         search_text: '',
                     },
                     beforeList:[],
+                    allNumberList:[],
+                    tempAllNumber: '',
                     tempBefore: '',
                     checkList: {
                         phone: true
                     },
-                    pageLists:[],
-                    pageList:[],
-                    currentPage: 1,
+                    lastData: '',
+                    checkDel: false
                 }
             },
             methods:{
-                async getOrderList(){
-                    this.orderList = [];
-                    this.currentPage = 1;
+                async getOrderList(first = false){
                     if(this.displayName !== '管理'){
                             // 員工
-                            let data = await db.collection('MEMBERP').doc(this.uid).collection('order').get();
-                            data.forEach( item => {
-                                this.orderList.push({
-                                    ...item.data(),
-                                    id: item.id
-                                })
-                            })
-                            this.getPage();
-                            this.pageList = this.pageLists[0];
+                            if (first){
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').limit(10).get();
+                              data.forEach( item => {
+                                  this.orderList.push({
+                                      ...item.data(),
+                                      id: item.id
+                                  })
+                              })
+                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                              console.log(this.orderList)
+                            } else {
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
+                              data.forEach( item => {
+                                  this.orderList.push({
+                                      ...item.data(),
+                                      id: item.id
+                                  })
+                              })
+                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                            }
                         }else{
                             // 管理
-                            let data = await db.collection('ORDER').get();
-                            let temp = [];
-                            data.forEach( item => {
+                            if (first) {
+                              this.orderList = []
+                              this.lastData = ''
+                              let data = await db.collection('ORDER').orderBy('oId', 'desc').limit(10).get();
+                              data.forEach( item => {
                                 this.orderList.push({
                                     ...item.data(),
                                     id: item.id
                                 })
-                            })
-                            this.getPage();
-                            this.pageList = this.pageLists[0];
-                            console.log(this.pageList[0])
-
-                            let time = [];
-                            this.orderList.forEach( item => {
-                                time.push( new Date(item.date).getTime() )
-                            })
+                              })
+                              console.log(this.orderList)
+                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                            } else {
+                              let data = await db.collection('ORDER').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get()
+                              data.forEach( item => {
+                                this.orderList.push({
+                                    ...item.data(),
+                                    id: item.id
+                                })
+                              })
+                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                            }
                         }
                 },
                 checkLogin(){
@@ -430,13 +457,18 @@
                         this.uid = uid;
                         this.mname = name;
                         this.displayName = displayName;
-                        this.getOrderList();
+                        this.getOrderList(true);
                         this.getBefore();
+                        this.getAllNumber();
                     }else{
                         window.location = './index.html'
                     }
                 },
-                editOrder(){
+                editOrder(event, tempOrderList){
+                    this.tempOrderList = tempOrderList;
+                    this.openEdit(event, tempOrderList)
+                },
+                editModal () {
                     if(this.checkList.phone == false){
                         alert('請填寫正確電話號碼');
                         return;
@@ -449,15 +481,24 @@
                     });
                     this.closeEdit();
                     setTimeout(() => {
-                      this.getOrderList();
+                      this.getOrderList(true);
                     }, 3000)
                 },
-                deleteOrder(){
+                deleteOrder(tempOrderList){
+                    this.tempOrderList = tempOrderList;
+                    this.modalControl.is_delete = true;
+                },
+                delModal(flag){
+                  if(flag){
                     db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
                     db.collection('ORDER').doc(this.tempOrderList.oId).delete();
                     this.modalControl.is_delete = false;
                     this.tempOrderList = {};
-                    this.getOrderList();
+                    this.getOrderList(true);
+                  } else {
+                    this.modalControl.is_delete = false;
+                    this.tempOrderList = {};
+                  }
                 },
                 add(){
                     if(this.checkList.phone == false || this.tempOrderList.phone == ''){
@@ -490,7 +531,7 @@
                     this.tempOrderList = {};
                     this.modalControl.is_add = false;
 
-                    this.getOrderList();
+                    this.getOrderList(true);
                 },
                 addMember(){
                     firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
@@ -514,7 +555,6 @@
                     window.location = './index.html'
                 },
                 async searchBtn(type ,input = ''){
-                    await this.getOrderList();
                     if(type == '期數大於'){
                         this.searchHandler('staging_number', '>', input);
                     }else if(type == '期數小於'){
@@ -526,29 +566,29 @@
                     }else if(type == '專員查詢'){
                         this.searchHandler('mname', 'searchName', input);
                     }else{
-                        this.getOrderList();
+                        this.getOrderList(true);
                     }
                 },
-                searchHandler(category, type, input){
-                    this.orderList = this.orderList.filter(item => {
-                        if(type == '='){
-                            if(isNaN(+input)){
-                                return item[`${category}`] == input;
-                            }else{
-                                return item[`${category}`] == +input;
-                            }
-                        }else if(type == '>'){
-                            return item[`${category}`] > +input;
-                        }else if(type == '<'){
-                            return item[`${category}`] < +input;
-                        }else if(type == 'searchName'){
-                            if(item[`${category}`] !== undefined){
-                                return item[`${category}`].trim() == input.trim()
-                            }
-                        }
-                    });
-                    let data = [...this.orderList]
-                    this.getPage(data)
+                async searchHandler(category, type, input){
+                    this.orderList = []
+                    let temp = []
+                    if(type == '=') {
+                      if(isNaN(+input)){
+                        temp = await db.collection('ORDER').where(category, '==', input).get()
+                      } else {
+                        temp = await db.collection('ORDER').where(category, '==', +input).get()
+                      }
+                    } else if (type == '>') {
+                        temp = await db.collection('ORDER').where(category, '>', +input).get()
+                    } else if (type == '<') {
+                        temp = await db.collection('ORDER').where(category, '<', +input).get()
+                    } else if(type == 'searchName') {
+                        console.log(category, input)
+                        temp = await db.collection('ORDER').where(category, '==', input).get()
+                    }
+                    temp.forEach(item => {
+                      this.orderList.push(item.data())
+                    })
                 },
                 async getBefore(){
                     this.beforeList = [];
@@ -566,6 +606,7 @@
                             title: this.tempBefore
                         })
                         this.modalControl.is_add_before = 0;
+                        this.tempBefore = '';
                         this.getBefore();
                     }
                 },
@@ -598,7 +639,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
+                            if( ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;
@@ -612,29 +653,6 @@
                             console.dir(err);
                         })
                     
-                },
-                paginationHandler(page){
-                    if(page == 0 || page > this.pageLists.length) return;
-                    this.pageList = this.pageLists[page - 1];
-                    this.currentPage = page;
-                },
-                getPage(data = this.orderList){
-                    this.pageLists = [];
-                    let page = 0;
-                    this.pageLists[page] = [];
-                    data.sort((a,b) => {
-                        return b.oId - a.oId;
-                    })
-                    data.forEach((item, index) => {
-                        if((index + 1 ) % 80 !== 0){
-                            this.pageLists[page].push(item);
-                        }else if((index + 1) % 80 == 0){
-                            this.pageLists[page].push(item);
-                            page += 1;
-                            this.pageLists[page] = [];
-                        }
-                    })
-                    this.paginationHandler(1);
                 },
                 async updateS(){
                   let update = await db.collection('ORDER').get();
@@ -679,7 +697,40 @@
                   //     staging_number: +item.staging_number + 1
                   //   })
                   // })
-                }
+                },
+                async deleteBefore (item) {
+                  let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
+                  let before_id = ''
+                  before.forEach(item => {
+                    before_id = item.id
+                  })
+                  db.collection('BEFORE').doc(before_id).delete()
+                  this.getBefore()
+                },
+                add_AllNumber () {
+                  if(this.tempAllNumber == '') return;
+                  db.collection('ALLNUMBER').add({
+                    title: this.tempAllNumber
+                  })
+                  this.tempAllNumber = '';
+                  this.getAllNumber();
+                },
+                async getAllNumber () {
+                  this.allNumberList = [];
+                  let data = await db.collection('ALLNUMBER').orderBy('title', 'asc').get();
+                  data.forEach(item => {
+                    this.allNumberList.push(item.data().title)
+                  })
+                },
+                async deleteAllNumber (item) {
+                  let allNumber = await db.collection('ALLNUMBER').where('title', '==', item).limit(1).get()
+                  let allNumber_id = ''
+                  allNumber.forEach(item => {
+                    allNumber_id = item.id
+                  })
+                  db.collection('ALLNUMBER').doc(allNumber_id).delete()
+                  this.getAllNumber()
+                },
             },
             computed:{
                 filterData:{
@@ -703,8 +754,21 @@
             mounted(){
                 document.body.oncopy = function(){event.returnValue = false;}
                 this.checkLogin();
+                const vm = this;
+                $(window).scroll(function(){
+                  if  (Math.ceil($(window).scrollTop()) == ($(document).height() - $(window).height())){
+                    console.log('first',Math.ceil($(window).scrollTop()))
+                    vm.scrollCount = Math.ceil($(window).scrollTop())
+                    vm.getOrderList()
+                  }
+                });
             }
         })
+        app.component('list',{
+          props:["item", "displayName"],
+          emits:["deleteOrder", "editOrder"],
+          template: '#list'
+        });
         app.mount('#app');
 
     </script>

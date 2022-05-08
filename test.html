@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .container{
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .list{
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+    .list-item{
+      padding: 100px;
+      text-align: center;
+      background: blue;
+      color: white;
+      font-size: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="list">
+      <list v-for="(list, index) in list_one" :list="list" @edit-list="editList" :key="index"><list>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/x-template" id="list">
+    <div class="list-item">
+      <p @click="$emit('editList', list, list.id)">{{ list.num }}</p>
+    </div>
+  </script>
+  <script>
+    const app =  Vue.createApp({
+      data () {
+        return {
+          list_one: [
+              {
+                id: 1,
+                num: 1
+              },
+              {
+                id: 2,
+                num: 2
+              },
+              {
+                id: 3,
+                num: 3
+              },
+              {
+                id: 4,
+                num: 4
+              },
+              {
+                id: 5,
+                num: 5
+              },
+              {
+                id: 6,
+                num: 6
+              },
+              {
+                id: 7,
+                num: 7
+              },
+              {
+                id: 8,
+                num: 8
+              },
+              {
+                id: 9,
+                num: 9
+              },
+              {
+                id: 10,
+                num: 10
+              }
+          ]
+        }
+      },
+      methods: {
+        editList (tempList, id) {
+          console.log(tempList, id)
+        }
+      },
+      mounted () {
+        let vm = this
+        $(window).scroll(function(){
+                  if  (Math.ceil($(window).scrollTop()) == ($(document).height() - $(window).height())){
+                    let data = [
+                      {
+                        num: vm.list_one.length + 1,
+                        id: vm.list_one.length + 1
+                      },
+                      {
+                        num: vm.list_one.length + 2,
+                        id: vm.list_one.length + 2
+                      },
+                      {
+                        num: vm.list_one.length + 3,
+                        id: vm.list_one.length + 3
+                      },
+                      {
+                        num: vm.list_one.length + 4,
+                        id: vm.list_one.length + 4
+                      },
+                      {
+                        num: vm.list_one.length + 5,
+                        id: vm.list_one.length + 5
+                      }
+                    ]
+                    vm.list_one.push(...data)
+                  }
+                });
+        }
+    })
+    app.component('list',{
+      props:["list"],
+      emits:["editList"],
+      template: '#list'
+    });
+    app.mount('#app');
+  </script>
+</body>
+</html>
