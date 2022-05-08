@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>增量頁面</title>
+    <title>一般頁面</title>
     <link rel="stylesheet" href="./css/all.css" class="css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
@@ -41,7 +41,7 @@
             </div>
             <div class="container-lg">
                 <div class="list">
-                    <div class="list-title">增量頁面</div>
+                    <div class="list-title">一般頁面</div>
                     <div class="add__list">
                         <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
                         <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
@@ -410,7 +410,7 @@
                             // 員工
                             if (first){
                               this.orderList = []
-                              let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').limit(10).get();
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('oId', 'desc').limit(10).get();
                               data.forEach( item => {
                                   this.orderList.push({
                                       ...item.data(),
@@ -419,7 +419,7 @@
                               })
                               this.lastData = this.orderList[this.orderList.length - 1].id;
                             } else {
-                              let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
                               data.forEach( item => {
                                   this.orderList.push({
                                       ...item.data(),
@@ -433,7 +433,7 @@
                             if (first) {
                               this.orderList = []
                               this.lastData = ''
-                              let data = await db.collection('ORDER').orderBy('oId', 'desc').limit(10).get();
+                              let data = await db.collection('NORMALORDER').orderBy('oId', 'desc').limit(10).get();
                               data.forEach( item => {
                                 this.orderList.push({
                                     ...item.data(),
@@ -442,7 +442,7 @@
                               })
                               this.lastData = this.orderList[this.orderList.length - 1].id;
                             } else {
-                              let data = await db.collection('ORDER').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get()
+                              let data = await db.collection('NORMALORDER').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get()
                               data.forEach( item => {
                                 this.orderList.push({
                                     ...item.data(),
@@ -475,10 +475,10 @@
                         alert('請填寫正確電話號碼');
                         return;
                     }
-                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
+                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('normalOrder').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList,
                     });
-                    db.collection('ORDER').doc(this.tempOrderList.oId).set({
+                    db.collection('NORMALORDER').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList,
                     });
                     this.closeEdit();
@@ -492,8 +492,8 @@
                 },
                 delModal(flag){
                   if(flag){
-                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
-                    db.collection('ORDER').doc(this.tempOrderList.oId).delete();
+                    db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('normalOrder').doc(this.tempOrderList.oId).delete();
+                    db.collection('NORMALORDER').doc(this.tempOrderList.oId).delete();
                     this.closeDelete()
                     this.getOrderList(true);
                   } else {
@@ -515,13 +515,13 @@
                         return;
                     }
                     let id = "" + new Date().getTime();
-                    db.collection('ORDER').doc(id).set({
+                    db.collection('NORMALORDER').doc(id).set({
                         ...this.tempOrderList,
                         oId: id,
                         uId: this.uid,
                         mname: this.mname
                     })
-                    db.collection('MEMBERP').doc(this.uid).collection('order').doc(id).set({
+                    db.collection('MEMBERP').doc(this.uid).collection('normalOrder').doc(id).set({
                         ...this.tempOrderList,
                         oId: id,
                         uId: this.uid,
@@ -532,23 +532,6 @@
                     this.modalControl.is_add = false;
 
                     this.getOrderList(true);
-                },
-                addMember(){
-                    firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
-                    .then((res) => {
-                        let data = {
-                            account: res.user.email,
-                            displayName: '員工',
-                            uid: res.user.uid
-                        }
-                        db.collection('MEMBERP').doc(res.user.uid).set(data);
-                        this.member = {};
-                        this.modalControl.is_add_member = false;
-                    })
-                    .catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                    }); 
                 },
                 logout(){
                     localStorage.removeItem('cookie');
@@ -575,25 +558,25 @@
                     if(type == '=') {
                       if(isNaN(+input)){
                         this.displayName == '管理'
-                        ? temp = await db.collection('ORDER').where(category, '==', input).get()
-                        : temp = await db.collection('MEMBERP').doc(this.uid).collection('order'). where(category, '==', input).get()
+                        ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
+                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
                       } else {
                         this.displayName == '管理'
-                        ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('MEMBERP').doc(this.uid).collection('order'). where(category, '==', +input).get()
+                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
                       }
                     } else if (type == '>') {
                       this.displayName == '管理'
-                        ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('MEMBERP').doc(this.uid).collection('order'). where(category, '==', +input).get()
+                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
                     } else if (type == '<') {
                       this.displayName == '管理'
-                        ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('MEMBERP').doc(this.uid).collection('order'). where(category, '==', +input).get()
+                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
                     } else if(type == 'searchName') {
                       this.displayName == '管理'
-                        ? temp = await db.collection('ORDER').where(category, '==', input).get()
-                        : temp = await db.collection('MEMBERP').doc(this.uid).collection('order'). where(category, '==', input).get()
+                        ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
+                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
                     }
                     temp.forEach(item => {
                       this.orderList.push(item.data())
@@ -601,7 +584,7 @@
                 },
                 async getBefore(){
                     this.beforeList = [];
-                    let data = await db.collection('BEFORE').get();
+                    let data = await db.collection('NORMALBEFORE').get();
                     data.forEach(item => {
                         this.beforeList.push(item.data().title);
                     })
@@ -611,7 +594,7 @@
                         this.modalControl.is_add_before = 0;
                         return;
                     } else {
-                        db.collection('BEFORE').add({
+                        db.collection('NORMALBEFORE').add({
                             title: this.tempBefore
                         })
                         this.modalControl.is_add_before = 0;
@@ -672,62 +655,18 @@
                         })
                     
                 },
-                async updateS(){
-                  let update = await db.collection('ORDER').get();
-                  let data = [];
-                  let newData = [];
-
-                  update.forEach((item, index) =>{
-                    data.push(item.data())
-                  })
-                  // console.log(data)
-                  // data.forEach((item, index) =>{
-                  //   console.log(index)
-                  //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
-                  //     ...item
-                  //   })
-                  // })
-
-                  // data.forEach(item => {
-                  //   db.collection('ORDER').doc(item.oId).set({
-                  //     ...item
-                  //   })
-                  // })
-
-
-                  // data.forEach(item => {
-                  //   if(+item.staging_number >= 0){
-                  //     newData.push(item)
-                  //   }
-                  // })
-                
-
-
-                  // console.log(newData)
-                  // newData.forEach((item, index) => {
-                  //   console.log(index);
-                  //   db.collection('ORDER').doc(item.oId).set({
-                  //     ...item,
-                  //     staging_number: +item.staging_number + 1
-                  //   })
-                  //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
-                  //     ...item,
-                  //     staging_number: +item.staging_number + 1
-                  //   })
-                  // })
-                },
                 async deleteBefore (item) {
-                  let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
+                  let before = await db.collection('NORMALBEFORE').where('title', '==', item).limit(1).get()
                   let before_id = ''
                   before.forEach(item => {
                     before_id = item.id
                   })
-                  db.collection('BEFORE').doc(before_id).delete()
+                  db.collection('NORMALBEFORE').doc(before_id).delete()
                   this.getBefore()
                 },
                 add_AllNumber () {
                   if(this.tempAllNumber == '') return;
-                  db.collection('ALLNUMBER').add({
+                  db.collection('NORMALALLNUMBER').add({
                     title: this.tempAllNumber
                   })
                   this.tempAllNumber = '';
@@ -735,18 +674,18 @@
                 },
                 async getAllNumber () {
                   this.allNumberList = [];
-                  let data = await db.collection('ALLNUMBER').orderBy('title', 'asc').get();
+                  let data = await db.collection('NORMALALLNUMBER').orderBy('title', 'asc').get();
                   data.forEach(item => {
                     this.allNumberList.push(item.data().title)
                   })
                 },
                 async deleteAllNumber (item) {
-                  let allNumber = await db.collection('ALLNUMBER').where('title', '==', item).limit(1).get()
+                  let allNumber = await db.collection('NORMALALLNUMBER').where('title', '==', item).limit(1).get()
                   let allNumber_id = ''
                   allNumber.forEach(item => {
                     allNumber_id = item.id
                   })
-                  db.collection('ALLNUMBER').doc(allNumber_id).delete()
+                  db.collection('NORMALALLNUMBER').doc(allNumber_id).delete()
                   this.getAllNumber()
                 },
                 upToTop () {
@@ -759,22 +698,7 @@
                   }
                 }
             },
-            computed:{
-                filterData:{
-                    get(){
-                        return this.orderList;
-                    },
-                    set(val){
-                        this.orderList = this.orderList.sort((a, b) => {
-                            if(val == 0){
-                                return new Date(a.date).getTime() - new Date(b.date).getTime();
-                            }else{
-                                return new Date(b.date).getTime() - new Date(a.date).getTime();
-                            }
-                        })
-                    }
-                }
-            },
+
             created(){
                 this.getIp();
             },
