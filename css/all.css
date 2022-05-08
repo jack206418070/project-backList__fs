@@ -322,7 +322,7 @@ body {
 
 .delete-modal.show {
   z-index: 100;
-  top: 20%;
+  top: 50%;
 }
 
 .delete-modal .title {
@@ -712,5 +712,30 @@ body {
 
 .before-modal .content .btn-group .delete, .allNumber-modal .content .btn-group .delete {
   background-color: red;
+}
+
+.scrollTop {
+  position: fixed;
+  bottom: 30px;
+  right: 10%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: #777;
+  opacity: .5;
+  color: white;
+}
+
+.scrollTop:hover {
+  opacity: 1;
 }
 /*# sourceMappingURL=all.css.map */

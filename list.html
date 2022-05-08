@@ -7,10 +7,14 @@
     <title>增量頁面</title>
     <link rel="stylesheet" href="./css/all.css" class="css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body  oncopy="return false;" oncontextmenu="return false;">
+<body oncopy="return false;" oncontextmenu="return false;">
     <div id="app">
+        <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
+          <i class="fa-solid fa-arrow-up"></i>
+        </a>
         <div v-if="checkIp == true">
             <div class="header">
                 <div class="container-lg d-flex jy-content-between align-items-center">
@@ -414,7 +418,6 @@
                                   })
                               })
                               this.lastData = this.orderList[this.orderList.length - 1].id;
-                              console.log(this.orderList)
                             } else {
                               let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
                               data.forEach( item => {
@@ -486,18 +489,16 @@
                 },
                 deleteOrder(tempOrderList){
                     this.tempOrderList = tempOrderList;
-                    this.modalControl.is_delete = true;
+                    this.openDelete();
                 },
                 delModal(flag){
                   if(flag){
                     db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
                     db.collection('ORDER').doc(this.tempOrderList.oId).delete();
-                    this.modalControl.is_delete = false;
-                    this.tempOrderList = {};
+                    this.closeDelete()
                     this.getOrderList(true);
                   } else {
-                    this.modalControl.is_delete = false;
-                    this.tempOrderList = {};
+                    this.closeDelete()
                   }
                 },
                 add(){
@@ -612,13 +613,22 @@
                 },
                 openEdit(event, item){
                     document.querySelector('.edit-modal').style.zIndex = 100;
-                    document.querySelector('.edit-modal').style.top = `${event.pageY - event.screenY + 120}px`;
+                    document.querySelector('.edit-modal').style.top = `${event.pageY - event.screenY + 150}px`;
                     this.tempOrderList = {...item}
                 },
                 closeEdit(){
                     this.tempOrderList = {};
                     document.querySelector('.edit-modal').style.zIndex = -10;
                     document.querySelector('.edit-modal').style.top = `-1200px`;
+                },
+                openDelete(){
+                    document.querySelector('.delete-modal').style.zIndex = 100;
+                    document.querySelector('.delete-modal').style.top = `${event.pageY - event.screenY + 300}px`;
+                },
+                closeDelete(){
+                    this.tempOrderList = {};
+                    document.querySelector('.delete-modal').style.zIndex = -10;
+                    document.querySelector('.delete-modal').style.top = `-1200px`;
                 },
                 checkFormOrder(type){
                     if(type == 'phone'){
@@ -639,7 +649,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
+                            if( ip.startsWith('27.52') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;
@@ -731,6 +741,16 @@
                   db.collection('ALLNUMBER').doc(allNumber_id).delete()
                   this.getAllNumber()
                 },
+                upToTop () {
+                  let vm = this;
+                  console.log(1)
+                  if(window.scrollY != 0) {
+                    setTimeout(function(){
+                      window.scrollBy(0,-100);
+                      vm.upToTop();
+                    },10);
+                  }
+                }
             },
             computed:{
                 filterData:{
@@ -757,7 +777,6 @@
                 const vm = this;
                 $(window).scroll(function(){
                   if  (Math.ceil($(window).scrollTop()) == ($(document).height() - $(window).height())){
-                    console.log('first',Math.ceil($(window).scrollTop()))
                     vm.scrollCount = Math.ceil($(window).scrollTop())
                     vm.getOrderList()
                   }
