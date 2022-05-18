@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
     <div id="app">
         <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
           <i class="fa-solid fa-arrow-up"></i>
@@ -46,7 +46,6 @@
                         <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
                         <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
                         <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-                        <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a>
                         <div class="search">
                             <select name="search" id="search" v-model="search.staging">
                                 <option value="全部訂單" selected>全部訂單</option>
@@ -410,46 +409,69 @@
                             // 員工
                             if (first){
                               this.orderList = []
-                              let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('oId', 'desc').limit(10).get();
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('date', 'desc').limit(10).get();
                               data.forEach( item => {
                                   this.orderList.push({
                                       ...item.data(),
-                                      id: item.id
+                                      id: item.id,
+                                      date: this.formatDate(item.data().date)
                                   })
                               })
-                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                              this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
                             } else {
-                              let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
+                              let flag = true
+                              let data = await db.collection('MEMBERP').doc(this.uid).collection
+                              ('normalOrder').orderBy('date', 'desc').startAfter(this.lastData).limit(5).get();
                               data.forEach( item => {
+                                if(this.orderList[0].oId == item.data().oId) {
+                                  console.log(1)
+                                  flag = false
+                                }
+                              })
+                              if(flag) {
+                                data.forEach( item => {
                                   this.orderList.push({
                                       ...item.data(),
-                                      id: item.id
+                                      id: item.id,
+                                      date: this.formatDate(item.data().date)
                                   })
-                              })
-                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                                })
+                                this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+                              }
                             }
                         }else{
                             // 管理
                             if (first) {
                               this.orderList = []
                               this.lastData = ''
-                              let data = await db.collection('NORMALORDER').orderBy('oId', 'desc').limit(10).get();
-                              data.forEach( item => {
+                              let data = await db.collection('NORMALORDER').orderBy('date', 'desc').limit(10).get();
+                              data.forEach(item => {
                                 this.orderList.push({
                                     ...item.data(),
-                                    id: item.id
+                                    id: item.id,
+                                    date: this.formatDate(item.data().date)
                                 })
                               })
-                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                              this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
                             } else {
-                              let data = await db.collection('NORMALORDER').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get()
+                              let flag = true;
+                              let data = await db.collection('NORMALORDER').orderBy('date', 'desc').startAfter(this.lastData).limit(5).get()
                               data.forEach( item => {
+                                if(this.orderList[0].oId == item.data().oId) {
+                                  flag = false
+                                  console.log(this.lastData, this.orderList[0].oId, item.data().oId)
+                                }
+                              })
+                              if(flag) {
+                                data.forEach( item => {
                                 this.orderList.push({
                                     ...item.data(),
-                                    id: item.id
+                                    id: item.id,
+                                    date: this.formatDate(item.data().date)
+                                  })
                                 })
-                              })
-                              this.lastData = this.orderList[this.orderList.length - 1].id;
+                                this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+                              }
                             }
                         }
                 },
@@ -477,9 +499,11 @@
                     }
                     db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('normalOrder').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList,
+                        date: Date.parse(this.tempOrderList.date)
                     });
                     db.collection('NORMALORDER').doc(this.tempOrderList.oId).set({
                         ...this.tempOrderList,
+                        date: Date.parse(this.tempOrderList.date)
                     });
                     this.closeEdit();
                     setTimeout(() => {
@@ -515,14 +539,19 @@
                         return;
                     }
                     let id = "" + new Date().getTime();
+                    let date = new Date(this.tempOrderList.date)
+                    let dateTimeStamp = Date.parse(date)
+                    
                     db.collection('NORMALORDER').doc(id).set({
                         ...this.tempOrderList,
                         oId: id,
+                        date: dateTimeStamp,
                         uId: this.uid,
                         mname: this.mname
                     })
                     db.collection('MEMBERP').doc(this.uid).collection('normalOrder').doc(id).set({
                         ...this.tempOrderList,
+                        date: dateTimeStamp,
                         oId: id,
                         uId: this.uid,
                         mname: this.mname
@@ -640,7 +669,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('27.52') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
+                            if( ip.startsWith('39.8') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;
@@ -696,6 +725,10 @@
                       vm.upToTop();
                     },10);
                   }
+                },
+                formatDate (timeStamp) {
+                  let date = new Date(timeStamp);
+                  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
                 }
             },
 

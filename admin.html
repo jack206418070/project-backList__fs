@@ -20,7 +20,7 @@
                           <a class="list-control" href="./normal.html">一般頁面</a>
                         </li>
                         <li>
-                            <a class="list-control" href="./list.html">訂單管理</a>
+                            <a class="list-control" href="./list.html">增量頁面</a>
                         </li>
                         <li>
                           <a class="account-control" href="./admin.html">帳號管理</a>
@@ -274,10 +274,29 @@
                     localStorage.removeItem('cookie');
                     window.location = './index.html'
                 },
-                
+                // changePassword() {
+                //   firebase.auth().signInWithEmailAndPassword('admin@gmail.com', 'adminadmin')
+                //     .then( async (res) => {
+                //       const user = firebase.auth().currentUser;
+                //       user.updatePassword('admin123').then(() => {
+                //         console.log('成功')
+                //       }).catch((error) => {
+                //         console.dir(error)
+                //         // An error ocurred
+                //         // ...
+                //       });
+                //     })
+                //     .catch((error) => {
+                //         var errorCode = error.code;
+                //         var errorMessage = error.message;
+                //         alert(errorMessage);
+                //     });
+                  
+                // }
             },
             mounted(){
                 this.checkLogin();
+                // this.changePassword();
                 setTimeout(() => {
                     localStorage.removeItem('cookie')
                 },60 * 60 * 1000);
