@@ -99,6 +99,7 @@
                                 <label for="permission">員工權限</label>
                                 <select name="permission" id="permission" v-model="member.displayName">
                                     <option value="員工" :selected = "member.displayName === '員工'">員工</option>
+                                    <option value="組長">組長</option>
                                     <option value="管理">管理</option>
                                 </select>
                             </div>
@@ -145,6 +146,7 @@
                             <label for="permission">員工權限</label>
                             <select name="permission" id="permission" v-model="member.displayName">
                                 <option value="員工" :selected = "member.displayName === '員工'">員工</option>
+                                <option value="組長">組長</option>
                                 <option value="管理">管理</option>
                             </select>
                         </div>

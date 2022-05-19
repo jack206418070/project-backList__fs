@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body>
+<body oncopy="return false;" oncontextmenu="return false;">
     <div id="app">
         <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
           <i class="fa-solid fa-arrow-up"></i>
@@ -46,7 +46,7 @@
                         <a class="add" href="#" @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
                         <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
                         <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-                        <div class="search">
+                        <!-- <div class="search">
                             <select name="search" id="search" v-model="search.staging">
                                 <option value="全部訂單" selected>全部訂單</option>
                                 <option value="客戶查詢">客戶查詢</option>
@@ -58,7 +58,7 @@
                             <input type="text" v-model="search.search_text">
                             <a class="search-btn" href="#" 
                             @click.prevent="searchBtn(search.staging,search.search_text)">搜尋</a>
-                        </div>
+                        </div> -->
                     </div>
                     <ul>
                         <li>
@@ -581,36 +581,36 @@
                         this.getOrderList(true);
                     }
                 },
-                async searchHandler(category, type, input){
-                    this.orderList = []
-                    let temp = []
-                    if(type == '=') {
-                      if(isNaN(+input)){
-                        this.displayName == '管理'
-                        ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
-                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
-                      } else {
-                        this.displayName == '管理'
-                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
-                      }
-                    } else if (type == '>') {
-                      this.displayName == '管理'
-                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
-                    } else if (type == '<') {
-                      this.displayName == '管理'
-                        ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
-                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
-                    } else if(type == 'searchName') {
-                      this.displayName == '管理'
-                        ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
-                        : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
-                    }
-                    temp.forEach(item => {
-                      this.orderList.push(item.data())
-                    })
-                },
+                // async searchHandler(category, type, input){
+                //     this.orderList = []
+                //     let temp = []
+                //     if(type == '=') {
+                //       if(isNaN(+input)){
+                //         this.displayName == '管理'
+                //         ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
+                //         : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
+                //       } else {
+                //         this.displayName == '管理'
+                //         ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                //         : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
+                //       }
+                //     } else if (type == '>') {
+                //       this.displayName == '管理'
+                //         ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                //         : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
+                //     } else if (type == '<') {
+                //       this.displayName == '管理'
+                //         ? temp = await db.collection('NORMALORDER').where(category, '==', +input).get()
+                //         : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', +input).get()
+                //     } else if(type == 'searchName') {
+                //       this.displayName == '管理'
+                //         ? temp = await db.collection('NORMALORDER').where(category, '==', input).get()
+                //         : temp = await db.collection('NORMALMEMBERP').doc(this.uid).collection('normalOrder'). where(category, '==', input).get()
+                //     }
+                //     temp.forEach(item => {
+                //       this.orderList.push(item.data())
+                //     })
+                // },
                 async getBefore(){
                     this.beforeList = [];
                     let data = await db.collection('NORMALBEFORE').get();
@@ -669,7 +669,7 @@
                     axios.get("https://api.ipify.org/?format=json")
                         .then(res => {
                             let ip = res.data.ip;
-                            if( ip.startsWith('39.8') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
+                            if( ip.startsWith('39.13') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')){
                                 this.checkIp = true;
                             } else {
                                 this.checkIp = false;

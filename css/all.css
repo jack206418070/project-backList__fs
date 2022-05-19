@@ -738,4 +738,8 @@ body {
 .scrollTop:hover {
   opacity: 1;
 }
+
+.control-height {
+  height: 80px;
+}
 /*# sourceMappingURL=all.css.map */
