@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
   <div id="app">
     <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
       <i class="fa-solid fa-arrow-up"></i>
@@ -26,6 +26,12 @@
           </div>
           <div class="menu">
             <ul class="d-flex">
+              <li class="d-flex align-items-center" style="position: relative;">
+                <input type="text" style="width: 400px; padding: 10px 5px 10px 10px;" v-model.trim="searchText">
+                <a href="javascript:;" class="list-control" style="position: absolute; right: -10px" @click="getOrderList(0)">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+              </li>
               <li>
                 <a class="list-control" href="./normal.html">一般頁面</a>
               </li>
@@ -50,8 +56,8 @@
               @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
             <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
             <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-            <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a>
-            <div class="search">
+            <!-- <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a> -->
+            <!-- <div class="search">
               <select name="search" id="search" v-model="search.staging">
                 <option value="全部訂單" selected>全部訂單</option>
                 <option value="客戶查詢">客戶查詢</option>
@@ -62,7 +68,7 @@
               </select>
               <input type="text" v-model="search.search_text">
               <a class="search-btn" href="#" @click.prevent="searchBtn(search.staging,search.search_text)">搜尋</a>
-            </div>
+            </div> -->
           </div>
           <ul>
             <li>
@@ -385,10 +391,7 @@
             is_before: false,
             is_allNumber: false
           },
-          search: {
-            staging: '全部訂單',
-            search_text: '',
-          },
+          searchText: '',
           beforeList: [],
           allNumberList: [],
           tempAllNumber: '',
@@ -407,30 +410,49 @@
           this.orderList = []
           if (this.displayName == '管理' || this.displayName == '組長') {
             let url = dns + "/1/indexes/ORDER/query";
+            let data = {
+              hitsPerPage: 150,
+              page: page
+            }
+            if(this.searchText !== '') {
+              data = {
+                hitsPerPage: 150,
+                page: page,
+                query: this.searchText
+              }
+            }
+            console.log(this.searchText)
             let response = await axios({
               method: "post",
               url: url,
               headers: header,
-              data: {
-                hitsPerPage: 150,
-                page: page
-              }
+              data: data
             })
+            console.log(response.data)
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits
           } else {
             let url = dns + "/1/indexes/ORDER/query";
             let filters = `(uId:${this.uid})`
+            let data = {
+              hitsPerPage: 150,
+              page: page,
+              'filters': filters
+            }
+            if(this.searchText !== '') {
+              data = {
+                hitsPerPage: 150,
+                page: page,
+                'filters': filters,
+                query: this.searchText
+              }
+            }
             let response = await axios({
               method: "post",
               url: url,
               headers: header,
-              data: {
-                hitsPerPage: 150,
-                page: page,
-                'filters': filters
-              }
+              data: data
             })
             this.allPage = response.data.nbPages;
             this.currentPage = page;
@@ -588,51 +610,93 @@
           localStorage.removeItem('cookie');
           window.location = './index.html'
         },
-        async searchBtn(type, input = '') {
-          if (type == '期數大於') {
-            this.searchHandler('staging_number', '>', input);
-          } else if (type == '期數小於') {
-            this.searchHandler('staging_number', '<', input);
-          } else if (type == '期數等於') {
-            this.searchHandler('staging_number', '=', input);
-          } else if (type == '客戶查詢') {
-            this.searchHandler('name', 'searchName', input);
-          } else if (type == '專員查詢') {
-            this.searchHandler('mname', 'searchName', input);
-          } else {
-            this.getOrderList(true);
-          }
-        },
-        async searchHandler(category, type, input) {
-          this.orderList = []
-          let temp = []
-          if (type == '=') {
-            if (isNaN(+input)) {
-              this.displayName == '管理'
-                ? temp = await db.collection('ORDER').where(category, '==', input).get()
-                : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
-            } else {
-              this.displayName == '管理'
-                ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-                : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-            }
-          } else if (type == '>') {
-            this.displayName == '管理'
-              ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-              : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-          } else if (type == '<') {
-            this.displayName == '管理'
-              ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-              : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-          } else if (type == 'searchName') {
-            this.displayName == '管理'
-              ? temp = await db.collection('ORDER').where(category, '==', input).get()
-              : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
-          }
-          temp.forEach(item => {
-            this.orderList.push(item.data())
-          })
-        },
+        // async searchHandler (page = 0) {
+        //   if(this.searchText === '') {
+        //     this.getOrderList(0)
+        //   } else {
+        //     this.orderList = []
+        //     if (this.displayName == '管理' || this.displayName == '組長') {
+        //       console.log(page)
+        //       let url = dns + "/1/indexes/ORDER/query";
+        //       let response = await axios({
+        //         method: "post",
+        //         url: url,
+        //         headers: header,
+        //         data: {
+        //           hitsPerPage: 150,
+        //           query: this.searchText,
+        //           page: page
+        //         }
+        //       })
+        //       console.dir(response)
+        //       this.allPage = response.data.nbPages;
+        //       this.currentPage = page;
+        //       this.orderList = response.data.hits
+        //     } else {
+        //       let url = dns + "/1/indexes/ORDER/query";
+        //       let filters = `(uId:${this.uid})`
+        //       let response = await axios({
+        //             method: "post",
+        //             url: url,
+        //             headers: header,
+        //             data: {
+        //               hitsPerPage: 150,
+        //               page: page,
+        //               'filters': filters,
+        //               query: this.searchText
+        //             }
+        //           })
+        //       this.allPage = response.data.nbPages;
+        //       this.currentPage = page;
+        //       this.orderList = response.data.hits
+        //     }
+        //   }
+        // },
+        // async searchBtn(type, input = '') {
+        //   if (type == '期數大於') {
+        //     this.searchHandler('staging_number', '>', input);
+        //   } else if (type == '期數小於') {
+        //     this.searchHandler('staging_number', '<', input);
+        //   } else if (type == '期數等於') {
+        //     this.searchHandler('staging_number', '=', input);
+        //   } else if (type == '客戶查詢') {
+        //     this.searchHandler('name', 'searchName', input);
+        //   } else if (type == '專員查詢') {
+        //     this.searchHandler('mname', 'searchName', input);
+        //   } else {
+        //     this.getOrderList(true);
+        //   }
+        // },
+        // async searchHandler(category, type, input) {
+        //   this.orderList = []
+        //   let temp = []
+        //   if (type == '=') {
+        //     if (isNaN(+input)) {
+        //       this.displayName == '管理'
+        //         ? temp = await db.collection('ORDER').where(category, '==', input).get()
+        //         : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
+        //     } else {
+        //       this.displayName == '管理'
+        //         ? temp = await db.collection('ORDER').where(category, '==', +input).get()
+        //         : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
+        //     }
+        //   } else if (type == '>') {
+        //     this.displayName == '管理'
+        //       ? temp = await db.collection('ORDER').where(category, '==', +input).get()
+        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
+        //   } else if (type == '<') {
+        //     this.displayName == '管理'
+        //       ? temp = await db.collection('ORDER').where(category, '==', +input).get()
+        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
+        //   } else if (type == 'searchName') {
+        //     this.displayName == '管理'
+        //       ? temp = await db.collection('ORDER').where(category, '==', input).get()
+        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
+        //   }
+        //   temp.forEach(item => {
+        //     this.orderList.push(item.data())
+        //   })
+        // },
         async getBefore() {
           this.beforeList = [];
           let data = await db.collection('BEFORE').get();
