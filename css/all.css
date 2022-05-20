@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   padding: 0;
   margin: 0;
@@ -105,7 +106,9 @@ body {
   opacity: 0.6;
 }
 
-.list .add__list .search select, .list .add__list .search input, .list .add__list .search .search-btn {
+.list .add__list .search select,
+.list .add__list .search input,
+.list .add__list .search .search-btn {
   padding: 8px 10px;
   margin-left: 5px;
 }
@@ -135,7 +138,15 @@ body {
           justify-content: space-between;
 }
 
-.list li .date, .list li .name, .list li .carId, .list li .staging, .list li .money, .list li .dieLine, .list li .month, .list li .extra, .list li .lineId {
+.list li .date,
+.list li .name,
+.list li .carId,
+.list li .staging,
+.list li .money,
+.list li .dieLine,
+.list li .month,
+.list li .extra,
+.list li .lineId {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 8%;
           flex: 0 0 8%;
@@ -189,7 +200,8 @@ body {
   background-color: red;
 }
 
-.list li .btn-control .edit, .list li .btn-control .delete {
+.list li .btn-control .edit,
+.list li .btn-control .delete {
   color: white;
   font-weight: bold;
   display: block;
@@ -199,11 +211,13 @@ body {
   margin-bottom: 5px;
 }
 
-.list li .btn-control .edit:hover, .list li .btn-control .delete:hover {
+.list li .btn-control .edit:hover,
+.list li .btn-control .delete:hover {
   opacity: 0.7;
 }
 
-.add-modal, .edit-modal {
+.add-modal,
+.edit-modal {
   position: absolute;
   width: 50%;
   top: -1300px;
@@ -217,23 +231,27 @@ body {
   transition: .5s;
 }
 
-.add-modal.show, .edit-modal.show {
+.add-modal.show,
+.edit-modal.show {
   z-index: 100;
   top: 10%;
 }
 
-.add-modal .title, .edit-modal .title {
+.add-modal .title,
+.edit-modal .title {
   text-align: center;
   padding: 10px 0;
   background-color: blue;
   color: white;
 }
 
-.add-modal .content, .edit-modal .content {
+.add-modal .content,
+.edit-modal .content {
   padding: 10px 20px;
 }
 
-.add-modal .form-group, .edit-modal .form-group {
+.add-modal .form-group,
+.edit-modal .form-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -243,37 +261,44 @@ body {
   margin-bottom: 20px;
 }
 
-.add-modal .form-control, .edit-modal .form-control {
+.add-modal .form-control,
+.edit-modal .form-control {
   margin: 0;
 }
 
-.add-modal label, .edit-modal label {
+.add-modal label,
+.edit-modal label {
   font-size: 16px;
 }
 
-.add-modal input, .edit-modal input {
+.add-modal input,
+.edit-modal input {
   padding: 0;
   font-size: 16px;
   padding: 3px;
 }
 
-.add-modal select, .edit-modal select {
+.add-modal select,
+.edit-modal select {
   padding: 6px;
   width: 100%;
 }
 
-.add-modal .type input, .edit-modal .type input {
+.add-modal .type input,
+.edit-modal .type input {
   display: inline-block;
   width: 20%;
 }
 
-.add-modal textarea, .edit-modal textarea {
+.add-modal textarea,
+.edit-modal textarea {
   width: 100%;
   padding: 10px;
   font-size: 20px;
 }
 
-.add-modal .btn-group, .edit-modal .btn-group {
+.add-modal .btn-group,
+.edit-modal .btn-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -283,7 +308,10 @@ body {
   margin-top: 20px;
 }
 
-.add-modal .btn-group .add, .add-modal .btn-group .close, .edit-modal .btn-group .add, .edit-modal .btn-group .close {
+.add-modal .btn-group .add,
+.add-modal .btn-group .close,
+.edit-modal .btn-group .add,
+.edit-modal .btn-group .close {
   width: 15%;
   display: block;
   color: white;
@@ -291,15 +319,20 @@ body {
   padding: 4px 8px;
 }
 
-.add-modal .btn-group .add:hover, .add-modal .btn-group .close:hover, .edit-modal .btn-group .add:hover, .edit-modal .btn-group .close:hover {
+.add-modal .btn-group .add:hover,
+.add-modal .btn-group .close:hover,
+.edit-modal .btn-group .add:hover,
+.edit-modal .btn-group .close:hover {
   opacity: 0.7;
 }
 
-.add-modal .btn-group .add, .edit-modal .btn-group .add {
+.add-modal .btn-group .add,
+.edit-modal .btn-group .add {
   background-color: green;
 }
 
-.add-modal .btn-group .close, .edit-modal .btn-group .close {
+.add-modal .btn-group .close,
+.edit-modal .btn-group .close {
   background-color: red;
 }
 
@@ -353,7 +386,8 @@ body {
   margin-top: 20px;
 }
 
-.delete-modal .content .btn-group .close, .delete-modal .content .btn-group .delete {
+.delete-modal .content .btn-group .close,
+.delete-modal .content .btn-group .delete {
   display: block;
   color: white;
   font-weight: bold;
@@ -362,7 +396,8 @@ body {
   width: 20%;
 }
 
-.delete-modal .content .btn-group .close:hover, .delete-modal .content .btn-group .delete:hover {
+.delete-modal .content .btn-group .close:hover,
+.delete-modal .content .btn-group .delete:hover {
   opacity: 0.7;
 }
 
@@ -592,7 +627,8 @@ body {
   background: rgba(255, 255, 255, 0.8);
 }
 
-.before-modal, .allNumber-modal {
+.before-modal,
+.allNumber-modal {
   position: absolute;
   width: 40%;
   top: -200%;
@@ -605,12 +641,14 @@ body {
   transition: .5s;
 }
 
-.before-modal.show, .allNumber-modal.show {
+.before-modal.show,
+.allNumber-modal.show {
   z-index: 100;
   top: 50%;
 }
 
-.before-modal .title, .allNumber-modal .title {
+.before-modal .title,
+.allNumber-modal .title {
   background-color: blue;
   text-align: center;
   font-weight: bold;
@@ -618,11 +656,13 @@ body {
   padding: 4px 0;
 }
 
-.before-modal .content, .allNumber-modal .content {
+.before-modal .content,
+.allNumber-modal .content {
   padding: 20px;
 }
 
-.before-modal .content-list, .allNumber-modal .content-list {
+.before-modal .content-list,
+.allNumber-modal .content-list {
   background-color: #fff;
   width: 100%;
   margin: 0 auto;
@@ -642,7 +682,8 @@ body {
   overflow: auto;
 }
 
-.before-modal .content .before-item, .allNumber-modal .content .before-item {
+.before-modal .content .before-item,
+.allNumber-modal .content .before-item {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 35%;
           flex: 0 0 35%;
@@ -658,17 +699,20 @@ body {
           justify-content: space-between;
 }
 
-.before-modal .content .before-item a:hover, .allNumber-modal .content .before-item a:hover {
+.before-modal .content .before-item a:hover,
+.allNumber-modal .content .before-item a:hover {
   color: red;
 }
 
-.before-modal .content p, .allNumber-modal .content p {
+.before-modal .content p,
+.allNumber-modal .content p {
   letter-spacing: 3px;
   text-align: center;
   font-weight: bold;
 }
 
-.before-modal .content .btn-group, .allNumber-modal .content .btn-group {
+.before-modal .content .btn-group,
+.allNumber-modal .content .btn-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -681,19 +725,24 @@ body {
   margin-top: 20px;
 }
 
-.before-modal .content .btn-group input, .allNumber-modal .content .btn-group input {
+.before-modal .content .btn-group input,
+.allNumber-modal .content .btn-group input {
   width: 70%;
   padding: 8px;
   outline: none;
   border: 0;
 }
 
-.before-modal .content .btn-group input:focus, .allNumber-modal .content .btn-group input:focus {
+.before-modal .content .btn-group input:focus,
+.allNumber-modal .content .btn-group input:focus {
   outline: none;
   border: 0;
 }
 
-.before-modal .content .btn-group .close, .before-modal .content .btn-group .delete, .allNumber-modal .content .btn-group .close, .allNumber-modal .content .btn-group .delete {
+.before-modal .content .btn-group .close,
+.before-modal .content .btn-group .delete,
+.allNumber-modal .content .btn-group .close,
+.allNumber-modal .content .btn-group .delete {
   display: block;
   color: white;
   font-weight: bold;
@@ -702,15 +751,20 @@ body {
   width: 20%;
 }
 
-.before-modal .content .btn-group .close:hover, .before-modal .content .btn-group .delete:hover, .allNumber-modal .content .btn-group .close:hover, .allNumber-modal .content .btn-group .delete:hover {
+.before-modal .content .btn-group .close:hover,
+.before-modal .content .btn-group .delete:hover,
+.allNumber-modal .content .btn-group .close:hover,
+.allNumber-modal .content .btn-group .delete:hover {
   opacity: 0.7;
 }
 
-.before-modal .content .btn-group .close, .allNumber-modal .content .btn-group .close {
+.before-modal .content .btn-group .close,
+.allNumber-modal .content .btn-group .close {
   background-color: green;
 }
 
-.before-modal .content .btn-group .delete, .allNumber-modal .content .btn-group .delete {
+.before-modal .content .btn-group .delete,
+.allNumber-modal .content .btn-group .delete {
   background-color: red;
 }
 
@@ -741,5 +795,64 @@ body {
 
 .control-height {
   height: 80px;
+}
+
+.loading::before {
+  width: 80px;
+  /*先將loading區域變成正方形*/
+  height: 80px;
+  -webkit-animation: loading-animation 0.8s infinite linear;
+          animation: loading-animation 0.8s infinite linear;
+  display: inline-block;
+  /*將loading區域變成行內元素，防止旋轉的時候，100%寬度都在旋轉*/
+  border: 5px solid #f3f3f3;
+  /*設定四周邊框大小，並將顏色設定為淺白色*/
+  border-top: 5px solid #555;
+  /*將上邊框顏色設定為紅色高亮，以便旋轉的時候能夠看到旋轉的效果*/
+  border-radius: 50%;
+  /*將邊框和內容區域都變成圓形*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  content: '';
+  z-index: 1000;
+}
+
+.loading:after {
+  content: '';
+  width: 100%;
+  height: 10000px;
+  background-color: #000;
+  opacity: .5;
+  position: absolute;
+  z-index: 999;
+}
+
+@-webkit-keyframes loading-animation {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    /*動畫起始的時候旋轉了0度*/
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+    /*動畫結束的時候旋轉了360度*/
+  }
+}
+
+@keyframes loading-animation {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    /*動畫起始的時候旋轉了0度*/
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+    /*動畫結束的時候旋轉了360度*/
+  }
 }
 /*# sourceMappingURL=all.css.map */

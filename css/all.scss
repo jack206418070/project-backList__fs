@@ -1,472 +1,559 @@
-@mixin mobile(){
-    @media (max-width: 768px) {
-        @content
-    }
+@mixin mobile() {
+  @media (max-width: 768px) {
+    @content
+  }
 }
 
-*{
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    text-decoration: none;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
-body{
-    background-color: lightblue;
+body {
+  background-color: lightblue;
 }
-.container{
-    max-width: 1200px;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 80px;
+
+  @include mobile {
+    padding: 20px 10px;
+  }
+
+  &-lg {
+    max-width: 1480px;
     margin: 0 auto;
-    padding: 40px 80px;
-    @include mobile{
-        padding: 20px 10px;
-    }
-    &-lg{
-        max-width: 1480px;
-        margin: 0 auto;
-        padding: 40px 0;
-    }
+    padding: 40px 0;
+  }
 
 }
 
-.login{
-    margin-top: 200px;
-    .btn-login{
-        width: 40%;
+.login {
+  margin-top: 200px;
+
+  .btn-login {
+    width: 40%;
+    background-color: green;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: center;
+    margin-top: 20px;
+    border: 0;
+    border-style: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+.form-control {
+  width: 30%;
+  margin: 0 auto;
+
+  @include mobile {
+    width: 80%;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+
+  input {
+    width: 100%;
+    padding: 5px 3px 5px 3px;
+    margin-bottom: 5px;
+    font-size: 20px;
+  }
+}
+
+
+.list {
+  .add__list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 30px;
+
+    .add {
+      display: block;
+      padding: 6px 20px;
+      background-color: blue;
+      color: white;
+      text-align: center;
+      width: 15%;
+      font-weight: bold;
+      margin-bottom: 20px;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    .search {
+
+      select,
+      input,
+      .search-btn {
+        padding: 8px 10px;
+        margin-left: 5px;
+      }
+
+      .search-btn {
+        background: blue;
+        color: white;
+      }
+    }
+  }
+
+  li {
+    display: flex;
+    border-bottom: 1px solid black;
+    padding: 5px 0;
+    align-items: center;
+
+    .type {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .date,
+    .name,
+    .carId,
+    .staging,
+    .money,
+    .dieLine,
+    .month,
+    .extra,
+    .lineId {
+      flex: 0 0 8%;
+      text-align: center;
+      font-weight: bold;
+      word-break: break-word;
+      table-layout: fixed;
+      overflow-x: hidden;
+    }
+
+    .btn-control {
+      flex: 0 0 7%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .phone {
+      flex: 0 0 9%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .type {
+      flex: 0 0 5%;
+      padding: 0 3px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .before {
+      flex: 0 0 7%;
+      padding: 0 3px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .btn-control {
+      .edit {
         background-color: green;
-        padding: 10px 20px;
+        margin-right: 3px;
+      }
+
+      .delete {
+        background-color: red;
+      }
+
+      .edit,
+      .delete {
         color: white;
         font-weight: bold;
         display: block;
-        margin-left: auto;
-        margin-right: 0;
-        text-align: center;
-        margin-top: 20px;
-        border: 0;
-        border-style: none;
-        cursor: pointer;
-        font-size: 18px;
-    }
-}
-
-.form-control{
-    width: 30%;
-    margin: 0 auto;
-    @include mobile{
         width: 80%;
-    }
-    label{
-        display: block;
-        margin-bottom: 3px;
-        font-weight: bold;
-        font-size: 20px;
-        letter-spacing: 2px;
-    }
-    input{
-        width:100%;
-        padding: 5px 3px 5px 3px;
+        padding: 6px 15px;
+        margin: 0 auto;
         margin-bottom: 5px;
-        font-size: 20px;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
     }
+  }
 }
 
 
-.list{
-    .add__list{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        padding: 0 30px;
-        .add{
-            display: block;
-            padding: 6px 20px;
-            background-color: blue;
-            color: white;
-            text-align: center;
-            width: 15%;
-            font-weight: bold;
-            margin-bottom: 20px;
-            &:hover{
-                opacity: 0.6;
-            }
-        }
-        .search{
-            select, input, .search-btn{
-                padding: 8px 10px;
-                margin-left: 5px;
-            }
-            .search-btn{
-                background: blue;
-                color: white;
-            }
-        }
-    }
-    li{
-        display: flex;
-        border-bottom: 1px solid black;
-        padding: 5px 0;
-        align-items: center;
-        .type{
-            display: flex;
-            justify-content: space-between;
-        }
-        .date, .name, .carId, .staging, .money, .dieLine, .month, .extra, .lineId{
-            flex: 0 0 8%;
-            text-align: center;
-            font-weight: bold;
-            word-break: break-word;
-            table-layout: fixed;
-            overflow-x: hidden;
-        }
-        .btn-control{
-            flex: 0 0 7%;
-            text-align: center;
-            font-weight: bold;
-        }
-        .phone{
-            flex: 0 0 9%;
-            text-align: center;
-            font-weight: bold;
-        }
-        .type{
-            flex: 0 0 5%;
-            padding: 0 3px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .before{
-            flex: 0 0 7%;
-            padding: 0 3px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .btn-control{
-            .edit{
-                background-color: green;
-                margin-right: 3px;
-            }
-            .delete{
-                background-color: red;
-            }
-            .edit, .delete{
-                color: white;
-                font-weight: bold;
-                display: block;
-                width: 80%;
-                padding: 6px 15px;
-                margin: 0 auto;
-                margin-bottom: 5px;
+.add-modal,
+.edit-modal {
+  position: absolute;
+  width: 50%;
+  top: -1300px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: #ddd;
+  padding-bottom: 20px;
+  z-index: -1;
+  transition: .5s;
 
-                &:hover{
-                    opacity: 0.7;
-                }
-            }
-        }
+  &.show {
+    z-index: 100;
+    top: 10%;
+  }
+
+  .title {
+    text-align: center;
+    padding: 10px 0;
+    background-color: blue;
+    color: white;
+  }
+
+  .content {
+    padding: 10px 20px;
+  }
+
+  .form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .form-control {
+    margin: 0;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  input {
+    padding: 0;
+    font-size: 16px;
+    padding: 3px;
+  }
+
+  select {
+    padding: 6px;
+    width: 100%;
+  }
+
+  .type {
+    input {
+      display: inline-block;
+      width: 20%;
     }
+  }
+
+  textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    .add,
+    .close {
+      width: 15%;
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 4px 8px;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .add {
+      background-color: green;
+    }
+
+    .close {
+      background-color: red;
+    }
+  }
 }
 
+.w-100 {
+  width: 100%;
+}
 
-.add-modal, .edit-modal{
-    position: absolute;
-    width: 50%;
-    top: -1300px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    background-color: #ddd;
-    padding-bottom: 20px;
-    z-index: -1;
-    transition: .5s;
-    &.show{
-        z-index: 100;
-        top: 10%;
+.delete-modal {
+  position: absolute;
+  width: 40%;
+  top: -200%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ccc;
+  z-index: -1;
+  transition: .5s;
+
+  &.show {
+    z-index: 100;
+    top: 50%;
+  }
+
+  .title {
+    background-color: red;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    padding: 4px 0;
+  }
+
+  .content {
+    padding: 20px;
+
+    p {
+      letter-spacing: 3px;
+      text-align: center;
+      font-weight: bold;
     }
-    .title{
-        text-align: center;
-        padding: 10px 0;
-        background-color: blue;
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      .close,
+      .delete {
+        display: block;
         color: white;
-    }
+        font-weight: bold;
+        text-align: center;
+        padding: 4px 8px;
+        width: 20%;
 
-    .content{
-        padding: 10px 20px;
-    }
-    .form-group{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .form-control{
-        margin: 0;
-    }
-    label{
-        font-size: 16px;
-    }
-    input{
-        padding: 0;
-        font-size: 16px;
-        padding: 3px;
-    }
-    select{
-        padding: 6px;
-        width: 100%;
-    }
-    .type{
-        input{
-            display:inline-block;
-            width: 20%;
+        &:hover {
+          opacity: 0.7;
         }
+      }
+
+      .close {
+        background-color: green;
+      }
+
+      .delete {
+        background-color: red;
+      }
+
     }
-    textarea{
+  }
+}
+
+.add-member {
+  position: absolute;
+  width: 50%;
+  top: -200%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding-bottom: 20px;
+  z-index: -10;
+  transition: .5s;
+
+  &.show {
+    top: 50%;
+    z-index: 100;
+  }
+
+  .title {
+    background-color: orange;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 24px;
+    padding: 10px 0;
+  }
+
+  form {
+    padding: 20px 0;
+  }
+
+  .form-group {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    justify-content: space-between;
+
+    .form-control {
+      width: 33%;
+      padding: 0 10px;
+
+      input {
         width: 100%;
+      }
+
+      textarea {
         padding: 10px;
         font-size: 20px;
-    }
-    .btn-group{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-        .add, .close{
-            width: 15%;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 4px 8px;
-            &:hover{
-                opacity: 0.7;
-            }
-        }
-        .add{
-            background-color: green;
-        }
-        .close{
-            background-color: red;
-        }
-    }
-}
-.w-100{
-    width: 100%;
-}
+      }
 
-.delete-modal{
-    position: absolute;
-    width: 40%;
-    top: -200%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ccc;
-    z-index: -1;
-    transition: .5s;
-    &.show{
-        z-index: 100;
-        top: 50%;
-    }
-    .title{
-        background-color: red;
-        text-align: center;
-        font-weight: bold;
-        color: white;
-        padding: 4px 0;
-    }
-    .content{
-        padding: 20px;
-        p{
-            letter-spacing: 3px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .btn-group{
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            .close, .delete{
-                display: block;
-                color: white;
-                font-weight: bold;
-                text-align: center;
-                padding: 4px 8px;
-                width: 20%;
-                &:hover{
-                    opacity: 0.7;
-                }
-            }
-            .close{
-                background-color: green;
-            }
-            .delete{
-                background-color: red;
-            }
-
-        }
-    }
-}
-
-.add-member{
-    position: absolute;
-    width: 50%;
-    top: -200%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding-bottom: 20px;
-    z-index: -10;
-    transition: .5s;
-    &.show{
-        top: 50%;
-        z-index: 100;
-    }
-    .title{
-        background-color: orange;
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        font-size: 24px;
-        padding: 10px 0;
-    }
-    form{
-        padding: 20px 0;
-    }
-
-    .form-group{
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        justify-content: space-between;
-        .form-control{
-            width: 33%;
-            padding: 0 10px;
-            input{
-                width: 100%;
-            }
-            textarea{
-                padding: 10px;
-                font-size: 20px;
-            }
-            select{
-                width: 100%;
-                display: block;
-                padding: 8px 0;
-                font-size: 20px;
-            }
-        }
-    }
-
-    .form-control{
-        margin-bottom: 20px;
+      select {
         width: 100%;
-        padding: 0 70px;
-        margin: 0;
-        margin-bottom: 10px;
-        label{
-            display: inline;
-            width: 20%;
-        }
-        input{
-            display: inline-block;
-            width: 80%;
-        }
-    }
-    .btn-group{
-        padding: 0 60px;
-        display: flex;
-        justify-content: space-between;
-        a{
-            display: block;
-            padding: 8px 20px;
-            color: white;
-            &:hover{
-                opacity: .7;
-            }
-        }
-        .add{
-            background-color: orange;
-        }
-        .close{
-            background-color: red;
-        }
-    }
-}
-
-.d-flex{
-    display: flex;
-}
-.jy-content-between{
-    justify-content: space-between;
-}
-.jy-content-center{
-    justify-content: center;
-}
-.align-items-center{
-    align-items: center;
-}
-
-.header{
-    background-color: #fff;
-    .container-lg{
-        padding: 10px 40px;
-    }
-}
-
-.menu{
-    a{
         display: block;
-        padding: 8px 20px;
-        font-size: 24px;
-        font-weight: bold;
-        color: #000;
-        cursor: pointer;
-        &:hover{
-            color: blue;
-        }
+        padding: 8px 0;
+        font-size: 20px;
+      }
     }
-}
+  }
 
-.account-list{
-    li{
-        div{
-            flex: 0 0 14% !important;
-            text-align: center;
-            font-weight: bold;
-        }
+  .form-control {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 0 70px;
+    margin: 0;
+    margin-bottom: 10px;
+
+    label {
+      display: inline;
+      width: 20%;
     }
-}
-.w-30{
-    width: 30% !important;
-}
-.flex-wrap{
-    flex-wrap: wrap;
-}
-.w-100{
-    width: 100% !important;
-}
-.d-flex{
+
+    input {
+      display: inline-block;
+      width: 80%;
+    }
+  }
+
+  .btn-group {
+    padding: 0 60px;
     display: flex;
+    justify-content: space-between;
+
+    a {
+      display: block;
+      padding: 8px 20px;
+      color: white;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    .add {
+      background-color: orange;
+    }
+
+    .close {
+      background-color: red;
+    }
+  }
 }
 
-.print{
-    @media print {
-        display: none;
-    }
+.d-flex {
+  display: flex;
 }
 
-.pagnation{
-    margin-top: 20px;
-    li{
-        a{
-            font-size: 20px;
-            padding: 8px 12px;
-            display: block;
-            color: white;
-            background: #999;
-            border-right: 2px solid #ccc;
-            &:hover, &.active{
-                background: blue;
-            }
-        }
-    }
+.jy-content-between {
+  justify-content: space-between;
 }
-.list-title{
+
+.jy-content-center {
+  justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.header {
+  background-color: #fff;
+
+  .container-lg {
+    padding: 10px 40px;
+  }
+}
+
+.menu {
+  a {
+    display: block;
+    padding: 8px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+
+    &:hover {
+      color: blue;
+    }
+  }
+}
+
+.account-list {
+  li {
+    div {
+      flex: 0 0 14% !important;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.print {
+  @media print {
+    display: none;
+  }
+}
+
+.pagnation {
+  margin-top: 20px;
+
+  li {
+    a {
+      font-size: 20px;
+      padding: 8px 12px;
+      display: block;
+      color: white;
+      background: #999;
+      border-right: 2px solid #ccc;
+
+      &:hover,
+      &.active {
+        background: blue;
+      }
+    }
+  }
+}
+
+.list-title {
   margin: 0 auto;
   margin-bottom: 30px;
   text-align: center;
@@ -476,95 +563,113 @@ body{
   padding: 30px 0;
   background: rgba(255, 255, 255, 0.8);
 }
-.before-modal, .allNumber-modal{
-  position: absolute;
-    width: 40%;
-    top: -200%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ccc;
-    z-index: -1;
-    transition: .5s;
-    &.show{
-        z-index: 100;
-        top: 50%;
-    }
-    .title{
-        background-color: blue;
-        text-align: center;
-        font-weight: bold;
-        color: white;
-        padding: 4px 0;
-    }
-    .content{
-        padding: 20px;
-        &-list{
-          background-color: #fff;
-          width: 100%;
-          margin: 0 auto;
-          padding: 40px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          height: 400px;
-          overflow:auto;
-        }
-        .before-item{
-          flex: 0 0 35%;
-          margin-bottom: 50px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          a{
-            &:hover{
-              color: red;
-            }
-          }
-        }
-        p{
-            letter-spacing: 3px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .btn-group{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            input{
-              width: 70%;
-              padding: 8px;
-              outline:none;
-              border: 0;
-              &:focus{
-                outline:none;
-                border: 0;
-              }
-            }
-            .close, .delete{
-                display: block;
-                color: white;
-                font-weight: bold;
-                text-align: center;
-                padding: 4px 8px;
-                width: 20%;
-                &:hover{
-                    opacity: 0.7;
-                }
-            }
-            .close{
-                background-color: green;
-            }
-            .delete{
-                background-color: red;
-            }
 
-        }
+.before-modal,
+.allNumber-modal {
+  position: absolute;
+  width: 40%;
+  top: -200%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ccc;
+  z-index: -1;
+  transition: .5s;
+
+  &.show {
+    z-index: 100;
+    top: 50%;
+  }
+
+  .title {
+    background-color: blue;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    padding: 4px 0;
+  }
+
+  .content {
+    padding: 20px;
+
+    &-list {
+      background-color: #fff;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      height: 400px;
+      overflow: auto;
     }
+
+    .before-item {
+      flex: 0 0 35%;
+      margin-bottom: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      a {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+
+    p {
+      letter-spacing: 3px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+
+      input {
+        width: 70%;
+        padding: 8px;
+        outline: none;
+        border: 0;
+
+        &:focus {
+          outline: none;
+          border: 0;
+        }
+      }
+
+      .close,
+      .delete {
+        display: block;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        padding: 4px 8px;
+        width: 20%;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+
+      .close {
+        background-color: green;
+      }
+
+      .delete {
+        background-color: red;
+      }
+
+    }
+  }
 }
-.scrollTop{
-  position:fixed;
+
+.scrollTop {
+  position: fixed;
   bottom: 30px;
   right: 10%;
   display: flex;
@@ -576,10 +681,52 @@ body{
   background-color: #777;
   opacity: .5;
   color: white;
-  &:hover{
+
+  &:hover {
     opacity: 1;
   }
 }
-.control-height{
+
+.control-height {
   height: 80px;
+}
+
+.loading {
+  &::before{
+    width: 80px;
+    /*先將loading區域變成正方形*/
+    height: 80px;
+    animation: loading-animation 0.8s infinite linear;
+    display: inline-block;
+    /*將loading區域變成行內元素，防止旋轉的時候，100%寬度都在旋轉*/
+    border: 5px solid #f3f3f3;
+    /*設定四周邊框大小，並將顏色設定為淺白色*/
+    border-top: 5px solid #555;
+    /*將上邊框顏色設定為紅色高亮，以便旋轉的時候能夠看到旋轉的效果*/
+    border-radius: 50%;
+    /*將邊框和內容區域都變成圓形*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: '';
+    z-index: 1000;
+  }
+  &:after{
+    content: '';
+    width: 100%;
+    height: 10000px;
+    background-color: #000;
+    opacity: .5;
+    position: absolute;
+    z-index: 999;
+  }
+}
+@keyframes loading-animation{
+  0% {
+      transform: rotate(0deg); /*動畫起始的時候旋轉了0度*/
+  }
+  100% {
+      transform: rotate(360deg); /*動畫結束的時候旋轉了360度*/
+  }
 }

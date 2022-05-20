@@ -13,6 +13,7 @@
 
 <body oncopy="return false;" oncontextmenu="return false;">
   <div id="app">
+    <div v-if="isLoading" class="loading"></div>
     <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
       <i class="fa-solid fa-arrow-up"></i>
     </a>
@@ -403,6 +404,7 @@
           checkDel: false,
           currentPage: 0,
           allPage: 0,
+          isLoading: false
         }
       },
       methods: {
@@ -534,10 +536,16 @@
           db.collection('ORDER').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
           });
-          this.closeEdit();
+          this.isLoading = true
           setTimeout(() => {
-            this.getOrderList(this.currentPage);
-          }, 5000)
+            let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
+            this.orderList[index] = {
+              ...this.tempOrderList
+            }
+            this.isLoading = false;
+            this.tempOrderList = {};
+          }, 3000)
+          this.closeEdit();
         },
         deleteOrder(tempOrderList) {
           this.tempOrderList = tempOrderList;
@@ -547,10 +555,13 @@
           if (flag) {
             db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
             db.collection('ORDER').doc(this.tempOrderList.oId).delete();
-            this.closeDelete()
-            setTimeout(()=> {
-              this.getOrderList(this.currentPage);
-            }, 5000)
+            this.isLoading = true;
+            setTimeout(() => {
+              let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
+              this.orderList.splice(index, 1);
+              this.isLoading = false;
+              this.closeDelete()
+            }, 3000)
           } else {
             this.closeDelete()
           }
@@ -582,12 +593,21 @@
             uId: this.uid,
             mname: this.mname
           })
-
-          this.tempOrderList = {};
-          this.modalControl.is_add = false;
+          this.isLoading = true
           setTimeout(() => {
-            this.getOrderList(this.currentPage);
-          }, 5000)
+            this.orderList.unshift({
+              ...this.tempOrderList,
+              oId: id,
+              uId: this.uid,
+              mname: this.mname
+            });
+            this.isLoading = false
+            this.tempOrderList = {};
+          }, 3000)
+          this.modalControl.is_add = false;
+          // setTimeout(() => {
+          //   this.getOrderList(this.currentPage);
+          // }, 5000)
         },
         addMember() {
           firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
@@ -723,7 +743,6 @@
           this.tempOrderList = { ...item }
         },
         closeEdit() {
-          this.tempOrderList = {};
           document.querySelector('.edit-modal').style.zIndex = -10;
           document.querySelector('.edit-modal').style.top = `-1200px`;
         },
@@ -755,7 +774,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('39.13') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
+              if (ip.startsWith('110.30') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
