@@ -95,7 +95,7 @@
               <div class="extra">備註</div>
               <div class="btn-control">操作</div>
             </li>
-            <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
+            <list v-for="item in orderList" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
               @delete-order="deleteOrder" @edit-order="editOrder">
             </list>
 
@@ -348,7 +348,7 @@
         <div class="month">{{ item.month }}</div>
         <div class="extra">{{ item.extra }}</div>
         <div class="btn-control" :class="{'control-height':displayName === '組長'}">
-          <template v-if="displayName !== '組長'">
+          <template v-if="displayName !== '組長' || (displayName === '組長' && item.uId === uid)">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
           </template>
@@ -774,7 +774,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('110.30') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
+              if (ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -908,9 +908,12 @@
       }
     })
     app.component('list', {
-      props: ["item", "displayName"],
+      props: ["item", "displayName", "uid"],
       emits: ["deleteOrder", "editOrder"],
-      template: '#list'
+      template: '#list',
+      mounted () {
+        console.log(this.item.uId, this.uid)
+      }
     });
     app.mount('#app');
 
