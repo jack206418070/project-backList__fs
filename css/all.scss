@@ -198,6 +198,36 @@ body {
       }
     }
   }
+  @media print {
+    body {
+      max-height: 300px !important;
+    }
+    ul .btn-control{
+      display: none;
+    }
+    .list-title{
+      display: none;
+    }
+    .add__list{
+      display: none;
+    }
+    .date{
+      flex: 0 0 10% !important;
+    }
+    .carId{
+      flex: 0 0 10% !important;
+    }
+    .name{
+      flex: 0 0 6% !important;
+    }
+    .extra{
+      flex: 0 0 10% !important;
+    }
+    ul li{
+      font-size: 12px !important;
+      padding: 8px 0;
+    }
+  }
 }
 
 
@@ -484,6 +514,9 @@ body {
   .container-lg {
     padding: 10px 40px;
   }
+  @media print {
+    display: none;
+  }
 }
 
 .menu {
@@ -550,6 +583,9 @@ body {
         background: blue;
       }
     }
+  }
+  @media print {
+    display: none;
   }
 }
 

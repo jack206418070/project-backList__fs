@@ -216,6 +216,45 @@ body {
   opacity: 0.7;
 }
 
+@media print {
+  .list body {
+    max-height: 300px !important;
+  }
+  .list ul .btn-control {
+    display: none;
+  }
+  .list .list-title {
+    display: none;
+  }
+  .list .add__list {
+    display: none;
+  }
+  .list .date {
+    -webkit-box-flex: 0 !important;
+        -ms-flex: 0 0 10% !important;
+            flex: 0 0 10% !important;
+  }
+  .list .carId {
+    -webkit-box-flex: 0 !important;
+        -ms-flex: 0 0 10% !important;
+            flex: 0 0 10% !important;
+  }
+  .list .name {
+    -webkit-box-flex: 0 !important;
+        -ms-flex: 0 0 6% !important;
+            flex: 0 0 6% !important;
+  }
+  .list .extra {
+    -webkit-box-flex: 0 !important;
+        -ms-flex: 0 0 10% !important;
+            flex: 0 0 10% !important;
+  }
+  .list ul li {
+    font-size: 12px !important;
+    padding: 8px 0;
+  }
+}
+
 .add-modal,
 .edit-modal {
   position: absolute;
@@ -553,6 +592,12 @@ body {
   padding: 10px 40px;
 }
 
+@media print {
+  .header {
+    display: none;
+  }
+}
+
 .menu a {
   display: block;
   padding: 8px 20px;
@@ -614,6 +659,12 @@ body {
 
 .pagnation li a:hover, .pagnation li a.active {
   background: blue;
+}
+
+@media print {
+  .pagnation {
+    display: none;
+  }
 }
 
 .list-title {
