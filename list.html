@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
   <div id="app">
     <div v-if="isLoading" class="loading"></div>
     <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
@@ -71,7 +71,7 @@
               <a class="search-btn" href="#" @click.prevent="searchBtn(search.staging,search.search_text)">搜尋</a>
             </div> -->
           </div>
-          <ul>
+          <ul class="no-print">
             <li>
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
@@ -98,7 +98,34 @@
             <list v-for="item in orderList" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
               @delete-order="deleteOrder" @edit-order="editOrder">
             </list>
-
+          </ul>
+          <ul class="print-page" v-for="page in printLen">
+            <li>
+              <div class="date">日期
+                <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
+                  @click="modalControl.is_order_dec = 1; filterData = 1"></i>
+                <i v-else-if="modalControl.is_order_dec == 1 && modalControl.is_page == 0" class="fa-solid fa-angles-up"
+                  @click="modalControl.is_order_dec = 0;  filterData = 0"></i>
+              </div>
+              <div class="name">姓名</div>
+              <div class="carId">車牌</div>
+              <div class="phone">電話</div>
+              <div class="lineId">LINE</div>
+              <div class="type">
+                <p>汽</p>
+                <p>機</p>
+              </div>
+              <div class="before">前貸</div>
+              <div class="staging">期數</div>
+              <div class="money">貸款金額(萬)</div>
+              <div class="dieLine">應繳日</div>
+              <div class="month">月付款</div>
+              <div class="extra">備註</div>
+              <div class="btn-control">操作</div>
+            </li>
+            <list v-for="item in printData[page - 1]" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
+              @delete-order="deleteOrder" @edit-order="editOrder">
+            </list>
           </ul>
         </div>
 
@@ -404,7 +431,9 @@
           checkDel: false,
           currentPage: 0,
           allPage: 0,
-          isLoading: false
+          isLoading: false,
+          printLen: 0,
+          printData: []
         }
       },
       methods: {
@@ -423,17 +452,26 @@
                 query: this.searchText
               }
             }
-            console.log(this.searchText)
             let response = await axios({
               method: "post",
               url: url,
               headers: header,
               data: data
             })
-            console.log(response.data)
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits
+            this.printLen = Math.ceil(response.data.hits.length / 11);
+            this.orderList.forEach((item, index) => {
+              console.log(index)
+              if(index % 11 !== 0) {
+                this.printData[this.printData.length - 1].push(item);
+              } else {
+                this.printData[this.printData.length] = [];
+                this.printData[this.printData.length - 1].push(item);
+              }
+            })
+            console.log(this.printData)
           } else {
             let url = dns + "/1/indexes/ORDER/query";
             let filters = `(uId:${this.uid})`
@@ -910,10 +948,7 @@
     app.component('list', {
       props: ["item", "displayName", "uid"],
       emits: ["deleteOrder", "editOrder"],
-      template: '#list',
-      mounted () {
-        console.log(this.item.uId, this.uid)
-      }
+      template: '#list'
     });
     app.mount('#app');
 
