@@ -58,18 +58,23 @@
             <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
             <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
             <!-- <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a> -->
-            <!-- <div class="search">
+            <div class="search" v-if="displayName === '管理'">
               <select name="search" id="search" v-model="search.staging">
-                <option value="全部訂單" selected>全部訂單</option>
-                <option value="客戶查詢">客戶查詢</option>
-                <option value="期數大於">期數大於</option>
+                <option value="期數大於" selected>期數大於</option>
                 <option value="期數小於">期數小於</option>
                 <option value="期數等於">期數等於</option>
-                <option v-if="displayName === '管理' " value="專員查詢">專員查詢</option>
+                <option value="期數大於等於">期數大於等於</option>
+                <option value="期數小於等於">期數小於等於</option>
+                <option value="有前貸">有前貸</option>
+                <option value="有前貸大於等於">有前貸大於等於</option>
+                <option value="有前貸小於等於">有前貸小於等於</option>
+                <option value="無前貸">無前貸</option>
+                <option value="無前貸大於等於">無前貸大於等於</option>
+                <option value="無前貸小於等於">無前貸小於等於</option>
               </select>
               <input type="text" v-model="search.search_text">
               <a class="search-btn" href="#" @click.prevent="searchBtn(search.staging,search.search_text)">搜尋</a>
-            </div> -->
+            </div>
           </div>
           <ul class="no-print">
             <li>
@@ -420,6 +425,10 @@
             is_allNumber: false
           },
           searchText: '',
+          search: {
+            staging: '期數等於',
+            search_text: ''
+          },
           beforeList: [],
           allNumberList: [],
           tempAllNumber: '',
@@ -711,51 +720,98 @@
         //     }
         //   }
         // },
-        // async searchBtn(type, input = '') {
-        //   if (type == '期數大於') {
-        //     this.searchHandler('staging_number', '>', input);
-        //   } else if (type == '期數小於') {
-        //     this.searchHandler('staging_number', '<', input);
-        //   } else if (type == '期數等於') {
-        //     this.searchHandler('staging_number', '=', input);
-        //   } else if (type == '客戶查詢') {
-        //     this.searchHandler('name', 'searchName', input);
-        //   } else if (type == '專員查詢') {
-        //     this.searchHandler('mname', 'searchName', input);
-        //   } else {
-        //     this.getOrderList(true);
-        //   }
-        // },
-        // async searchHandler(category, type, input) {
-        //   this.orderList = []
-        //   let temp = []
-        //   if (type == '=') {
-        //     if (isNaN(+input)) {
-        //       this.displayName == '管理'
-        //         ? temp = await db.collection('ORDER').where(category, '==', input).get()
-        //         : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
-        //     } else {
-        //       this.displayName == '管理'
-        //         ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-        //         : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-        //     }
-        //   } else if (type == '>') {
-        //     this.displayName == '管理'
-        //       ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-        //   } else if (type == '<') {
-        //     this.displayName == '管理'
-        //       ? temp = await db.collection('ORDER').where(category, '==', +input).get()
-        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', +input).get()
-        //   } else if (type == 'searchName') {
-        //     this.displayName == '管理'
-        //       ? temp = await db.collection('ORDER').where(category, '==', input).get()
-        //       : temp = await db.collection('MEMBERP').doc(this.uid).collection('order').where(category, '==', input).get()
-        //   }
-        //   temp.forEach(item => {
-        //     this.orderList.push(item.data())
-        //   })
-        // },
+        async searchBtn(type, input = '') {
+          if (type == '期數大於') {
+            this.searchHandler('staging_number', '>', input);
+          } else if (type == '期數小於') {
+            this.searchHandler('staging_number', '<', input);
+          } else if (type == '期數等於') {
+            this.searchHandler('staging_number', '=', input);
+          } else if (type == '期數大於等於') {
+            this.searchHandler('staging_number', '>=', input);
+          } else if (type == '期數小於等於') {
+            this.searchHandler('staging_number', '=<', input);
+          } else if (type == '有前貸') {
+            this.searchHandler('before', 'yes', '');
+          } else if (type == '無前貸') {
+            this.searchHandler('before', 'no', '');
+          } else if (type == '無前貸大於等於') {
+            this.searchHandler('before', 'no>=', input);
+          } else if (type == '無前貸小於等於') {
+            this.searchHandler('before', 'no<=', input);
+          } else if (type == '有前貸大於等於') {
+            this.searchHandler('before', 'yes>=', input);
+          } else if (type == '有前貸小於等於') {
+            this.searchHandler('before', 'yes<=', input);
+          }
+        },
+        async searchHandler(category, type, input) {
+          this.orderList = []
+          let temp = []
+          if (type == '=') {
+            if (isNaN(+input)) {
+              temp = await db.collection('ORDER').where(category, '==', input).get()
+            } else {
+              temp = await db.collection('ORDER').where(category, '==', +input).get()
+            }
+          } else if (type == '>') {
+            temp = await db.collection('ORDER').where(category, '>', +input).get()
+          } else if (type == '<') {
+            temp = await db.collection('ORDER').where(category, '<', +input).get()
+          } else if (type == '>=') {
+            temp = await db.collection('ORDER').where(category, '>=', +input).get()
+          } else if (type == '=<') {
+            temp = await db.collection('ORDER').where(category, '<=', +input).get()
+          } else if (type == 'yes'){
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              if(item.data().before != undefined && item.data().before != '無貸款') {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (type == 'no') {
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              if(item.data().before == undefined || item.data().before == '無貸款') {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (type == 'yes>=') {
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              if(item.data().before != undefined && item.data().before != '無貸款' && item.data().staging_number >= +input) {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (type == 'yes<=') {
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              if(item.data().before != undefined && item.data().before != '無貸款' && item.data().staging_number <= +input) {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (type == 'no<=') {
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              console.log(item.data().staging_number)
+              if((item.data().before == undefined || item.data().before == '無貸款') && item.data().staging_number <= +input && item.data().staging_number != 'N/A') {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (type == 'no>=') {
+            temp = await db.collection('ORDER').get();
+            temp.forEach(item => {
+              if((item.data().before == undefined || item.data().before == '無貸款') && item.data().staging_number >= +input && item.data().staging_number != 'N/A') {
+                this.orderList.push(item.data())
+              }
+            })
+          }
+          if(type !== 'yes' && type !== 'no' && type !== 'yes>='&& type !== 'yes<=' && type !== 'no>=' && type !== 'no<=') {
+            temp.forEach(item => {
+              this.orderList.push(item.data())
+            })
+          }
+        },
         async getBefore() {
           this.beforeList = [];
           let data = await db.collection('BEFORE').get();
@@ -813,7 +869,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
+              if (ip.startsWith('27.246') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
