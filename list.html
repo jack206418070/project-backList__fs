@@ -734,7 +734,6 @@
         //   }
         // },
         async searchBtn(input = '') {
-          console.log(1)
           if (this.search.staging == '期數大於') {
             this.searchHandler('>', input);
           } else if (this.search.staging == '期數小於') {
@@ -750,7 +749,6 @@
           }
         },
         async searchHandler(type, input) {
-          console.log(2)
           this.orderList = []
           let temp = []
           let before = this.search.before
@@ -805,9 +803,13 @@
               })
             }
           } else if (before == '不管有無貸款' && mname == '所有業務') {
-            temp.forEach(item => {
-              this.orderList.push(item.data())
-            })
+            if(type == "all") {
+              this.getOrderList(page = 0)
+            } else {
+              temp.forEach(item => {
+                this.orderList.push(item.data())
+              })
+            }
           }
         },
         async getBefore() {
