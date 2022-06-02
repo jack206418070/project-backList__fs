@@ -11,8 +11,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
   <div id="app">
+    <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
     <a href="javascript:;" class="scrollTop" @click.prevent="upToTop">
       <i class="fa-solid fa-arrow-up"></i>
@@ -999,7 +1000,7 @@
         this.getIp();
       },
       mounted() {
-        document.body.oncopy = function () { event.returnValue = false; }
+        // document.body.oncopy = function () { event.returnValue = false; }
         this.checkLogin();
         this.getAllMname();
         // const vm = this;
@@ -1026,18 +1027,16 @@
 
   </script>
   <script>
-    function copyToClipboard(elementId) {
-      var aux = document.createElement("input");
-      aux.setAttribute("value", document.getElementById(elementId).innerHTML);
-      document.body.appendChild(aux);
-      aux.select();
-      document.execCommand("copy");
-      document.body.removeChild(aux);
-    }
-    document.querySelector('body').addEventListener('keyup', function (e) {
+    document.querySelector('body').addEventListener('keydown', function (e) {
+      console.log(e.keyCode)
       if (e.keyCode == 44) {
-        copyToClipboard('list');
-        document.querySelector('body').style.visibility = 'hidden';
+        var copyWarn = document.querySelector('#copyWarnId');
+        console.log(copyWarn)
+        copyWarn.value = '不要截圖'
+        console.log(copyWarn.value)
+        copyWarn.select();
+        copyWarn.setSelectionRange(0, copyWarn.value.length);
+        document.execCommand('copy');
       }
     });
     let { displayName } = JSON.parse(localStorage.getItem("cookie"));
