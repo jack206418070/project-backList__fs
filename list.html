@@ -378,7 +378,7 @@
         <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理' || displayName === '組長'">( {{ item.mname }} )</span> </div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
-        <div class="phone">{{ item.phone }}</div>
+        <div class="phone">{{ phoneFormat }}</div>
         <div class="lineId">{{ item.lineId }}</div>
         <div class="type">
             <p>{{ item.type == '汽' ? 'V' : ''}}</p>
@@ -487,7 +487,6 @@
             this.orderList = response.data.hits
             this.printLen = Math.ceil(response.data.hits.length / 11);
             this.orderList.forEach((item, index) => {
-              console.log(index)
               if(index % 11 !== 0) {
                 this.printData[this.printData.length - 1].push(item);
               } else {
@@ -1015,7 +1014,13 @@
     app.component('list', {
       props: ["item", "displayName", "uid"],
       emits: ["deleteOrder", "editOrder"],
-      template: '#list'
+      template: '#list',
+      computed: {
+        phoneFormat () {
+          let temp = this.item.phone
+          return temp.slice(0, 4) + '-' + temp.slice(4)
+        }
+      }
     });
     app.mount('#app');
 
