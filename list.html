@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body>
+<body oncopy="return false;" oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -1027,16 +1027,24 @@
 
   </script>
   <script>
+    document.body.oncopy = function () { 
+      var copyWarn = document.querySelector('#copyWarnId');
+      console.log(copyWarn)
+      copyWarn.value = '不要亂複製'
+      copyWarn.select();
+      copyWarn.setSelectionRange(0, copyWarn.value.length);
+      document.execCommand('copy');
+    }
     document.querySelector('body').addEventListener('keyup', function (e) {
       console.log(e.keyCode)
       if (e.keyCode == 44) {
         var copyWarn = document.querySelector('#copyWarnId');
         console.log(copyWarn)
         copyWarn.value = '不要截圖'
-        console.log(copyWarn.value)
         copyWarn.select();
         copyWarn.setSelectionRange(0, copyWarn.value.length);
         document.execCommand('copy');
+        alert('不要截圖')
       }
     });
     let { displayName } = JSON.parse(localStorage.getItem("cookie"));
