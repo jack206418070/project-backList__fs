@@ -869,7 +869,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('27.240') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
+              if (ip.startsWith('27.51') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1019,7 +1019,8 @@
       computed: {
         phoneFormat () {
           let temp = this.item.phone
-          return temp.slice(0, 4) + '-' + temp.slice(4)
+          if ( temp !== undefined ) return temp.slice(0, 4) + '-' + temp.slice(4)
+          return ''
         }
       }
     });
@@ -1030,7 +1031,7 @@
     document.body.oncopy = function () { 
       var copyWarn = document.querySelector('#copyWarnId');
       console.log(copyWarn)
-      copyWarn.value = '不要亂複製'
+      copyWarn.value = ''
       copyWarn.select();
       copyWarn.setSelectionRange(0, copyWarn.value.length);
       document.execCommand('copy');
@@ -1040,7 +1041,7 @@
       if (e.keyCode == 44) {
         var copyWarn = document.querySelector('#copyWarnId');
         console.log(copyWarn)
-        copyWarn.value = '不要截圖'
+        copyWarn.value = ''
         copyWarn.select();
         copyWarn.setSelectionRange(0, copyWarn.value.length);
         document.execCommand('copy');
