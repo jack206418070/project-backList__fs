@@ -77,12 +77,6 @@
                 <option value="期數等於">期數等於</option>
                 <option value="期數大於等於">期數大於等於</option>
                 <option value="期數小於等於">期數小於等於</option>
-                <!-- <option value="有前貸">有前貸</option>
-                <option value="有前貸大於等於">有前貸大於等於</option>
-                <option value="有前貸小於等於">有前貸小於等於</option>
-                <option value="無前貸">無前貸</option>
-                <option value="無前貸大於等於">無前貸大於等於</option>
-                <option value="無前貸小於等於">無前貸小於等於</option> -->
               </select>
               <input type="text" v-model="search.search_text">
               <a class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
@@ -411,7 +405,7 @@
     const db = firebase.firestore();
     let dns = `https://C5XEZ6LJMR-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com`
     let header = {
-      "X-Algolia-API-Key": "b467eae84913d43645f73c7c15d53e9a",
+      "X-Algolia-API-Key": "d73ab2c18074c91e8a80de315f27dd49",
       "X-Algolia-Application-Id": "C5XEZ6LJMR"
     }
     const app = Vue.createApp({
@@ -869,7 +863,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('27.51') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
+              if (ip.startsWith('39.9') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -883,50 +877,6 @@
               console.dir(err);
             })
 
-        },
-        async updateS() {
-          let update = await db.collection('ORDER').get();
-          let data = [];
-          let newData = [];
-
-          update.forEach((item, index) => {
-            data.push(item.data())
-          })
-          // console.log(data)
-          // data.forEach((item, index) =>{
-          //   console.log(index)
-          //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
-          //     ...item
-          //   })
-          // })
-
-          // data.forEach(item => {
-          //   db.collection('ORDER').doc(item.oId).set({
-          //     ...item
-          //   })
-          // })
-
-
-          // data.forEach(item => {
-          //   if(+item.staging_number >= 0){
-          //     newData.push(item)
-          //   }
-          // })
-
-
-
-          // console.log(newData)
-          // newData.forEach((item, index) => {
-          //   console.log(index);
-          //   db.collection('ORDER').doc(item.oId).set({
-          //     ...item,
-          //     staging_number: +item.staging_number + 1
-          //   })
-          //   db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set({
-          //     ...item,
-          //     staging_number: +item.staging_number + 1
-          //   })
-          // })
         },
         async deleteBefore(item) {
           let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
