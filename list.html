@@ -58,19 +58,40 @@
               @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
             <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
             <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-            <!-- <a class="add" href="#" @click.prevent="updateS" style="display:none">更新期數</a> -->
 
-            <div class="search" v-if="displayName === '管理'">
-              <select name="before" id="before" v-model="search.before">
+            <div class="search">
+              <select
+                name="before"
+                id="before"
+                v-model="search.before"
+              >
                 <option value="不管有無貸款">不管有無貸款</option>
                 <option value="有前貸">有前貸</option>
                 <option value="無前貸">無前貸</option>
               </select>
-              <select name="mname" id="mname" v-model="search.mname">
+              <select
+                name="mname"
+                id="mname"
+                v-model="search.mname"
+                v-if="displayName === '管理'"
+              >
                 <option value="所有業務">所有業務</option>
                 <option v-for="mname in mnameData" :value="mname">{{ mname }}</option>
               </select>
-              <select name="search" id="search" v-model="search.staging">
+              <select
+                name="type"
+                id="type"
+                v-model="search.type"
+              >
+                <option value="">所有車種</option>
+                <option value="機">機車</option>
+                <option value="汽">汽車</option>
+              </select>
+              <select
+                name="search"
+                id="search"
+                v-model="search.staging"
+              >
                 <option value="所有期數">所有期數</option>
                 <option value="期數大於" selected>期數大於</option>
                 <option value="期數小於">期數小於</option>
@@ -79,7 +100,8 @@
                 <option value="期數小於等於">期數小於等於</option>
               </select>
               <input type="text" v-model="search.search_text">
-              <a class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
+              <a v-if="displayName === '管理'" class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
+              <a v-else class="search-btn" href="#" @click.prevent="staffsearchBtn(search.search_text)">搜尋</a>
             </div>
           </div>
           <ul class="no-print">
@@ -435,7 +457,8 @@
             staging: '所有期數',
             mname: '所有業務',
             before: '不管有無貸款',
-            search_text: ''
+            search_text: '',
+            type: ''
           },
           beforeList: [],
           allNumberList: [],
@@ -515,53 +538,6 @@
             this.currentPage = page;
             this.orderList = response.data.hits
           }
-          // 滾動
-          // if(this.displayName !== '管理'){
-          //         // 員工
-          //         if (first){
-          //           this.orderList = []
-          //           let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').limit(10).get();
-          //           data.forEach( item => {
-          //               this.orderList.push({
-          //                   ...item.data(),
-          //                   id: item.id
-          //               })
-          //           })
-          //           this.lastData = this.orderList[this.orderList.length - 1].id;
-          //         } else {
-          //           let data = await db.collection('MEMBERP').doc(this.uid).collection('order').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get();
-          //           data.forEach( item => {
-          //               this.orderList.push({
-          //                   ...item.data(),
-          //                   id: item.id
-          //               })
-          //           })
-          //           this.lastData = this.orderList[this.orderList.length - 1].id;
-          //         }
-          //     }else{
-          //         // 管理
-          //         if (first) {
-          //           this.orderList = []
-          //           this.lastData = ''
-          //           let data = await db.collection('ORDER').orderBy('oId', 'desc').limit(10).get();
-          //           data.forEach( item => {
-          //             this.orderList.push({
-          //                 ...item.data(),
-          //                 id: item.id
-          //             })
-          //           })
-          //           this.lastData = this.orderList[this.orderList.length - 1].id;
-          //         } else {
-          //           let data = await db.collection('ORDER').orderBy('oId', 'desc').startAfter(this.lastData).limit(5).get()
-          //           data.forEach( item => {
-          //             this.orderList.push({
-          //                 ...item.data(),
-          //                 id: item.id
-          //             })
-          //           })
-          //           this.lastData = this.orderList[this.orderList.length - 1].id;
-          //         }
-          //     }
         },
         checkLogin() {
           if (localStorage.getItem("cookie")) {
@@ -660,9 +636,6 @@
             this.tempOrderList = {};
           }, 3000)
           this.modalControl.is_add = false;
-          // setTimeout(() => {
-          //   this.getOrderList(this.currentPage);
-          // }, 5000)
         },
         addMember() {
           firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
@@ -685,48 +658,110 @@
           localStorage.removeItem('cookie');
           window.location = './index.html'
         },
-        // async searchHandler (page = 0) {
-        //   if(this.searchText === '') {
-        //     this.getOrderList(0)
-        //   } else {
-        //     this.orderList = []
-        //     if (this.displayName == '管理' || this.displayName == '組長') {
-        //       console.log(page)
-        //       let url = dns + "/1/indexes/ORDER/query";
-        //       let response = await axios({
-        //         method: "post",
-        //         url: url,
-        //         headers: header,
-        //         data: {
-        //           hitsPerPage: 150,
-        //           query: this.searchText,
-        //           page: page
-        //         }
-        //       })
-        //       console.dir(response)
-        //       this.allPage = response.data.nbPages;
-        //       this.currentPage = page;
-        //       this.orderList = response.data.hits
-        //     } else {
-        //       let url = dns + "/1/indexes/ORDER/query";
-        //       let filters = `(uId:${this.uid})`
-        //       let response = await axios({
-        //             method: "post",
-        //             url: url,
-        //             headers: header,
-        //             data: {
-        //               hitsPerPage: 150,
-        //               page: page,
-        //               'filters': filters,
-        //               query: this.searchText
-        //             }
-        //           })
-        //       this.allPage = response.data.nbPages;
-        //       this.currentPage = page;
-        //       this.orderList = response.data.hits
-        //     }
-        //   }
-        // },
+        async staffsearchBtn(input = '') {
+          if (this.search.staging == '期數大於') {
+            this.staffsearchHandler('>', input);
+          } else if (this.search.staging == '期數小於') {
+            this.staffsearchHandler('<', input);
+          } else if (this.search.staging == '期數等於') {
+            this.staffsearchHandler('=', input);
+          } else if (this.search.staging == '期數大於等於') {
+            this.staffsearchHandler('>=', input);
+          } else if (this.search.staging == '期數小於等於') {
+            this.staffsearchHandler('=<', input);
+          } else if (this.search.staging == '所有期數') {
+            this.staffsearchHandler('all', input);
+          }
+        },
+        async staffsearchHandler(type, input) {
+          this.orderList = []
+          let temp = []
+          let before = this.search.before
+          let mname = this.search.mname
+          let Ctype = this.search.type
+          let uid  = this.uid
+          if (type == '=') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '==', input).get()
+            } else {
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '==', input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '>') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).get()
+            }
+          } else if (type == '<') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '>=') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '=<') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).get()
+            } else {
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+            }
+          }  else if (type == 'all') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('type', '==', Ctype).get()
+            }
+          }
+          if(before !== '不管有無貸款' && mname !== '所有業務') {
+            if(before == '有前貸') {
+              temp.forEach(item => {
+                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
+                  this.orderList.push(item.data())
+                }
+              })
+            } else {
+              temp.forEach(item => {
+                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
+                  this.orderList.push(item.data())
+                }
+              })
+            }
+          } else if (before == '不管有無貸款' && mname !== '所有業務') {
+            temp.forEach(item => {
+              if(item.data().mname == mname) {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (before !== '不管有無貸款' && mname == '所有業務') {
+            if(before == '有前貸') {
+              temp.forEach(item => {
+                if(item.data().before !== '無貸款' && item.data().before != undefined) {
+                  console.log(item.data())
+                  this.orderList.push(item.data())
+                }
+              })
+            } else {
+              temp.forEach(item => {
+                if(item.data().before == '無貸款' || item.data().before == undefined) {
+                  this.orderList.push(item.data())
+                }
+              })
+            }
+          } else if (before == '不管有無貸款' && mname == '所有業務') {
+            if(type == "all") {
+              this.getOrderList(page = 0)
+            } else {
+              temp.forEach(item => {
+                this.orderList.push(item.data())
+              })
+            }
+          }
+        },
         async searchBtn(input = '') {
           if (this.search.staging == '期數大於') {
             this.searchHandler('>', input);
@@ -747,19 +782,43 @@
           let temp = []
           let before = this.search.before
           let mname = this.search.mname
-          console.log(before, mname)
+          let Ctype = this.search.type
           if (type == '=') {
-            temp = await db.collection('ORDER').where('staging_number', '==', input).get()
+            if (Ctype == '') {
+              temp = await db.collection('ORDER').where('staging_number', '==', input).get()
+            } else {
+              temp = await db.collection('ORDER').where('staging_number', '==', input).where('type', '==', Ctype).get()
+            }
           } else if (type == '>') {
-            temp = await db.collection('ORDER').where('staging_number', '>', +input).get()
+            if (Ctype == '') {
+              temp = await db.collection('ORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+            } else { 
+              temp = await db.collection('ORDER').where('staging_number', '>', +input).get()
+            }
           } else if (type == '<') {
-            temp = await db.collection('ORDER').where('staging_number', '<', +input).get()
+            if (Ctype == '') { 
+              temp = await db.collection('ORDER').where('staging_number', '<', +input).get()
+            } else { 
+              temp = await db.collection('ORDER').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+            }
           } else if (type == '>=') {
-            temp = await db.collection('ORDER').where('staging_number', '>=', +input).get()
+            if (Ctype == '') {
+              temp = await db.collection('ORDER').where('staging_number', '>=', +input).get()
+            } else { 
+              temp = await db.collection('ORDER').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+            }
           } else if (type == '=<') {
-            temp = await db.collection('ORDER').where('staging_number', '<=', +input).get()
+            if (Ctype == '') { 
+              temp = await db.collection('ORDER').where('staging_number', '<=', +input).get()
+            } else {
+              temp = await db.collection('ORDER').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+            }
           }  else if (type == 'all') {
-            temp = await db.collection('ORDER').get()
+            if (Ctype == '') { 
+              temp = await db.collection('ORDER').get()
+            } else { 
+              temp = await db.collection('ORDER').where('type', '==', Ctype).get()
+            }
           }
           if(before !== '不管有無貸款' && mname !== '所有業務') {
             if(before == '有前貸') {
@@ -863,7 +922,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('39.9') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') | ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -950,16 +1009,8 @@
         this.getIp();
       },
       mounted() {
-        // document.body.oncopy = function () { event.returnValue = false; }
         this.checkLogin();
         this.getAllMname();
-        // const vm = this;
-        // $(window).scroll(function () {
-        //   if (Math.ceil($(window).scrollTop()) == ($(document).height() - $(window).height())) {
-        //     vm.scrollCount = Math.ceil($(window).scrollTop())
-        //     vm.getOrderList()
-        //   }
-        // });
       }
     })
     app.component('list', {

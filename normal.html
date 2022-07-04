@@ -58,17 +58,39 @@
               @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
             <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
             <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-            <div class="search" v-if="displayName === '管理'">
-              <select name="before" id="before" v-model="search.before">
+            <div class="search">
+              <select
+                name="before"
+                id="before"
+                v-model="search.before"
+              >
                 <option value="不管有無貸款">不管有無貸款</option>
                 <option value="有前貸">有前貸</option>
                 <option value="無前貸">無前貸</option>
               </select>
-              <select name="mname" id="mname" v-model="search.mname">
+              <select
+                name="mname"
+                id="mname"
+                v-model="search.mname"
+                v-if="displayName === '管理'"
+              >
                 <option value="所有業務">所有業務</option>
                 <option v-for="mname in mnameData" :value="mname">{{ mname }}</option>
               </select>
-              <select name="search" id="search" v-model="search.staging">
+              <select
+                name="type"
+                id="type"
+                v-model="search.type"
+              >
+                <option value="">所有車種</option>
+                <option value="機">機車</option>
+                <option value="汽">汽車</option>
+              </select>
+              <select
+                name="search"
+                id="search"
+                v-model="search.staging"
+              >
                 <option value="所有期數">所有期數</option>
                 <option value="期數大於" selected>期數大於</option>
                 <option value="期數小於">期數小於</option>
@@ -77,7 +99,8 @@
                 <option value="期數小於等於">期數小於等於</option>
               </select>
               <input type="text" v-model="search.search_text">
-              <a class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
+              <a v-if="displayName === '管理'" class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
+              <a v-else class="search-btn" href="#" @click.prevent="staffsearchBtn(search.search_text)">搜尋</a>
             </div>
 
           </div>
@@ -456,7 +479,8 @@
             staging: '所有期數',
             mname: '所有業務',
             before: '不管有無貸款',
-            search_text: ''
+            search_text: '',
+            type: '所有車種'
           },
           beforeList: [],
           allNumberList: [],
@@ -725,6 +749,110 @@
           localStorage.removeItem('cookie');
           window.location = './index.html'
         },
+        async staffsearchBtn(input = '') {
+          if (this.search.staging == '期數大於') {
+            this.staffsearchHandler('>', input);
+          } else if (this.search.staging == '期數小於') {
+            this.staffsearchHandler('<', input);
+          } else if (this.search.staging == '期數等於') {
+            this.staffsearchHandler('=', input);
+          } else if (this.search.staging == '期數大於等於') {
+            this.staffsearchHandler('>=', input);
+          } else if (this.search.staging == '期數小於等於') {
+            this.staffsearchHandler('=<', input);
+          } else if (this.search.staging == '所有期數') {
+            this.staffsearchHandler('all', input);
+          }
+        },
+        async staffsearchHandler(type, input) {
+          this.orderList = []
+          let temp = []
+          let before = this.search.before
+          let mname = this.search.mname
+          let Ctype = this.search.type
+          let uid  = this.uid
+          if (type == '=') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '==', input).get()
+            } else {
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '==', input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '>') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '>', +input).get()
+            }
+          } else if (type == '<') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '<', +input).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '>=') {
+            if (Ctype == '') {
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '>=', +input).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+            }
+          } else if (type == '=<') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '<=', +input).get()
+            } else {
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+            }
+          }  else if (type == 'all') {
+            if (Ctype == '') { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('normalOrder').where('type', '==', Ctype).get()
+            }
+          }
+          if(before !== '不管有無貸款' && mname !== '所有業務') {
+            if(before == '有前貸') {
+              temp.forEach(item => {
+                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
+                  this.orderList.push(item.data())
+                }
+              })
+            } else {
+              temp.forEach(item => {
+                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
+                  this.orderList.push(item.data())
+                }
+              })
+            }
+          } else if (before == '不管有無貸款' && mname !== '所有業務') {
+            temp.forEach(item => {
+              if(item.data().mname == mname) {
+                this.orderList.push(item.data())
+              }
+            })
+          } else if (before !== '不管有無貸款' && mname == '所有業務') {
+            if(before == '有前貸') {
+              temp.forEach(item => {
+                if(item.data().before !== '無貸款' && item.data().before != undefined) {
+                  console.log(item.data())
+                  this.orderList.push(item.data())
+                }
+              })
+            } else {
+              temp.forEach(item => {
+                if(item.data().before == '無貸款' || item.data().before == undefined) {
+                  this.orderList.push(item.data())
+                }
+              })
+            }
+          } else if (before == '不管有無貸款' && mname == '所有業務') {
+            if(type == "all") {
+              this.getOrderList(page = 0)
+            } else {
+              temp.forEach(item => {
+                this.orderList.push(item.data())
+              })
+            }
+          }
+        },
         async searchBtn(input = '') {
           if (this.search.staging == '期數大於') {
             this.searchHandler('>', input);
@@ -745,19 +873,43 @@
           let temp = []
           let before = this.search.before
           let mname = this.search.mname
-          console.log(before, mname)
+          let Ctype = this.search.type
           if (type == '=') {
-            temp = await db.collection('NORMALORDER').where('staging_number', '==', input).get()
+            if (Ctype == '') {
+              temp = await db.collection('NORMALORDER').where('staging_number', '==', input).get()
+            } else {
+              temp = await db.collection('NORMALORDER').where('staging_number', '==', input).where('type', '==', Ctype).get()
+            }
           } else if (type == '>') {
-            temp = await db.collection('NORMALORDER').where('staging_number', '>', +input).get()
+            if (Ctype == '') {
+              temp = await db.collection('NORMALORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+            } else { 
+              temp = await db.collection('NORMALORDER').where('staging_number', '>', +input).get()
+            }
           } else if (type == '<') {
-            temp = await db.collection('NORMALORDER').where('staging_number', '<', +input).get()
+            if (Ctype == '') { 
+              temp = await db.collection('NORMALORDER').where('staging_number', '<', +input).get()
+            } else { 
+              temp = await db.collection('NORMALORDER').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+            }
           } else if (type == '>=') {
-            temp = await db.collection('NORMALORDER').where('staging_number', '>=', +input).get()
+            if (Ctype == '') {
+              temp = await db.collection('NORMALORDER').where('staging_number', '>=', +input).get()
+            } else { 
+              temp = await db.collection('NORMALORDER').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+            }
           } else if (type == '=<') {
-            temp = await db.collection('NORMALORDER').where('staging_number', '<=', +input).get()
-          } else if (type == 'all') {
-            temp = await db.collection('NORMALORDER').get()
+            if (Ctype == '') { 
+              temp = await db.collection('NORMALORDER').where('staging_number', '<=', +input).get()
+            } else {
+              temp = await db.collection('NORMALORDER').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+            }
+          }  else if (type == 'all') {
+            if (Ctype == '') { 
+              temp = await db.collection('NORMALORDER').get()
+            } else { 
+              temp = await db.collection('NORMALORDER').where('type', '==', Ctype).get()
+            }
           }
           if (before !== '不管有無貸款' && mname !== '所有業務') {
             if (before == '有前貸') {
