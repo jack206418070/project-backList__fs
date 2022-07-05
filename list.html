@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -54,11 +54,16 @@
         <div class="list">
           <div class="list-title">增量頁面</div>
           <div class="add__list">
+            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage">
+              <span v-if="is_page == true">切換顯示方法(分頁)</span>
+              <span v-else>切換顯示方法(全部顯示)</span>
+            </a>
+          </div>
+          <div class="add__list">
             <a class="add" href="#"
               @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
             <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
             <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
-
             <div class="search">
               <select
                 name="before"
@@ -474,7 +479,8 @@
           isLoading: false,
           printLen: 0,
           printData: [],
-          mnameData: []
+          mnameData: [],
+          is_page: true
         }
       },
       methods: {
@@ -520,12 +526,26 @@
               page: page,
               'filters': filters
             }
-            if(this.searchText !== '') {
+            if (page === -1) {
               data = {
-                hitsPerPage: 150,
-                page: page,
-                'filters': filters,
-                query: this.searchText
+                hitsPerPage: 3000,
+                'filters': filters
+              }
+            }
+            if(this.searchText !== '') {
+              if(page !== -1) {
+                data = {
+                  hitsPerPage: 150,
+                  page: page,
+                  'filters': filters,
+                  query: this.searchText
+                }
+              } else {
+                data = {
+                  hitsPerPage: 3000,
+                  'filters': filters,
+                  query: this.searchText
+                }
               }
             }
             let response = await axios({
@@ -987,6 +1007,14 @@
               this.mnameData.push(item.data().name)
             }
           })
+        },
+        changeIsPage () {
+          this.is_page = !this.is_page
+          if (this.is_page) {
+            this.getOrderList(0)
+          } else {
+            this.getOrderList(-1)
+          }
         }
       },
       computed: {
