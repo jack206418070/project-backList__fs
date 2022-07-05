@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body>
+<body oncopy="return false;" oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -53,7 +53,7 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">增量頁面</div>
-          <div class="add__list">
+          <div class="add__list" v-if="displayName !== '管理'">
             <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage">
               <span v-if="is_page == true">切換顯示方法(分頁)</span>
               <span v-else>切換顯示方法(全部顯示)</span>
