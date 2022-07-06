@@ -59,11 +59,11 @@
               <span v-else>切換顯示方法(全部顯示)</span>
             </a>
           </div>
-          <div class="add__list">
+          <div class="add__list" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0;">
             <a class="add" href="#"
-              @click.prevent="modalControl.is_add = true; tempOrderList = {staging_allNumber: '12', name: '', phone: '', date: '', staging_number: ''}">新增訂單</a>
-            <a class="add" href="#" @click.prevent="modalControl.is_before = true;">前貸管理</a>
-            <a class="add" href="#" @click.prevent="modalControl.is_allNumber = true;">總期數管理</a>
+              @click.prevent="openAddOrder">新增訂單</a>
+            <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
+            <a class="add" href="#" @click.prevent="openNumber">總期數管理</a>
             <div class="search">
               <select
                 name="before"
@@ -250,7 +250,7 @@
               <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
             </div>
             <div class="btn-group">
-              <a class="close" href="#" @click.prevent="modalControl.is_add = false; tempOrderList = {}">取消</a>
+              <a class="close" href="#" @click.prevent="closeAddOrder">取消</a>
               <a class="add" href="#" @click.prevent="add">增加訂單</a>
             </div>
           </form>
@@ -360,7 +360,7 @@
             <a class="close" style="background: blue" href="#" @click.prevent="add_Before">新增前貸</a>
           </div>
           <div class="btn-group">
-            <a class="close" href="#" @click.prevent="modalControl.is_before = false">取消</a>
+            <a class="close" href="#" @click.prevent="closeBefore">取消</a>
           </div>
         </div>
       </div>
@@ -381,7 +381,7 @@
             <a class="close" style="background: blue" href="#" @click.prevent="add_AllNumber">新增總期數</a>
           </div>
           <div class="btn-group">
-            <a class="close" href="#" @click.prevent="modalControl.is_allNumber = false">取消</a>
+            <a class="close" href="#" @click.prevent="closeNumber">取消</a>
           </div>
         </div>
       </div>
@@ -914,9 +914,41 @@
           document.querySelector('.edit-modal').style.zIndex = -10;
           document.querySelector('.edit-modal').style.top = `-1200px`;
         },
+        openAddOrder() {
+          document.querySelector('.add-modal').style.zIndex = 100;
+          document.querySelector('.add-modal').style.top = `${event.pageY - event.screenY + 150}px`;
+          this.tempOrderList = {
+            staging_allNumber: '12',
+            name: '',
+            phone: '',
+            date: '',
+            staging_number: ''
+          }
+        },
+        closeAddOrder() {
+          document.querySelector('.add-modal').style.zIndex = -10;
+          document.querySelector('.add-modal').style.top = `-1200px`;
+          this.tempOrderList = {}
+        },
         openDelete() {
           document.querySelector('.delete-modal').style.zIndex = 100;
           document.querySelector('.delete-modal').style.top = `${event.pageY - event.screenY + 300}px`;
+        },
+        openBefore() {
+          document.querySelector('.before-modal').style.zIndex = 100;
+          document.querySelector('.before-modal').style.top = `${event.pageY - event.screenY + 500}px`;
+        },
+        closeBefore() {
+          document.querySelector('.before-modal').style.zIndex = -10;
+          document.querySelector('.before-modal').style.top = `-1200px`;
+        },
+        openNumber() {
+          document.querySelector('.allNumber-modal').style.zIndex = 100;
+          document.querySelector('.allNumber-modal').style.top = `${event.pageY - event.screenY + 500}px`;
+        },
+        closeNumber() {
+          document.querySelector('.allNumber-modal').style.zIndex = -10;
+          document.querySelector('.allNumber-modal').style.top = `-1200px`;
         },
         closeDelete() {
           this.tempOrderList = {};
