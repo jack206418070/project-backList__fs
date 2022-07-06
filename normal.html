@@ -265,7 +265,7 @@
               <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
             </div>
             <div class="btn-group">
-              <a class="close" href="#" @click.prevent="closeAddOrder">取消</a>
+              <a class="close" href="#" @click.prevent="closeAddOrder(); tempOrderList = {}">取消</a>
               <a class="add" href="#" @click.prevent="add">增加訂單</a>
             </div>
           </form>
@@ -743,7 +743,7 @@
             this.isLoading = false
             this.tempOrderList = {};
           }, 3000)
-          this.modalControl.is_add = false;
+          this.closeAddOrder()
         },
         logout() {
           localStorage.removeItem('cookie');
@@ -1009,7 +1009,6 @@
         closeAddOrder() {
           document.querySelector('.add-modal').style.zIndex = -10;
           document.querySelector('.add-modal').style.top = `-1200px`;
-          this.tempOrderList = {}
         },
         openBefore() {
           document.querySelector('.before-modal').style.zIndex = 100;

@@ -53,8 +53,8 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">增量頁面</div>
-          <div class="add__list" v-if="displayName !== '管理'">
-            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage">
+          <div class="add__list">
+            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage" v-if="displayName !== '管理'">
               <span v-if="is_page == true">切換顯示方法(分頁)</span>
               <span v-else>切換顯示方法(全部顯示)</span>
             </a>
@@ -250,7 +250,7 @@
               <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
             </div>
             <div class="btn-group">
-              <a class="close" href="#" @click.prevent="closeAddOrder">取消</a>
+              <a class="close" href="#" @click.prevent="closeAddOrder(); tempOrderList = {}">取消</a>
               <a class="add" href="#" @click.prevent="add">增加訂單</a>
             </div>
           </form>
@@ -655,7 +655,7 @@
             this.isLoading = false
             this.tempOrderList = {};
           }, 3000)
-          this.modalControl.is_add = false;
+          this.closeAddOrder()
         },
         addMember() {
           firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
@@ -928,7 +928,6 @@
         closeAddOrder() {
           document.querySelector('.add-modal').style.zIndex = -10;
           document.querySelector('.add-modal').style.top = `-1200px`;
-          this.tempOrderList = {}
         },
         openDelete() {
           document.querySelector('.delete-modal').style.zIndex = 100;
@@ -1068,7 +1067,7 @@
       created() {
         this.getIp();
       },
-      mounted() {
+      async mounted() {
         this.checkLogin();
         this.getAllMname();
       }
