@@ -781,6 +781,9 @@
               })
             }
           }
+          this.orderList.sort((a, b) => {
+            return (+b.oId) - (+a.oId)
+          })
         },
         async searchBtn(input = '') {
           if (this.search.staging == '期數大於') {
@@ -884,6 +887,9 @@
               })
             }
           }
+          this.orderList.sort((a, b) => {
+            return (+b.oId) - (+a.oId)
+          })
         },
         async getBefore() {
           this.beforeList = [];
@@ -973,7 +979,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('118.231') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
