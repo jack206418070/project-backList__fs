@@ -130,7 +130,7 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
-              @delete-order="deleteOrder" @edit-order="editOrder">
+              @delete-order="deleteOrder" @edit-order="editOrder" @trans-normal2-list="transNormal2List">
             </list>
 
           </ul>
@@ -430,6 +430,7 @@
         <div class="btn-control">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
+            <a class="delete" style="background: gray; color: white; font-weight: bold" href="#" @click.prevent="$emit('transNormal2List', item)">轉移</a>
         </div>
       </li>
     </script>
@@ -500,6 +501,21 @@
         }
       },
       methods: {
+        transNormal2List (item) {
+          let flag = confirm(`確定要將 ${item.name} 資料 從 <一般> 轉移到 <增量> 嗎？`)
+          if (flag) {
+            db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).delete()
+            db.collection('NORMALORDER').doc(item.oId).delete()
+            db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set(item)
+            db.collection('ORDER').doc(item.oId).set(item)
+            this.isLoading = true;
+            setTimeout(() => {
+              let index = this.orderList.findIndex(order => order.oId === item.oId);
+              this.orderList.splice(index, 1);
+              this.isLoading = false;
+            }, 6000)
+          }
+        },
         async getOrderList(page = 0) {
           this.orderList = []
           this.printData = []
@@ -1131,7 +1147,7 @@
     })
     app.component('list', {
       props: ["item", "displayName"],
-      emits: ["deleteOrder", "editOrder"],
+      emits: ["deleteOrder", "editOrder", "transNormal2List"],
       template: '#list',
       computed: {
         phoneFormat () {
