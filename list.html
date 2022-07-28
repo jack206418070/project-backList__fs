@@ -110,7 +110,7 @@
             </div>
           </div>
           <ul class="no-print">
-            <li>
+            <li style="position: sticky; top: 80px; background: lightblue;">
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
                   @click="modalControl.is_order_dec = 1; filterData = 1"></i>
@@ -995,7 +995,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('118.231') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('110.26') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
