@@ -274,8 +274,8 @@ body {
   background-color: #ddd;
   padding-bottom: 20px;
   z-index: -1;
-  -webkit-transition: .5s;
-  transition: .5s;
+  -webkit-transition: top .5s;
+  transition: top .5s;
 }
 
 .add-modal.show,
@@ -396,8 +396,8 @@ body {
           transform: translate(-50%, -50%);
   background-color: #ccc;
   z-index: -1;
-  -webkit-transition: .5s;
-  transition: .5s;
+  -webkit-transition: top .5s;
+  transition: top .5s;
 }
 
 .delete-modal.show {
@@ -913,5 +913,43 @@ body {
             transform: rotate(360deg);
     /*動畫結束的時候旋轉了360度*/
   }
+}
+
+.no-print li {
+  position: relative;
+  z-index: 0;
+}
+
+.transform-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  bottom: 5px;
+  right: 100px;
+  margin: auto;
+  gap: 5px;
+  z-index: -100;
+  opacity: 0;
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.transform-group.show {
+  z-index: 1;
+  opacity: 1;
+}
+
+.transform-group .trans {
+  color: #fff;
+  padding: 8px;
+  display: block;
+  background-color: #999;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.transform-group .trans:hover {
+  background-color: #000;
 }
 /*# sourceMappingURL=all.css.map */

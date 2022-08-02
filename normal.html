@@ -29,7 +29,7 @@
           <div class="menu">
             <ul class="d-flex">
               <li class="d-flex align-items-center" style="position: relative;">
-                <input type="text" style="width: 400px; padding: 10px 5px 10px 10px;" v-model.trim="searchText">
+                <input type="text" style="width: 200px; padding: 10px 5px 10px 10px;" v-model.trim="searchText">
                 <a href="javascript:;" class="list-control" style="position: absolute; right: -10px" @click="getOrderList(0)">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </a>
@@ -39,6 +39,12 @@
               </li>
               <li>
                 <a class="list-control" href="./list.html">增量頁面</a>
+              </li>
+              <li>
+                <a class="list-control" href="./na.html">N/A頁面</a>
+              </li>
+              <li>
+                <a class="list-control" href="./operate.html">經營頁面</a>
               </li>
               <li v-if="displayName === '管理'">
                 <a class="account-control" href="./admin.html">帳號管理</a>
@@ -53,7 +59,7 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">一般頁面</div>
-          <div class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0;">
+          <div class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99">
             <ul class="d-flex jy-content-center">
                 <li>
                     <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
@@ -68,7 +74,7 @@
                 </li>
             </ul>
         </div>
-          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0;">
+          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index: 99">
             <a class="add" href="#"
               @click.prevent="openAddOrder">新增訂單</a>
             <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
@@ -121,7 +127,7 @@
           </div>
 
           <ul class="no-print">
-            <li style="position: sticky; top: 150px; background: lightblue;">
+            <li style="position: sticky; top: 150px; background: lightblue; z-index: 99">
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
                   @click="modalControl.is_order_dec = 1; filterData = 1"></i>
@@ -145,7 +151,7 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
-              @delete-order="deleteOrder" @edit-order="editOrder" @trans-normal2-list="transNormal2List">
+              @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList">
             </list>
 
           </ul>
@@ -445,7 +451,12 @@
         <div class="btn-control">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
-            <a class="delete" style="background: gray; color: white; font-weight: bold" href="#" @click.prevent="$emit('transNormal2List', item)">轉移</a>
+            <div class="transform-group" :class="{ 'show': transShow }">
+              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'order'), transShow = false">至 增量</a>
+              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'na'), transShow = false">至 N/A</a>
+              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'operate'), transShow = false">至 經營</a>
+            </div>
+            <a class="delete" href="#" style="background: gray; color: white; font-weight: bold" @click.prevent="transShow = !transShow">轉移</a>
         </div>
       </li>
     </script>
@@ -516,19 +527,49 @@
         }
       },
       methods: {
-        transNormal2List (item) {
-          let flag = confirm(`確定要將 ${item.name} 資料 從 <一般> 轉移到 <增量> 嗎？`)
-          if (flag) {
-            db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).delete()
-            db.collection('NORMALORDER').doc(item.oId).delete()
-            db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set(item)
-            db.collection('ORDER').doc(item.oId).set(item)
-            this.isLoading = true;
-            setTimeout(() => {
-              let index = this.orderList.findIndex(order => order.oId === item.oId);
-              this.orderList.splice(index, 1);
-              this.isLoading = false;
-            }, 6000)
+        transList (item, to) {
+          if (to === 'order') {
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <一般> 轉移到 <增量> 嗎？`)
+            if (flag) {
+              db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).delete()
+              db.collection('NORMALORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set(item)
+              db.collection('ORDER').doc(item.oId).set(item)
+              this.isLoading = true;
+              setTimeout(() => {
+                let index = this.orderList.findIndex(order => order.oId === item.oId);
+                this.orderList.splice(index, 1);
+                this.isLoading = false;
+              }, 6000)
+            }
+          } else if (to === 'na') {
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <一般> 轉移到 <N/A> 嗎？`)
+            if (flag) {
+              db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).delete()
+              db.collection('NORMALORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('naOrder').doc(item.oId).set(item)
+              db.collection('NAORDER').doc(item.oId).set(item)
+              this.isLoading = true;
+              setTimeout(() => {
+                let index = this.orderList.findIndex(order => order.oId === item.oId);
+                this.orderList.splice(index, 1);
+                this.isLoading = false;
+              }, 6000)
+            }
+          } else if (to === 'operate') {
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <一般> 轉移到 <經營> 嗎？`)
+            if (flag) {
+              db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).delete()
+              db.collection('NORMALORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('operateOrder').doc(item.oId).set(item)
+              db.collection('OPERATEORDER').doc(item.oId).set(item)
+              this.isLoading = true;
+              setTimeout(() => {
+                let index = this.orderList.findIndex(order => order.oId === item.oId);
+                this.orderList.splice(index, 1);
+                this.isLoading = false;
+              }, 6000)
+            }
           }
         },
         async getOrderList(page = 0) {
@@ -1164,6 +1205,11 @@
       props: ["item", "displayName"],
       emits: ["deleteOrder", "editOrder", "transNormal2List"],
       template: '#list',
+      data () {
+        return {
+          transShow: false
+        }
+      },
       computed: {
         phoneFormat () {
           let temp = this.item.phone

@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>增量頁面</title>
+  <title>經營頁面</title>
   <link rel="stylesheet" href="./css/all.css" class="css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" class="css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body>
+<body oncopy="return false;" oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -58,8 +58,8 @@
       </div>
       <div class="container-lg">
         <div class="list">
-          <div class="list-title">增量頁面</div>
-          <div class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99;">
+          <div class="list-title">經營頁面</div>
+          <div class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99">
             <ul class="d-flex jy-content-center">
                 <li>
                     <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
@@ -74,13 +74,7 @@
                 </li>
             </ul>
         </div>
-          <div class="add__list">
-            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage" v-if="displayName !== '管理'">
-              <span v-if="is_page == true">切換顯示方法(分頁)</span>
-              <span v-else>切換顯示方法(全部顯示)</span>
-            </a>
-          </div>
-          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index:99;">
+          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index: 99">
             <a class="add" href="#"
               @click.prevent="openAddOrder">新增訂單</a>
             <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
@@ -129,9 +123,11 @@
               <a v-if="displayName === '管理'" class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
               <a v-else class="search-btn" href="#" @click.prevent="staffsearchBtn(search.search_text)">搜尋</a>
             </div>
+
           </div>
+
           <ul class="no-print">
-            <li style="position: sticky; top: 150px; background: lightblue; z-index:99">
+            <li style="position: sticky; top: 150px; background: lightblue; z-index: 99">
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
                   @click="modalControl.is_order_dec = 1; filterData = 1"></i>
@@ -154,9 +150,10 @@
               <div class="extra">備註</div>
               <div class="btn-control">操作</div>
             </li>
-            <list v-for="item in orderList" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
+            <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
               @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList">
             </list>
+
           </ul>
           <ul class="print-page" v-for="page in printLen">
             <li>
@@ -187,22 +184,40 @@
             </list>
           </ul>
         </div>
-
         <div class="pagnation">
+          <ul class="d-flex jy-content-center">
+              <li>
+                  <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
+              </li>
+              <template v-for="page in allPage" :key="page">
+                  <li>
+                      <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{ page }}</a>
+                  </li>
+              </template>
+              <li>
+                  <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
+              </li>
+          </ul>
+      </div>
+
+        <!-- <div class="pagnation" v-if="modalControl.is_page == 1">
                     <ul class="d-flex jy-content-center">
                         <li>
-                            <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
+                            <a href="#" @click.prevent="paginationHandler
+                            (currentPage - 1)">上一頁</a>
                         </li>
-                        <template v-for="page in allPage" :key="page">
-                            <li>
-                                <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{ page }}</a>
+                        <template v-for="page in pageLists.length" :key="page">
+                            <li v-if="pageLists[page - 1].length > 0">
+                                <a href="#" :class="{'active': currentPage == page}" @click.prevent="paginationHandler
+                                (page)">{{ page }}</a>
                             </li>
                         </template>
                         <li>
-                            <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
+                            <a href="#" @click.prevent="paginationHandler
+                            (currentPage + 1)">下一頁</a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
       </div>
 
       <div class="add-modal" :class="{'show': modalControl.is_add === true}">
@@ -418,7 +433,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/x-template" id="list">
       <li>
-        <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理' || displayName === '組長'">( {{ item.mname }} )</span> </div>
+        <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理'">( {{ item.mname }} )</span> </div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
         <div class="phone">{{ phoneFormat }}</div>
@@ -433,17 +448,15 @@
         <div class="dieLine">{{ item.dieLine }}</div>
         <div class="month">{{ item.month }}</div>
         <div class="extra">{{ item.extra }}</div>
-        <div class="btn-control" :class="{'control-height':displayName === '組長'}">
-          <template v-if="displayName !== '組長' || (displayName === '組長' && item.uId === uid)">
+        <div class="btn-control">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
             <div class="transform-group" :class="{ 'show': transShow }">
-              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'normal'), transShow = false">至一般</a>
+              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'order'), transShow = false">至增量</a>
               <a href="#" class="trans" @click.prevent="$emit('transList', item, 'na'), transShow = false">至 N/A</a>
-              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'operate'), transShow = false">至 經營</a>
+              <a href="#" class="trans" @click.prevent="$emit('transList', item, 'normal'), transShow = false">至 一般</a>
             </div>
             <a class="delete" href="#" style="background: gray; color: white; font-weight: bold" @click.prevent="transShow = !transShow">轉移</a>
-          </template>
         </div>
       </li>
     </script>
@@ -457,10 +470,10 @@
       appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
     });
     const db = firebase.firestore();
-    let dns = `https://C5XEZ6LJMR-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com`
+    let dns = `https://XJWMY39KGA-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com`
     let header = {
-      "X-Algolia-API-Key": "d73ab2c18074c91e8a80de315f27dd49",
-      "X-Algolia-Application-Id": "C5XEZ6LJMR"
+      "X-Algolia-API-Key": "75c8e06cda710722f07aaf6ed770c8b6",
+      "X-Algolia-Application-Id": "XJWMY39KGA"
     }
     const app = Vue.createApp({
       data() {
@@ -484,6 +497,10 @@
             is_before: false,
             is_allNumber: false
           },
+          // search: {
+          //   staging: '全部訂單',
+          //   search_text: '',
+          // },
           searchText: '',
           search: {
             staging: '所有期數',
@@ -504,21 +521,20 @@
           currentPage: 0,
           allPage: 0,
           isLoading: false,
-          printLen: 0,
           printData: [],
           mnameData: [],
-          is_page: true
+          printLen: 0
         }
       },
       methods: {
         transList (item, to) {
-          if (to === 'normal') {
-            let flag = confirm(`確定要將 ${item.name} 資料 從 <增量> 轉移到 <一般> 嗎？`)
+          if (to === 'order') {
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <經營> 轉移到 <增量> 嗎？`)
             if (flag) {
-              db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).delete()
-              db.collection('ORDER').doc(item.oId).delete()
-              db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).set(item)
-              db.collection('NORMALORDER').doc(item.oId).set(item)
+              db.collection('MEMBERP').doc(item.uId).collection('operateOrder').doc(item.oId).delete()
+              db.collection('OPERATEORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).set(item)
+              db.collection('ORDER').doc(item.oId).set(item)
               this.isLoading = true;
               setTimeout(() => {
                 let index = this.orderList.findIndex(order => order.oId === item.oId);
@@ -527,10 +543,10 @@
               }, 6000)
             }
           } else if (to === 'na') {
-            let flag = confirm(`確定要將 ${item.name} 資料 從 <增量> 轉移到 <N/A> 嗎？`)
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <經營> 轉移到 <N/A> 嗎？`)
             if (flag) {
-              db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).delete()
-              db.collection('ORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('operateOrder').doc(item.oId).delete()
+              db.collection('OPERATEORDER').doc(item.oId).delete()
               db.collection('MEMBERP').doc(item.uId).collection('naOrder').doc(item.oId).set(item)
               db.collection('NAORDER').doc(item.oId).set(item)
               this.isLoading = true;
@@ -540,13 +556,13 @@
                 this.isLoading = false;
               }, 6000)
             }
-          } else if (to === 'operate') {
-            let flag = confirm(`確定要將 ${item.name} 資料 從 <增量> 轉移到 <經營> 嗎？`)
+          } else if (to === 'normal') {
+            let flag = confirm(`確定要將 ${item.name} 資料 從 <經營> 轉移到 <一般> 嗎？`)
             if (flag) {
-              db.collection('MEMBERP').doc(item.uId).collection('order').doc(item.oId).delete()
-              db.collection('ORDER').doc(item.oId).delete()
-              db.collection('MEMBERP').doc(item.uId).collection('operateOrder').doc(item.oId).set(item)
-              db.collection('OPERATEORDER').doc(item.oId).set(item)
+              db.collection('MEMBERP').doc(item.uId).collection('operateOrder').doc(item.oId).delete()
+              db.collection('OPERATEORDER').doc(item.oId).delete()
+              db.collection('MEMBERP').doc(item.uId).collection('normalOrder').doc(item.oId).set(item)
+              db.collection('NORMALORDER').doc(item.oId).set(item)
               this.isLoading = true;
               setTimeout(() => {
                 let index = this.orderList.findIndex(order => order.oId === item.oId);
@@ -560,7 +576,7 @@
           this.orderList = []
           this.printData = []
           if (this.displayName == '管理' || this.displayName == '組長') {
-            let url = dns + "/1/indexes/ORDER/query";
+            let url = dns + "/1/indexes/OPERATEORDER/query";
             let data = {
               hitsPerPage: 150,
               page: page
@@ -591,33 +607,19 @@
               }
             })
           } else {
-            let url = dns + "/1/indexes/ORDER/query";
+            let url = dns + "/1/indexes/OPERATEORDER/query";
             let filters = `(uId:${this.uid})`
             let data = {
               hitsPerPage: 150,
               page: page,
               'filters': filters
             }
-            if (page === -1) {
-              data = {
-                hitsPerPage: 3000,
-                'filters': filters
-              }
-            }
             if(this.searchText !== '') {
-              if(page !== -1) {
-                data = {
-                  hitsPerPage: 150,
-                  page: page,
-                  'filters': filters,
-                  query: this.searchText
-                }
-              } else {
-                data = {
-                  hitsPerPage: 3000,
-                  'filters': filters,
-                  query: this.searchText
-                }
+              data = {
+                hitsPerPage: 150,
+                page: page,
+                'filters': filters,
+                query: this.searchText
               }
             }
             let response = await axios({
@@ -630,6 +632,76 @@
             this.currentPage = page;
             this.orderList = response.data.hits
           }
+          //滾動
+          // if (this.displayName !== '管理') {
+          //   // 員工
+          //   if (first) {
+          //     this.orderList = []
+          //     let data = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').orderBy('date', 'desc').limit(10).get();
+          //     data.forEach(item => {
+          //       this.orderList.push({
+          //         ...item.data(),
+          //         id: item.id,
+          //         date: this.formatDate(item.data().date)
+          //       })
+          //     })
+          //     this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+          //   } else {
+          //     let flag = true
+          //     let data = await db.collection('MEMBERP').doc(this.uid).collection
+          //       ('normalOrder').orderBy('date', 'desc').startAfter(this.lastData).limit(5).get();
+          //     data.forEach(item => {
+          //       if (this.orderList[0].oId == item.data().oId) {
+          //         console.log(1)
+          //         flag = false
+          //       }
+          //     })
+          //     if (flag) {
+          //       data.forEach(item => {
+          //         this.orderList.push({
+          //           ...item.data(),
+          //           id: item.id,
+          //           date: this.formatDate(item.data().date)
+          //         })
+          //       })
+          //       this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+          //     }
+          //   }
+          // } else {
+          //   // 管理
+          //   if (first) {
+          //     this.orderList = []
+          //     this.lastData = ''
+          //     let data = await db.collection('NORMALORDER').orderBy('date', 'desc').limit(10).get();
+          //     data.forEach(item => {
+          //       this.orderList.push({
+          //         ...item.data(),
+          //         id: item.id,
+          //         date: this.formatDate(item.data().date)
+          //       })
+          //     })
+          //     this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+          //   } else {
+          //     let flag = true;
+          //     let data = await db.collection('NORMALORDER').orderBy('date', 'desc').startAfter(this.lastData).limit(5).get()
+          //     data.forEach(item => {
+          //       if (this.orderList[0].oId == item.data().oId) {
+          //         flag = false
+          //         console.log(this.lastData, this.orderList[0].oId, item.data().oId)
+          //       }
+          //     })
+          //     if (flag) {
+          //       data.forEach(item => {
+          //         this.orderList.push({
+          //           ...item.data(),
+          //           id: item.id,
+          //           date: this.formatDate(item.data().date)
+          //         })
+          //       })
+          //       this.lastData = Date.parse(this.orderList[this.orderList.length - 1].date);
+          //     }
+          //   }
+          // }
         },
         checkLogin() {
           if (localStorage.getItem("cookie")) {
@@ -653,22 +725,36 @@
             alert('請填寫正確電話號碼');
             return;
           }
-          db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
+          db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('operateOrder').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
           });
-          db.collection('ORDER').doc(this.tempOrderList.oId).set({
+          db.collection('OPERATEORDER').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
           });
           this.isLoading = true
+          let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
+          this.orderList[index] = {
+            ...this.tempOrderList
+          }
           setTimeout(() => {
-            let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
-            this.orderList[index] = {
-              ...this.tempOrderList
-            }
             this.isLoading = false;
             this.tempOrderList = {};
           }, 3000)
           this.closeEdit();
+          // if (this.checkList.phone == false) {
+          //   alert('請填寫正確電話號碼');
+          //   return;
+          // }
+          // db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('normalOrder').doc(this.tempOrderList.oId).set({
+          //   ...this.tempOrderList
+          // });
+          // db.collection('NORMALORDER').doc(this.tempOrderList.oId).set({
+          //   ...this.tempOrderList
+          // });
+          // this.closeEdit();
+          // setTimeout(() => {
+          //   this.getOrderList(true);
+          // }, 3000)
         },
         deleteOrder(tempOrderList) {
           this.tempOrderList = tempOrderList;
@@ -676,8 +762,8 @@
         },
         delModal(flag) {
           if (flag) {
-            db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).delete();
-            db.collection('ORDER').doc(this.tempOrderList.oId).delete();
+            db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('operateOrder').doc(this.tempOrderList.oId).delete();
+            db.collection('OPERATEORDER').doc(this.tempOrderList.oId).delete();
             this.isLoading = true;
             setTimeout(() => {
               let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
@@ -704,18 +790,20 @@
             return;
           }
           let id = "" + new Date().getTime();
-          db.collection('ORDER').doc(id).set({
+
+          db.collection('OPERATEORDER').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname
           })
-          db.collection('MEMBERP').doc(this.uid).collection('order').doc(id).set({
+          db.collection('MEMBERP').doc(this.uid).collection('operateOrder').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname
           })
+
           this.isLoading = true
           setTimeout(() => {
             this.orderList.unshift({
@@ -728,23 +816,6 @@
             this.tempOrderList = {};
           }, 3000)
           this.closeAddOrder()
-        },
-        addMember() {
-          firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
-            .then((res) => {
-              let data = {
-                account: res.user.email,
-                displayName: '員工',
-                uid: res.user.uid
-              }
-              db.collection('MEMBERP').doc(res.user.uid).set(data);
-              this.member = {};
-              this.modalControl.is_add_member = false;
-            })
-            .catch((error) => {
-              var errorCode = error.code;
-              var errorMessage = error.message;
-            });
         },
         logout() {
           localStorage.removeItem('cookie');
@@ -774,39 +845,39 @@
           let uid  = this.uid
           if (type == '=') {
             if (Ctype == '') {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '==', input).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '==', input).get()
             } else {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '==', input).where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '==', input).where('type', '==', Ctype).get()
             }
           } else if (type == '>') {
             if (Ctype == '') {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             } else { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '>', +input).get()
             }
           } else if (type == '<') {
             if (Ctype == '') { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '<', +input).get()
             } else { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '<', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '>=') {
             if (Ctype == '') {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '>=', +input).get()
             } else { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '=<') {
             if (Ctype == '') { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '<=', +input).get()
             } else {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
             }
           }  else if (type == 'all') {
             if (Ctype == '') { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').get()
             } else { 
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('type', '==', Ctype).get()
+              temp = await db.collection('MEMBERP').doc(uid).collection('operateOrder').where('type', '==', Ctype).get()
             }
           }
           if(before !== '不管有無貸款' && mname !== '所有業務') {
@@ -880,78 +951,79 @@
           let Ctype = this.search.type
           if (type == '=') {
             if (Ctype == '') {
-              temp = await db.collection('ORDER').where('staging_number', '==', input).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '==', input).get()
             } else {
-              temp = await db.collection('ORDER').where('staging_number', '==', input).where('type', '==', Ctype).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '==', input).where('type', '==', Ctype).get()
             }
           } else if (type == '>') {
             if (Ctype == '') {
-              temp = await db.collection('ORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             } else { 
-              temp = await db.collection('ORDER').where('staging_number', '>', +input).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '>', +input).get()
             }
           } else if (type == '<') {
             if (Ctype == '') { 
-              temp = await db.collection('ORDER').where('staging_number', '<', +input).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '<', +input).get()
             } else { 
-              temp = await db.collection('ORDER').where('staging_number', '<', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '<', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '>=') {
             if (Ctype == '') {
-              temp = await db.collection('ORDER').where('staging_number', '>=', +input).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '>=', +input).get()
             } else { 
-              temp = await db.collection('ORDER').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '=<') {
             if (Ctype == '') { 
-              temp = await db.collection('ORDER').where('staging_number', '<=', +input).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '<=', +input).get()
             } else {
-              temp = await db.collection('ORDER').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
+              temp = await db.collection('OPERATEORDER').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
             }
           }  else if (type == 'all') {
             if (Ctype == '') { 
-              temp = await db.collection('ORDER').get()
+              temp = await db.collection('OPERATEORDER').get()
             } else { 
-              temp = await db.collection('ORDER').where('type', '==', Ctype).get()
+              console.log(1, Ctype)
+              temp = await db.collection('OPERATEORDER').where('type', '==', Ctype).get()
             }
           }
-          if(before !== '不管有無貸款' && mname !== '所有業務') {
-            if(before == '有前貸') {
+          if (before !== '不管有無貸款' && mname !== '所有業務') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
+                if ((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname !== '所有業務') {
             temp.forEach(item => {
-              if(item.data().mname == mname) {
+              if (item.data().mname == mname) {
                 this.orderList.push(item.data())
               }
             })
           } else if (before !== '不管有無貸款' && mname == '所有業務') {
-            if(before == '有前貸') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined) {
                   console.log(item.data())
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if(item.data().before == '無貸款' || item.data().before == undefined) {
+                if (item.data().before == '無貸款' || item.data().before == undefined) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname == '所有業務') {
-            if(type == "all") {
+            if (type == "all") {
               this.getOrderList(page = 0)
             } else {
               temp.forEach(item => {
@@ -962,10 +1034,10 @@
           this.orderList.sort((a, b) => {
             return (+b.oId) - (+a.oId)
           })
-        },
+        },     
         async getBefore() {
           this.beforeList = [];
-          let data = await db.collection('BEFORE').get();
+          let data = await db.collection('OPERATEBEFORE').get();
           data.forEach(item => {
             this.beforeList.push(item.data().title);
           })
@@ -975,7 +1047,7 @@
             this.modalControl.is_add_before = 0;
             return;
           } else {
-            db.collection('BEFORE').add({
+            db.collection('OPERATEBEFORE').add({
               title: this.tempBefore
             })
             this.modalControl.is_add_before = 0;
@@ -989,8 +1061,18 @@
           this.tempOrderList = { ...item }
         },
         closeEdit() {
+          this.tempOrderList = {};
           document.querySelector('.edit-modal').style.zIndex = -10;
           document.querySelector('.edit-modal').style.top = `-1200px`;
+        },
+        openDelete() {
+          document.querySelector('.delete-modal').style.zIndex = 100;
+          document.querySelector('.delete-modal').style.top = `${event.pageY - event.screenY + 300}px`;
+        },
+        closeDelete() {
+          this.tempOrderList = {};
+          document.querySelector('.delete-modal').style.zIndex = -10;
+          document.querySelector('.delete-modal').style.top = `-1200px`;
         },
         openAddOrder() {
           document.querySelector('.add-modal').style.zIndex = 100;
@@ -1006,10 +1088,6 @@
         closeAddOrder() {
           document.querySelector('.add-modal').style.zIndex = -10;
           document.querySelector('.add-modal').style.top = `-1200px`;
-        },
-        openDelete() {
-          document.querySelector('.delete-modal').style.zIndex = 100;
-          document.querySelector('.delete-modal').style.top = `${event.pageY - event.screenY + 300}px`;
         },
         openBefore() {
           document.querySelector('.before-modal').style.zIndex = 100;
@@ -1027,12 +1105,7 @@
           document.querySelector('.allNumber-modal').style.zIndex = -10;
           document.querySelector('.allNumber-modal').style.top = `-1200px`;
         },
-        closeDelete() {
-          this.tempOrderList = {};
-          document.querySelector('.delete-modal').style.zIndex = -10;
-          document.querySelector('.delete-modal').style.top = `-1200px`;
-        },
-        async checkFormOrder(type) {
+        checkFormOrder(type) {
           if (type == 'phone') {
             const reg = /^09[0-9]{8}$/;
             if (this.tempOrderList.phone.match(reg)) {
@@ -1041,13 +1114,6 @@
               this.checkList.phone = false;
             } else {
               this.checkList.phone = false;
-            }
-
-            if (this.checkList.phone) {
-              let check1 = await db.collection('ORDER').where('phone', '==', this.tempOrderList.phone).get()
-              check1.forEach(item => {
-                console.log(item.data())
-              })
             }
           }
         },
@@ -1060,10 +1126,9 @@
               let ip = res.data.ip;
               if (ip.startsWith('110.26') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
-                console.log(ip, 'list')
               } else {
                 this.checkIp = false;
-                console.log(ip, 'list')
+                console.log(ip, 'operate')
               }
               if (this.checkIp === false) {
                 localStorage.removeItem('cookie');
@@ -1076,17 +1141,17 @@
 
         },
         async deleteBefore(item) {
-          let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
+          let before = await db.collection('OPERATEBEFORE').where('title', '==', item).limit(1).get()
           let before_id = ''
           before.forEach(item => {
             before_id = item.id
           })
-          db.collection('BEFORE').doc(before_id).delete()
+          db.collection('OPERATEBEFORE').doc(before_id).delete()
           this.getBefore()
         },
         add_AllNumber() {
           if (this.tempAllNumber == '') return;
-          db.collection('ALLNUMBER').add({
+          db.collection('OPERATEALLNUMBER').add({
             title: this.tempAllNumber
           })
           this.tempAllNumber = '';
@@ -1094,18 +1159,18 @@
         },
         async getAllNumber() {
           this.allNumberList = [];
-          let data = await db.collection('ALLNUMBER').orderBy('title', 'asc').get();
+          let data = await db.collection('OPERATEALLNUMBER').orderBy('title', 'asc').get();
           data.forEach(item => {
             this.allNumberList.push(item.data().title)
           })
         },
         async deleteAllNumber(item) {
-          let allNumber = await db.collection('ALLNUMBER').where('title', '==', item).limit(1).get()
+          let allNumber = await db.collection('OPERATEALLNUMBER').where('title', '==', item).limit(1).get()
           let allNumber_id = ''
           allNumber.forEach(item => {
             allNumber_id = item.id
           })
-          db.collection('ALLNUMBER').doc(allNumber_id).delete()
+          db.collection('OPERATEALLNUMBER').doc(allNumber_id).delete()
           this.getAllNumber()
         },
         upToTop() {
@@ -1125,32 +1190,9 @@
               this.mnameData.push(item.data().name)
             }
           })
-        },
-        changeIsPage () {
-          this.is_page = !this.is_page
-          if (this.is_page) {
-            this.getOrderList(0)
-          } else {
-            this.getOrderList(-1)
-          }
         }
       },
-      computed: {
-        filterData: {
-          get() {
-            return this.orderList;
-          },
-          set(val) {
-            this.orderList = this.orderList.sort((a, b) => {
-              if (val == 0) {
-                return new Date(a.date).getTime() - new Date(b.date).getTime();
-              } else {
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-              }
-            })
-          }
-        }
-      },
+
       created() {
         this.getIp();
       },
@@ -1160,14 +1202,14 @@
       }
     })
     app.component('list', {
-      props: ["item", "displayName", "uid"],
-      emits: ["deleteOrder", "editOrder", "transList"],
+      props: ["item", "displayName"],
+      emits: ["deleteOrder", "editOrder", "transNormal2List"],
+      template: '#list',
       data () {
         return {
           transShow: false
         }
       },
-      template: '#list',
       computed: {
         phoneFormat () {
           let temp = this.item.phone
