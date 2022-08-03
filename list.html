@@ -222,7 +222,7 @@
               </div>
               <div class="form-control">
                 <label for="carId">車牌</label>
-                <input type="text" id="carId" v-model="tempOrderList.carId">
+                <input type="text" id="carId" @change="checkCarId" v-model="tempOrderList.carId">
               </div>
             </div>
             <div class="form-group">
@@ -511,6 +511,18 @@
         }
       },
       methods: {
+        async checkCarId () {
+          let flag = false
+          let order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          // console.log(temp.data())
+          flag = order.docs.length + normal.docs.length + na.docs.length + operate.docs.length > 0 ? true : false
+          if (flag) {
+            alert('有重複的資料')
+          }
+        },
         transList (item, to) {
           if (to === 'normal') {
             let flag = confirm(`確定要將 ${item.name} 資料 從 <增量> 轉移到 <一般> 嗎？`)
@@ -1042,13 +1054,6 @@
             } else {
               this.checkList.phone = false;
             }
-
-            if (this.checkList.phone) {
-              let check1 = await db.collection('ORDER').where('phone', '==', this.tempOrderList.phone).get()
-              check1.forEach(item => {
-                console.log(item.data())
-              })
-            }
           }
         },
         changePhone(val) {
@@ -1058,7 +1063,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('122.116') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('1.171') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1189,7 +1194,6 @@
       document.execCommand('copy');
     }
     document.querySelector('body').addEventListener('keyup', function (e) {
-      console.log(e.keyCode)
       if (e.keyCode == 44) {
         var copyWarn = document.querySelector('#copyWarnId');
         console.log(copyWarn)

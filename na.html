@@ -237,7 +237,7 @@
               </div>
               <div class="form-control">
                 <label for="carId">車牌</label>
-                <input type="text" id="carId" v-model="tempOrderList.carId">
+                <input type="text" id="carId" @change="checkCarId" v-model="tempOrderList.carId">
               </div>
             </div>
             <div class="form-group">
@@ -527,6 +527,18 @@
         }
       },
       methods: {
+        async checkCarId () {
+          let flag = false
+          let order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          let operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          // console.log(temp.data())
+          flag = order.docs.length + normal.docs.length + na.docs.length + operate.docs.length > 0 ? true : false
+          if (flag) {
+            alert('有重複的資料')
+          }
+        },
         transList (item, to) {
           if (to === 'order') {
             let flag = confirm(`確定要將 ${item.name} 資料 從 <N/A> 轉移到 <增量> 嗎？`)
