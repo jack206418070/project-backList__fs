@@ -1039,7 +1039,7 @@
         },     
         async getBefore() {
           this.beforeList = [];
-          let data = await db.collection('NABEFORE').get();
+          let data = await db.collection('BEFORE').get();
           data.forEach(item => {
             this.beforeList.push(item.data().title);
           })
@@ -1049,7 +1049,7 @@
             this.modalControl.is_add_before = 0;
             return;
           } else {
-            db.collection('NABEFORE').add({
+            db.collection('BEFORE').add({
               title: this.tempBefore
             })
             this.modalControl.is_add_before = 0;
@@ -1126,7 +1126,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('110.26') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('122.116') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1143,17 +1143,17 @@
 
         },
         async deleteBefore(item) {
-          let before = await db.collection('NABEFORE').where('title', '==', item).limit(1).get()
+          let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
           let before_id = ''
           before.forEach(item => {
             before_id = item.id
           })
-          db.collection('NABEFORE').doc(before_id).delete()
+          db.collection('BEFORE').doc(before_id).delete()
           this.getBefore()
         },
         add_AllNumber() {
           if (this.tempAllNumber == '') return;
-          db.collection('NAALLNUMBER').add({
+          db.collection('ALLNUMBER').add({
             title: this.tempAllNumber
           })
           this.tempAllNumber = '';
@@ -1161,18 +1161,18 @@
         },
         async getAllNumber() {
           this.allNumberList = [];
-          let data = await db.collection('NAALLNUMBER').orderBy('title', 'asc').get();
+          let data = await db.collection('ALLNUMBER').orderBy('title', 'asc').get();
           data.forEach(item => {
             this.allNumberList.push(item.data().title)
           })
         },
         async deleteAllNumber(item) {
-          let allNumber = await db.collection('NAALLNUMBER').where('title', '==', item).limit(1).get()
+          let allNumber = await db.collection('ALLNUMBER').where('title', '==', item).limit(1).get()
           let allNumber_id = ''
           allNumber.forEach(item => {
             allNumber_id = item.id
           })
-          db.collection('NAALLNUMBER').doc(allNumber_id).delete()
+          db.collection('ALLNUMBER').doc(allNumber_id).delete()
           this.getAllNumber()
         },
         upToTop() {
