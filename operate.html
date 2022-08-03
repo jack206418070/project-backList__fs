@@ -1037,7 +1037,7 @@
         },     
         async getBefore() {
           this.beforeList = [];
-          let data = await db.collection('BEFORE').get();
+          let data = await db.collection('OPERATEBEFORE').get();
           data.forEach(item => {
             this.beforeList.push(item.data().title);
           })
@@ -1047,7 +1047,7 @@
             this.modalControl.is_add_before = 0;
             return;
           } else {
-            db.collection('BEFORE').add({
+            db.collection('OPERATEBEFORE').add({
               title: this.tempBefore
             })
             this.modalControl.is_add_before = 0;
@@ -1141,17 +1141,17 @@
 
         },
         async deleteBefore(item) {
-          let before = await db.collection('BEFORE').where('title', '==', item).limit(1).get()
+          let before = await db.collection('OPERATEBEFORE').where('title', '==', item).limit(1).get()
           let before_id = ''
           before.forEach(item => {
             before_id = item.id
           })
-          db.collection('BEFORE').doc(before_id).delete()
+          db.collection('OPERATEBEFORE').doc(before_id).delete()
           this.getBefore()
         },
         add_AllNumber() {
           if (this.tempAllNumber == '') return;
-          db.collection('ALLNUMBER').add({
+          db.collection('OPERATEALLNUMBER').add({
             title: this.tempAllNumber
           })
           this.tempAllNumber = '';
@@ -1159,18 +1159,18 @@
         },
         async getAllNumber() {
           this.allNumberList = [];
-          let data = await db.collection('ALLNUMBER').orderBy('title', 'asc').get();
+          let data = await db.collection('OPERATEALLNUMBER').orderBy('title', 'asc').get();
           data.forEach(item => {
             this.allNumberList.push(item.data().title)
           })
         },
         async deleteAllNumber(item) {
-          let allNumber = await db.collection('ALLNUMBER').where('title', '==', item).limit(1).get()
+          let allNumber = await db.collection('OPERATEALLNUMBER').where('title', '==', item).limit(1).get()
           let allNumber_id = ''
           allNumber.forEach(item => {
             allNumber_id = item.id
           })
-          db.collection('ALLNUMBER').doc(allNumber_id).delete()
+          db.collection('OPERATEALLNUMBER').doc(allNumber_id).delete()
           this.getAllNumber()
         },
         upToTop() {
