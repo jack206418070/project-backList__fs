@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body>
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -513,12 +513,20 @@
       methods: {
         async checkCarId () {
           let flag = false
-          let order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          // console.log(temp.data())
+          let order, normal, na, operate
+          if (this.displayName === '管理') {
+            order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          } else {
+            order = await db.collection('MEMBERP').doc(this.uid).collection('order').where('carId', '==', this.tempOrderList?.carId).get()
+            normal = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').where('carId', '==', this.tempOrderList?.carId).get()
+            na = await db.collection('MEMBERP').doc(this.uid).collection('naOrder').where('carId', '==', this.tempOrderList?.carId).get()
+            operate = await db.collection('MEMBERP').doc(this.uid).collection('operateOrder').where('carId', '==', this.tempOrderList?.carId).get()
+          }
           flag = order.docs.length + normal.docs.length + na.docs.length + operate.docs.length > 0 ? true : false
+          console.log(flag)
           if (flag) {
             alert('有重複的資料')
           }
@@ -1063,7 +1071,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('1.171') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('110.26') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
