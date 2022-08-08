@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body>
+<body oncopy="return false;" oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -526,7 +526,6 @@
             operate = await db.collection('MEMBERP').doc(this.uid).collection('operateOrder').where('carId', '==', this.tempOrderList?.carId).get()
           }
           flag = order.docs.length + normal.docs.length + na.docs.length + operate.docs.length > 0 ? true : false
-          console.log(flag)
           if (flag) {
             alert('有重複的資料')
           }

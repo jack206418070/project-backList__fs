@@ -529,11 +529,18 @@
       methods: {
         async checkCarId () {
           let flag = false
-          let order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          let operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
-          // console.log(temp.data())
+          let order, normal, na, operate
+          if (this.displayName === '管理') {
+            order = await db.collection('ORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            normal = await db.collection('NORMALORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            na = await db.collection('NAORDER').where('carId', '==', this.tempOrderList?.carId).get()
+            operate = await db.collection('OPERATEORDER').where('carId', '==', this.tempOrderList?.carId).get()
+          } else {
+            order = await db.collection('MEMBERP').doc(this.uid).collection('order').where('carId', '==', this.tempOrderList?.carId).get()
+            normal = await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').where('carId', '==', this.tempOrderList?.carId).get()
+            na = await db.collection('MEMBERP').doc(this.uid).collection('naOrder').where('carId', '==', this.tempOrderList?.carId).get()
+            operate = await db.collection('MEMBERP').doc(this.uid).collection('operateOrder').where('carId', '==', this.tempOrderList?.carId).get()
+          }
           flag = order.docs.length + normal.docs.length + na.docs.length + operate.docs.length > 0 ? true : false
           if (flag) {
             alert('有重複的資料')
