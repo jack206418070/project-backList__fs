@@ -151,7 +151,9 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
-              @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList">
+              @delete-order="deleteOrder" @edit-order="editOrder" 
+              @detail-order="detailOrder"
+              @trans-list="transList">
             </list>
 
           </ul>
@@ -400,7 +402,18 @@
           </div>
         </div>
       </div>
-
+      <div class="detail-modal">
+        <div class="title">
+          事件記錄
+        </div>
+        <div class="content">
+          <textarea name="content" id="content" v-model="detail_content"></textarea>
+          <div class="btn-group">
+            <a class="close" href="javascript:;" @click="closeDetail">取消</a>
+            <a class="save" href="javascript:;" @click="editDetail">儲存</a>
+          </div>
+        </div>
+      </div>
       <div class="allNumber-modal" :class="{'show': modalControl.is_allNumber === true}">
         <div class="title">
           <h3>總期數管理</h3>
@@ -433,6 +446,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/x-template" id="list">
       <li>
+        <div class="check_detail" @click="$emit('detailOrder', item)">
+          查看詳情
+        </div>
         <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理'">( {{ item.mname }} )</span> </div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
@@ -523,10 +539,50 @@
           isLoading: false,
           printData: [],
           mnameData: [],
-          printLen: 0
+          printLen: 0,
+          detail_content: ''
         }
       },
       methods: {
+        openDetail() {
+          document.querySelector('.detail-modal').style.zIndex = 100;
+          document.querySelector('.detail-modal').style.top = `${event.pageY - event.screenY + 500}px`;
+        },
+        closeDetail() {
+          document.querySelector('.detail-modal').style.zIndex = -10;
+          document.querySelector('.detail-modal').style.top = `-1200px`;
+        },
+        async detailOrder (item) {
+          this.openDetail()
+          this.detail_content = item.detail
+          this.tempOrderList = item;
+        },
+        async editDetail () {
+          try {
+            this.isLoading = true
+            await db.collection('NAORDER').doc(this.tempOrderList.oId).set({
+              ...this.tempOrderList,
+              detail: this.detail_content
+            })
+            await db.collection('MEMBERP').doc(this.uid).collection('naOrder').doc(this.tempOrderList.oId).set({
+              ...this.tempOrderList,
+              detail: this.detail_content
+            })
+            setTimeout(() => {
+              let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
+              this.orderList[index] = {
+                ...this.tempOrderList,
+                detail: this.detail_content
+              }
+              this.isLoading = false;
+              this.tempOrderList = {};
+              this.closeDetail()
+            }, 3000)
+          } catch (err) {
+            throw err
+          }
+          
+        },
         async checkCarId () {
           let flag = false
           let order, normal, na, operate
@@ -1224,7 +1280,7 @@
     })
     app.component('list', {
       props: ["item", "displayName"],
-      emits: ["deleteOrder", "editOrder", "transNormal2List"],
+      emits: ["deleteOrder", "editOrder", "transNormal2List", "deleteOrder"],
       template: '#list',
       data () {
         return {

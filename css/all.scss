@@ -123,7 +123,13 @@ body {
     border-bottom: 1px solid black;
     padding: 5px 0;
     align-items: center;
-
+    position: relative;
+    &:hover {
+      .check_detail {
+        opacity: 1;
+        z-index: 100;
+      }
+    }
     .type {
       display: flex;
       justify-content: space-between;
@@ -145,7 +151,6 @@ body {
       table-layout: fixed;
       overflow-x: hidden;
     }
-
     .btn-control {
       flex: 0 0 7%;
       text-align: center;
@@ -171,7 +176,20 @@ body {
       text-align: center;
       font-weight: bold;
     }
-
+    .check_detail {
+      position: absolute;
+      width: 100px;
+      padding: 8px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background:  #000;
+      z-index: -1000;
+      opacity: 0;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
     .btn-control {
       .edit {
         background-color: green;
@@ -800,6 +818,57 @@ body {
     transition: .3s;
     &:hover{
       background-color: #000;
+    }
+  }
+}
+.detail-modal {
+  position: absolute;
+  height: 500px;
+  width: 50%;
+  top: -200%;
+  left: 50%;
+  z-index: -100;
+  transform: translate(-50%, -50%);
+  .title {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 20px;
+    background: blue;
+    color: #fff;
+    font-weight: bold;
+  }
+  .content {
+    padding: 40px;
+    background-color: #ccc;
+    textarea {
+      width: 100%;
+      height: 400px;
+      &:focus {
+        outline: none;
+      }
+      padding: 16px;
+      font-size: 20px;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .save {
+      width: 100px;
+      padding: 8px;
+      background: green;
+      text-align: center;
+      color: #fff;
+      margin-top: 16px;
+    }
+    .close {
+      width: 100px;
+      padding: 8px;
+      background: red;
+      text-align: center;
+      color: #fff;
+      margin-top: 16px;
     }
   }
 }
