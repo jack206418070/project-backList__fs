@@ -19,14 +19,13 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 80px;
 
   @include mobile {
     padding: 20px 10px;
   }
 
   &-lg {
-    max-width: 1480px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 40px 0;
   }
@@ -89,13 +88,13 @@ body {
 
     .add {
       display: block;
-      padding: 6px 20px;
+      padding: 6px 10px;
       background-color: blue;
       color: white;
       text-align: center;
-      width: 10%;
+      width: 12%;
       font-weight: bold;
-
+      font-size: 14px;
       &:hover {
         opacity: 0.6;
       }

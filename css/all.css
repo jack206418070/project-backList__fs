@@ -15,7 +15,6 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 80px;
 }
 
 @media (max-width: 768px) {
@@ -25,7 +24,7 @@ body {
 }
 
 .container-lg {
-  max-width: 1480px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 40px 0;
 }
@@ -93,12 +92,13 @@ body {
 
 .list .add__list .add {
   display: block;
-  padding: 6px 20px;
+  padding: 6px 10px;
   background-color: blue;
   color: white;
   text-align: center;
-  width: 10%;
+  width: 12%;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .list .add__list .add:hover {
