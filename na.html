@@ -800,11 +800,17 @@
             alert('請填寫正確電話號碼');
             return;
           }
+          let sn = this.tempOrderList.staging_number
+          if (sn !== 'N/A' && sn !== 'NaN') {
+            sn = +sn
+          }
           db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('naOrder').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
+            staging_number: sn
           });
           db.collection('NAORDER').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
+            staging_number: sn
           });
           this.isLoading = true
           let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
@@ -865,18 +871,23 @@
             return;
           }
           let id = "" + new Date().getTime();
-
+          let sn = this.tempOrderList.staging_number
+          if (sn !== 'N/A' && sn !== 'NaN') {
+            sn = +sn
+          }
           db.collection('NAORDER').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
-            mname: this.mname
+            mname: this.mname,
+            staging_number: sn
           })
           db.collection('MEMBERP').doc(this.uid).collection('naOrder').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
-            mname: this.mname
+            mname: this.mname,
+            staging_number: sn
           })
 
           this.isLoading = true
@@ -885,7 +896,8 @@
               ...this.tempOrderList,
               oId: id,
               uId: this.uid,
-              mname: this.mname
+              mname: this.mname,
+              staging_number: sn
             });
             this.isLoading = false
             this.tempOrderList = {};
