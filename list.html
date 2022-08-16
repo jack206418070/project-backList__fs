@@ -857,9 +857,9 @@
             }
           } else if (type == '>') {
             if (Ctype == '') {
-              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).where('type', '==', Ctype).get()
-            } else { 
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).get()
+            } else { 
+              temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '<') {
             if (Ctype == '') { 
@@ -963,9 +963,9 @@
             }
           } else if (type == '>') {
             if (Ctype == '') {
-              temp = await db.collection('ORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
-            } else { 
               temp = await db.collection('ORDER').where('staging_number', '>', +input).get()
+            } else { 
+              temp = await db.collection('ORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '<') {
             if (Ctype == '') { 
