@@ -59,7 +59,7 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">N/A頁面</div>
-          <div class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99">
+          <div v-if="show_page" class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99">
             <ul class="d-flex jy-content-center">
                 <li>
                     <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
@@ -186,7 +186,7 @@
             </list>
           </ul>
         </div>
-        <div class="pagnation">
+        <div v-if="show_page" class="pagnation">
           <ul class="d-flex jy-content-center">
               <li>
                   <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
@@ -538,7 +538,8 @@
           printData: [],
           mnameData: [],
           printLen: 0,
-          detail_content: ''
+          detail_content: '',
+          show_page: true
         }
       },
       methods: {
@@ -646,17 +647,18 @@
           }
         },
         async getOrderList(page = 0) {
+          this.show_page = true
           this.orderList = []
           this.printData = []
           if (this.displayName == '管理' || this.displayName == '組長') {
             let url = dns + "/1/indexes/NAORDER/query";
             let data = {
-              hitsPerPage: 150,
+              hitsPerPage: 1000,
               page: page
             }
             if(this.searchText !== '') {
               data = {
-                hitsPerPage: 150,
+                hitsPerPage: 1000,
                 page: page,
                 query: this.searchText
               }
@@ -670,15 +672,6 @@
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits
-            this.printLen = Math.ceil(response.data.hits.length / 11);
-            this.orderList.forEach((item, index) => {
-              if(index % 11 !== 0) {
-                this.printData[this.printData.length - 1].push(item);
-              } else {
-                this.printData[this.printData.length] = [];
-                this.printData[this.printData.length - 1].push(item);
-              }
-            })
           } else {
             let url = dns + "/1/indexes/NAORDER/query";
             let filters = `(uId:${this.uid})`
@@ -924,6 +917,7 @@
           }
         },
         async staffsearchHandler(type, input) {
+          this.show_page = false
           this.orderList = []
           let temp = []
           let before = this.search.before
@@ -1031,6 +1025,7 @@
           }
         },
         async searchHandler(type, input) {
+          this.show_page = false
           this.orderList = []
           let temp = []
           let before = this.search.before
