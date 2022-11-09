@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -653,7 +653,7 @@
           if (this.displayName == '管理' || this.displayName == '組長') {
             let url = dns + "/1/indexes/NORMALORDER/query";
             let data = {
-              hitsPerPage: 1000,
+              hitsPerPage:  1000,
               page: page
             }
             if(this.searchText !== '') {
@@ -1203,7 +1203,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('211.23') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('220.133') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1301,17 +1301,9 @@
 
   </script>
   <script>
-    document.body.oncopy = function () { 
-      var copyWarn = document.querySelector('#copyWarnId');
-      console.log(copyWarn)
-      copyWarn.value = ''
-      copyWarn.select();
-      copyWarn.setSelectionRange(0, copyWarn.value.length);
-      document.execCommand('copy');
-    }
-    document.querySelector('body').addEventListener('keyup', function (e) {
-      console.log(e.keyCode)
-      if (e.keyCode == 44) {
+    let { displayName } = JSON.parse(localStorage.getItem("cookie"));
+    if (displayName != '管理' && displayName != '組長') {
+      document.body.oncopy = function () {
         var copyWarn = document.querySelector('#copyWarnId');
         console.log(copyWarn)
         copyWarn.value = ''
@@ -1319,8 +1311,17 @@
         copyWarn.setSelectionRange(0, copyWarn.value.length);
         document.execCommand('copy');
       }
-    });
-    let { displayName } = JSON.parse(localStorage.getItem("cookie"));
+      document.querySelector('body').addEventListener('keyup', function (e) {
+        if (e.keyCode == 44) {
+          var copyWarn = document.querySelector('#copyWarnId');
+          console.log(copyWarn)
+          copyWarn.value = ''
+          copyWarn.select();
+          copyWarn.setSelectionRange(0, copyWarn.value.length);
+          document.execCommand('copy');
+        }
+      });
+    }
     if (displayName != '管理') {
       document.querySelector('body').classList.add('print');
     }

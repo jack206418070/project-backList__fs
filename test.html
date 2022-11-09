@@ -6,19 +6,52 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <style>
-    #myChart {
-      background-color: lightblue;
-      border: 1px solid #000;
-    }
-  </style>
 </head>
 
 <body>
-  <canvas id="myChart">
+  <div id="app">
+    <input
+      v-for="item in classes"
+      :key="item.id"
+      type="checkbox"
+      :value="item.name"
+      v-model="tempProduct.classes"
+    >
+    <p>
+      {{ tempProduct.classes }}
+    </p>
+  </div>
+  <!-- <canvas id="myChart">
     食物報表
-  </canvas>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+  </canvas> -->
+  <script src="https://unpkg.com/vue@3"></script>
+  <script>
+    const app = Vue.createApp({
+      data () {
+        return {
+          tempProduct: {
+            classes: []
+          },
+          classes: [
+            {
+              id: 1,
+              name: '基礎課程1'
+            },
+            {
+              id: 2,
+              name: '基礎課程2'
+            },
+            {
+              id: 3,
+              name: '基礎課程3'
+            }
+          ]
+        }
+      }
+    })
+    app.mount('#app')
+  </script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
   <script>
     (function () {
       'use strict'
@@ -76,7 +109,7 @@
         options: options
       })
     })()
-  </script>
+  </script> -->
 </body>
 
 </html>

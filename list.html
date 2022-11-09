@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" class="css">
 </head>
 
-<body oncopy="return false;" oncontextmenu="return false;">
+<body oncontextmenu="return false;">
   <div id="app">
     <input id="copyWarnId" type="text" value="不要亂複製截圖" style="position: fixed; top:0; opacity: 0;">
     <div v-if="isLoading" class="loading"></div>
@@ -30,7 +30,8 @@
             <ul class="d-flex">
               <li class="d-flex align-items-center" style="position: relative;">
                 <input type="text" style="width: 200px; padding: 10px 5px 10px 10px;" v-model.trim="searchText">
-                <a href="javascript:;" class="list-control" style="position: absolute; right: -10px" @click="getOrderList(0)">
+                <a href="javascript:;" class="list-control" style="position: absolute; right: -10px"
+                  @click="getOrderList(0)">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </a>
               </li>
@@ -59,65 +60,51 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">增量頁面</div>
-          <div v-if="show_page" class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99;">
+          <div v-if="show_page" class="pagnation"
+            style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99;">
             <ul class="d-flex jy-content-center">
+              <li>
+                <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
+              </li>
+              <template v-for="page in allPage" :key="page">
                 <li>
-                    <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
+                  <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{
+                    page }}</a>
                 </li>
-                <template v-for="page in allPage" :key="page">
-                    <li>
-                        <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{ page }}</a>
-                    </li>
-                </template>
-                <li>
-                    <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
-                </li>
+              </template>
+              <li>
+                <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
+              </li>
             </ul>
-        </div>
+          </div>
           <div class="add__list">
-            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage" v-if="displayName !== '管理'">
+            <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage"
+              v-if="displayName !== '管理'">
               <span v-if="is_page == true">切換顯示方法(分頁)</span>
               <span v-else>切換顯示方法(全部顯示)</span>
             </a>
           </div>
-          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index:99;">
-            <a class="add" href="#"
-              @click.prevent="openAddOrder">新增訂單</a>
+          <div class="add__list"
+            style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index:99;">
+            <a class="add" href="#" @click.prevent="openAddOrder">新增訂單</a>
             <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
             <a class="add" href="#" @click.prevent="openNumber">總期數管理</a>
             <div class="search">
-              <select
-                name="before"
-                id="before"
-                v-model="search.before"
-              >
+              <select name="before" id="before" v-model="search.before">
                 <option value="不管有無貸款">不管有無貸款</option>
                 <option value="有前貸">有前貸</option>
                 <option value="無前貸">無前貸</option>
               </select>
-              <select
-                name="mname"
-                id="mname"
-                v-model="search.mname"
-                v-if="displayName === '管理'"
-              >
+              <select name="mname" id="mname" v-model="search.mname" v-if="displayName === '管理'">
                 <option value="所有業務">所有業務</option>
                 <option v-for="mname in mnameData" :value="mname">{{ mname }}</option>
               </select>
-              <select
-                name="type"
-                id="type"
-                v-model="search.type"
-              >
+              <select name="type" id="type" v-model="search.type">
                 <option value="">所有車種</option>
                 <option value="機">機車</option>
                 <option value="汽">汽車</option>
               </select>
-              <select
-                name="search"
-                id="search"
-                v-model="search.staging"
-              >
+              <select name="search" id="search" v-model="search.staging">
                 <option value="所有期數">所有期數</option>
                 <option value="期數大於" selected>期數大於</option>
                 <option value="期數小於">期數小於</option>
@@ -126,7 +113,8 @@
                 <option value="期數小於等於">期數小於等於</option>
               </select>
               <input type="text" v-model="search.search_text">
-              <a v-if="displayName === '管理'" class="search-btn" href="#" @click.prevent="searchBtn(search.search_text)">搜尋</a>
+              <a v-if="displayName === '管理'" class="search-btn" href="#"
+                @click.prevent="searchBtn(search.search_text)">搜尋</a>
               <a v-else class="search-btn" href="#" @click.prevent="staffsearchBtn(search.search_text)">搜尋</a>
             </div>
           </div>
@@ -155,8 +143,7 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in orderList" :key="item.carId" :item="item" :uid="uid" :display-name="displayName"
-              @delete-order="deleteOrder" @edit-order="editOrder" 
-              @trans-list="transList" @detail-order="detailOrder">
+              @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList" @detail-order="detailOrder">
             </list>
           </ul>
           <ul class="print-page" v-for="page in printLen">
@@ -190,20 +177,21 @@
         </div>
 
         <div v-if="show_page" class="pagnation">
-                    <ul class="d-flex jy-content-center">
-                        <li>
-                            <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
-                        </li>
-                        <template v-for="page in allPage" :key="page">
-                            <li>
-                                <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{ page }}</a>
-                            </li>
-                        </template>
-                        <li>
-                            <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
-                        </li>
-                    </ul>
-                </div>
+          <ul class="d-flex jy-content-center">
+            <li>
+              <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
+            </li>
+            <template v-for="page in allPage" :key="page">
+              <li>
+                <a href="#" :class="{'active': (currentPage + 1) == page}" @click.prevent="getOrderList(page - 1)">{{
+                  page }}</a>
+              </li>
+            </template>
+            <li>
+              <a href="#" @click.prevent="getOrderList(currentPage - 1)">下一頁</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="add-modal" :class="{'show': modalControl.is_add === true}">
@@ -526,12 +514,12 @@
         }
       },
       methods: {
-        async detailOrder (item) {
+        async detailOrder(item) {
           this.openDetail()
           this.detail_content = item.detail
           this.tempOrderList = item;
         },
-        async editDetail () {
+        async editDetail() {
           try {
             this.isLoading = true
             await db.collection('ORDER').doc(this.tempOrderList.oId).set({
@@ -555,9 +543,9 @@
           } catch (err) {
             throw err
           }
-          
+
         },
-        async checkCarId () {
+        async checkCarId() {
           let flag = false
           let order, normal, na, operate
           if (this.displayName === '管理') {
@@ -576,7 +564,7 @@
             alert('有重複的資料')
           }
         },
-        transList (item, to) {
+        transList(item, to) {
           if (to === 'normal') {
             let flag = confirm(`確定要將 ${item.name} 資料 從 <增量> 轉移到 <一般> 嗎？`)
             if (flag) {
@@ -631,7 +619,7 @@
               hitsPerPage: 1000,
               page: page
             }
-            if(this.searchText !== '') {
+            if (this.searchText !== '') {
               data = {
                 hitsPerPage: 1000,
                 page: page,
@@ -661,8 +649,8 @@
                 'filters': filters
               }
             }
-            if(this.searchText !== '') {
-              if(page !== -1) {
+            if (this.searchText !== '') {
+              if (page !== -1) {
                 data = {
                   hitsPerPage: 150,
                   page: page,
@@ -842,7 +830,7 @@
           let before = this.search.before
           let mname = this.search.mname
           let Ctype = this.search.type
-          let uid  = this.uid
+          let uid = this.uid
           if (type == '=') {
             if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '==', input).get()
@@ -852,71 +840,71 @@
           } else if (type == '>') {
             if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '<') {
-            if (Ctype == '') { 
+            if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '>=') {
             if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '=<') {
-            if (Ctype == '') { 
+            if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).get()
             } else {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
             }
-          }  else if (type == 'all') {
-            if (Ctype == '') { 
+          } else if (type == 'all') {
+            if (Ctype == '') {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').get()
-            } else { 
+            } else {
               temp = await db.collection('MEMBERP').doc(uid).collection('order').where('type', '==', Ctype).get()
             }
           }
-          if(before !== '不管有無貸款' && mname !== '所有業務') {
-            if(before == '有前貸') {
+          if (before !== '不管有無貸款' && mname !== '所有業務') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
+                if ((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname !== '所有業務') {
             temp.forEach(item => {
-              if(item.data().mname == mname) {
+              if (item.data().mname == mname) {
                 this.orderList.push(item.data())
               }
             })
           } else if (before !== '不管有無貸款' && mname == '所有業務') {
-            if(before == '有前貸') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined) {
                   console.log(item.data())
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if(item.data().before == '無貸款' || item.data().before == undefined) {
+                if (item.data().before == '無貸款' || item.data().before == undefined) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname == '所有業務') {
-            if(type == "all") {
+            if (type == "all") {
               this.getOrderList(page = 0)
             } else {
               temp.forEach(item => {
@@ -959,71 +947,71 @@
           } else if (type == '>') {
             if (Ctype == '') {
               temp = await db.collection('ORDER').where('staging_number', '>', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('ORDER').where('staging_number', '>', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '<') {
-            if (Ctype == '') { 
+            if (Ctype == '') {
               temp = await db.collection('ORDER').where('staging_number', '<', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('ORDER').where('staging_number', '<', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '>=') {
             if (Ctype == '') {
               temp = await db.collection('ORDER').where('staging_number', '>=', +input).get()
-            } else { 
+            } else {
               temp = await db.collection('ORDER').where('staging_number', '>=', +input).where('type', '==', Ctype).get()
             }
           } else if (type == '=<') {
-            if (Ctype == '') { 
+            if (Ctype == '') {
               temp = await db.collection('ORDER').where('staging_number', '<=', +input).get()
             } else {
               temp = await db.collection('ORDER').where('staging_number', '<=', +input).where('type', '==', Ctype).get()
             }
-          }  else if (type == 'all') {
-            if (Ctype == '') { 
+          } else if (type == 'all') {
+            if (Ctype == '') {
               temp = await db.collection('ORDER').get()
-            } else { 
+            } else {
               temp = await db.collection('ORDER').where('type', '==', Ctype).get()
             }
           }
-          if(before !== '不管有無貸款' && mname !== '所有業務') {
-            if(before == '有前貸') {
+          if (before !== '不管有無貸款' && mname !== '所有業務') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
+                if ((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname !== '所有業務') {
             temp.forEach(item => {
-              if(item.data().mname == mname) {
+              if (item.data().mname == mname) {
                 this.orderList.push(item.data())
               }
             })
           } else if (before !== '不管有無貸款' && mname == '所有業務') {
-            if(before == '有前貸') {
+            if (before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined) {
+                if (item.data().before !== '無貸款' && item.data().before != undefined) {
                   console.log(item.data())
                   this.orderList.push(item.data())
                 }
               })
             } else {
               temp.forEach(item => {
-                if(item.data().before == '無貸款' || item.data().before == undefined) {
+                if (item.data().before == '無貸款' || item.data().before == undefined) {
                   this.orderList.push(item.data())
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname == '所有業務') {
-            if(type == "all") {
+            if (type == "all") {
               this.getOrderList(page = 0)
             } else {
               temp.forEach(item => {
@@ -1131,7 +1119,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('211.23') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('27.247') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1194,12 +1182,12 @@
           this.mnameData = [];
           let mnameTemp = await db.collection('MEMBERP').get();
           mnameTemp.forEach(item => {
-            if(item.data().displayName !== '管理' && item.data().displayName !== '組長') {
+            if (item.data().displayName !== '管理' && item.data().displayName !== '組長') {
               this.mnameData.push(item.data().name)
             }
           })
         },
-        changeIsPage () {
+        changeIsPage() {
           this.is_page = !this.is_page
           if (this.is_page) {
             this.getOrderList(0)
@@ -1235,16 +1223,16 @@
     app.component('list', {
       props: ["item", "displayName", "uid"],
       emits: ["deleteOrder", "editOrder", "transList", "deleteOrder"],
-      data () {
+      data() {
         return {
           transShow: false
         }
       },
       template: '#list',
       computed: {
-        phoneFormat () {
+        phoneFormat() {
           let temp = this.item.phone
-          if ( temp !== undefined ) return temp.slice(0, 4) + '-' + temp.slice(4)
+          if (temp !== undefined) return temp.slice(0, 4) + '-' + temp.slice(4)
           return ''
         }
       }
@@ -1253,16 +1241,11 @@
 
   </script>
   <script>
-    document.body.oncopy = function () { 
-      var copyWarn = document.querySelector('#copyWarnId');
-      console.log(copyWarn)
-      copyWarn.value = ''
-      copyWarn.select();
-      copyWarn.setSelectionRange(0, copyWarn.value.length);
-      document.execCommand('copy');
-    }
-    document.querySelector('body').addEventListener('keyup', function (e) {
-      if (e.keyCode == 44) {
+    let { displayName } = JSON.parse(localStorage.getItem("cookie"));
+    console.log(displayName)
+    console.log('in')
+    if (displayName != '管理' && displayName != '組長') {
+      document.body.oncopy = function () {
         var copyWarn = document.querySelector('#copyWarnId');
         console.log(copyWarn)
         copyWarn.value = ''
@@ -1270,8 +1253,17 @@
         copyWarn.setSelectionRange(0, copyWarn.value.length);
         document.execCommand('copy');
       }
-    });
-    let { displayName } = JSON.parse(localStorage.getItem("cookie"));
+      document.querySelector('body').addEventListener('keyup', function (e) {
+        if (e.keyCode == 44) {
+          var copyWarn = document.querySelector('#copyWarnId');
+          console.log(copyWarn)
+          copyWarn.value = ''
+          copyWarn.select();
+          copyWarn.setSelectionRange(0, copyWarn.value.length);
+          document.execCommand('copy');
+        }
+      });
+    }
     if (displayName != '管理') {
       document.querySelector('body').classList.add('print');
     }
