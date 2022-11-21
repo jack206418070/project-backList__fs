@@ -150,7 +150,7 @@
               <div class="extra">備註</div>
               <div class="btn-control">操作</div>
             </li>
-            <list v-for="item in orderList" :key="item.id" :item="item" :display-name="displayName"
+            <list v-for="item in orderList" :key="item.id" :item="item"  :uid="uid" :display-name="displayName"
               @delete-order="deleteOrder" @edit-order="editOrder" 
               @detail-order="detailOrder"
               @trans-list="transList">
@@ -462,7 +462,7 @@
         <div class="dieLine">{{ item.dieLine }}</div>
         <div class="month">{{ item.month }}</div>
         <div class="extra">{{ item.extra }}</div>
-        <div class="btn-control">
+        <div class="btn-control" v-if="displayName !== '組長' || (displayName === '組長' && item.uId === uid)">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>
             <div class="transform-group" :class="{ 'show': transShow }">
@@ -1283,7 +1283,7 @@
       }
     })
     app.component('list', {
-      props: ["item", "displayName"],
+      props: ["item", "displayName", "uid"],
       emits: ["deleteOrder", "editOrder", "transNormal2List", "detailOrder"],
       template: '#list',
       data () {
