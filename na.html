@@ -127,7 +127,7 @@
           </div>
 
           <ul class="no-print">
-            <li style="position: sticky; top: 150px; background: lightblue; z-index: 99">
+            <li style="position: sticky; top: 130px; background: lightblue; z-index: 99">
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
                   @click="modalControl.is_order_dec = 1; filterData = 1"></i>
@@ -144,10 +144,12 @@
               </div>
               <div class="before">前貸</div>
               <div class="staging">期數</div>
-              <div class="money">貸款金額(萬)</div>
+              <div class="money">貸款金額</div>
               <div class="dieLine">應繳日</div>
               <div class="month">月付款</div>
               <div class="extra">備註</div>
+              <div class="inDate">進件日期</div>
+              <div class="reason">不良原因</div>
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in orderList" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
@@ -175,10 +177,12 @@
               </div>
               <div class="before">前貸</div>
               <div class="staging">期數</div>
-              <div class="money">貸款金額(萬)</div>
+              <div class="money">貸款金額</div>
               <div class="dieLine">應繳日</div>
               <div class="month">月付款</div>
               <div class="extra">備註</div>
+              <div class="inDate">進件日期</div>
+              <div class="reason">不良原因</div>
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in printData[page - 1]" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
@@ -283,6 +287,16 @@
                 <input type="number" id="month" v-model="tempOrderList.month">
               </div>
             </div>
+            <div class="form-group">
+              <div class="form-control">
+                <label for="inDate">進件日期</label>
+                <input type="date" id="date" v-model="tempOrderList.inDate">
+              </div>
+              <div class="form-control">
+                <label for="reason">不良原因</label>
+                <input type="text" id="money" v-model="tempOrderList.reason">
+              </div>
+            </div>
             <div class="form-control w-100">
               <label for="extra">備註</label>
               <textarea name="extra" id="extra" cols="30" rows="10" v-model="tempOrderList.extra"></textarea>
@@ -355,6 +369,16 @@
               <div class="form-control">
                 <label for="month">月付款</label>
                 <input type="number" id="month" v-model="tempOrderList.month">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-control">
+                <label for="inDate">進件日期</label>
+                <input type="date" id="date" v-model="tempOrderList.inDate">
+              </div>
+              <div class="form-control">
+                <label for="reason">不良原因</label>
+                <input type="text" id="money" v-model="tempOrderList.reason">
               </div>
             </div>
             <div class="form-control w-100">
@@ -461,6 +485,8 @@
         <div class="dieLine">{{ item.dieLine }}</div>
         <div class="month">{{ item.month }}</div>
         <div class="extra">{{ item.extra }}</div>
+        <div class="inDate">{{ item.inDate }}</div>
+        <div class="reason">{{ item.reason }}</div>
         <div class="btn-control" v-if="displayName !== '組長' || (displayName === '組長' && item.uId === uid)">
             <a class="edit" href="#" @click.prevent="$emit('editOrder', $event , item)">編輯</a>
             <a class="delete" href="#" @click.prevent="$emit('deleteOrder', item)">刪除</a>

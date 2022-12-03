@@ -141,24 +141,39 @@ body {
     .dieLine,
     .month,
     .extra,
-    .lineId {
-      flex: 0 0 8%;
+    .lineId,
+    .inDate,
+    .reason {
+      flex: 0 0 7%;
       text-align: center;
       font-weight: bold;
       word-break: break-word;
       table-layout: fixed;
       overflow-x: hidden;
+      font-size: 14px;
+    }
+    .inDate {
+      flex: 0 0 7%;
+    }
+    .reason, .extra {
+      flex: 0 0 11%;
     }
     .btn-control {
+      flex: 0 0 6%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      // position:absolute;
+      // width: 100px;
+    }
+    .money, .dieLine, .month, .name, .staging {
+      flex: 0 0 5%;
+    }
+    .phone {
       flex: 0 0 7%;
       text-align: center;
       font-weight: bold;
-    }
-
-    .phone {
-      flex: 0 0 9%;
-      text-align: center;
-      font-weight: bold;
+      font-size: 14px;
     }
 
     .type {
@@ -166,6 +181,7 @@ body {
       padding: 0 3px;
       text-align: center;
       font-weight: bold;
+      font-size: 14px;
     }
 
     .before {
@@ -173,6 +189,7 @@ body {
       padding: 0 3px;
       text-align: center;
       font-weight: bold;
+      font-size: 14px;
     }
     .check_detail {
       position: absolute;

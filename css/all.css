@@ -151,31 +151,54 @@ body {
 .list li .dieLine,
 .list li .month,
 .list li .extra,
-.list li .lineId {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 8%;
-          flex: 0 0 8%;
-  text-align: center;
-  font-weight: bold;
-  word-break: break-word;
-  table-layout: fixed;
-  overflow-x: hidden;
-}
-
-.list li .btn-control {
+.list li .lineId,
+.list li .inDate,
+.list li .reason {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 7%;
           flex: 0 0 7%;
   text-align: center;
   font-weight: bold;
+  word-break: break-word;
+  table-layout: fixed;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+.list li .inDate {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 7%;
+          flex: 0 0 7%;
+}
+
+.list li .reason, .list li .extra {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 11%;
+          flex: 0 0 11%;
+}
+
+.list li .btn-control {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 6%;
+          flex: 0 0 6%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.list li .money, .list li .dieLine, .list li .month, .list li .name, .list li .staging {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 5%;
+          flex: 0 0 5%;
 }
 
 .list li .phone {
   -webkit-box-flex: 0;
-      -ms-flex: 0 0 9%;
-          flex: 0 0 9%;
+      -ms-flex: 0 0 7%;
+          flex: 0 0 7%;
   text-align: center;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .list li .type {
@@ -185,6 +208,7 @@ body {
   padding: 0 3px;
   text-align: center;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .list li .before {
@@ -194,6 +218,7 @@ body {
   padding: 0 3px;
   text-align: center;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .list li .check_detail {
