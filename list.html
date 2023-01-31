@@ -175,7 +175,7 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in printData[page - 1]" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
-              @delete-order="deleteOrder" @edit-order="editOrder">
+            @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList" @detail-order="detailOrder">
             </list>
           </ul>
         </div>
@@ -669,8 +669,16 @@
               data: data
             })
             this.allPage = response.data.nbPages;
+            this.printLen = Math.ceil(response.data.hits.length / 9);
             this.currentPage = page;
-            this.orderList = response.data.hits
+            this.orderList = response.data.hits;
+            response.data.hits.forEach ((item, index) => {
+              if (index % 9 == 0) {
+                this.printData.push([item])
+              } else {
+                this.printData[this.printData.length - 1].push(item)
+              }
+            })
           } else {
             let url = dns + "/1/indexes/ORDER/query";
             let filters = `(uId:${this.uid})`
@@ -709,7 +717,9 @@
             })
             this.allPage = response.data.nbPages;
             this.currentPage = page;
-            this.orderList = response.data.hits
+            this.orderList = response.data.hits;
+            this.printData = response.data.hits;
+            this.printLen = response.data.nbPages;
           }
         },
         checkLogin() {
@@ -1158,7 +1168,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('27.242') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
