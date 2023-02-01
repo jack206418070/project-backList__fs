@@ -679,6 +679,7 @@
                 this.printData[this.printData.length - 1].push(item)
               }
             })
+            console.log(this.printData)
           } else {
             let url = dns + "/1/indexes/ORDER/query";
             let filters = `(uId:${this.uid})`
@@ -718,8 +719,6 @@
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits;
-            this.printData = response.data.hits;
-            this.printLen = response.data.nbPages;
           }
         },
         checkLogin() {
@@ -1168,7 +1167,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1281,6 +1280,7 @@
       computed: {
         phoneFormat() {
           let temp = this.item.phone
+          // console.log(temp)
           if (temp !== undefined) return temp.slice(0, 4) + '-' + temp.slice(4)
           return ''
         }
