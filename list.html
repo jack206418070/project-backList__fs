@@ -546,7 +546,8 @@
           mnameData: [],
           is_page: true,
           detail_content: '',
-          show_page: true
+          show_page: true,
+          userData_search: {}
         }
       },
       methods: {
@@ -656,10 +657,20 @@
               page: page
             }
             if (this.searchText !== '') {
+              let searchArray = this.searchText.split('+')
+              console.log(searchArray)
+              if (searchArray.length == 1) {
+                data = {
+                  hitsPerPage: 1000,
+                  page: page,
+                  query: this.searchText
+                }
+              }
               data = {
                 hitsPerPage: 1000,
                 page: page,
-                query: this.searchText
+                query: this.searchText,
+                'filters':  `(uId:${this.userData_search[searchArray[0]]})`
               }
             }
             let response = await axios({
@@ -679,7 +690,6 @@
                 this.printData[this.printData.length - 1].push(item)
               }
             })
-            console.log(this.printData)
           } else {
             let url = dns + "/1/indexes/ORDER/query";
             let filters = `(uId:${this.uid})`
@@ -1167,7 +1177,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1266,6 +1276,15 @@
       async mounted() {
         this.checkLogin();
         this.getAllMname();
+        let { displayName } = JSON.parse(localStorage.getItem("cookie"));
+        this.userData_search = {}
+        if (displayName == '管理' || displayName == '組長') {
+          let mnameTemp = await db.collection('MEMBERP').get();
+          mnameTemp.forEach(item => {
+            console.log(item.data())
+            this.userData_search[item.data().name] = item.data().uid
+          })
+        }
       }
     })
     app.component('list', {

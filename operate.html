@@ -576,7 +576,8 @@
           mnameData: [],
           printLen: 0,
           detail_content: '',
-          show_page: true
+          show_page: true,
+          userData_search: {}
         }
       },
       methods: {
@@ -694,10 +695,20 @@
               page: page
             }
             if(this.searchText !== '') {
+              let searchArray = this.searchText.split('+')
+              console.log(searchArray)
+              if (searchArray.length == 1) {
+                data = {
+                  hitsPerPage: 1000,
+                  page: page,
+                  query: this.searchText
+                }
+              }
               data = {
                 hitsPerPage: 1000,
                 page: page,
-                query: this.searchText
+                query: this.searchText,
+                'filters':  `(uId:${this.userData_search[searchArray[0]]})`
               }
             }
             let response = await axios({
@@ -1324,6 +1335,14 @@
       async mounted() {
         this.checkLogin();
         this.getAllMname();
+        this.userData_search = {}
+        if (displayName == '管理' || displayName == '組長') {
+          let mnameTemp = await db.collection('MEMBERP').get();
+          mnameTemp.forEach(item => {
+            console.log(item.data())
+            this.userData_search[item.data().name] = item.data().uid
+          })
+        }
       }
     })
     app.component('list', {
