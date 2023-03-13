@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <div id="app">
+    {{ tempData }}
+  </div>
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
+      authDomain: "project-list-1bd84.firebaseapp.com",
+      projectId: "project-list-1bd84",
+      storageBucket: "project-list-1bd84.appspot.com",
+      messagingSenderId: "636865072797",
+      appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
+    });
+    const db = firebase.firestore();
+    // const app = Vue.createApp({
+    //   data() {
+    //     return {
+    //       tempData: []
+    //     }
+    //   },
+    //   async mounted() {
+    //     data = await db.collection("MEMBERP").doc('qyluFybz1ORyRh9V0RqfolQnq6q2').delete()
+    //   }
+    // })
+    // app.mount('#app')
+
+  </script>
+</body>
+
+</html>

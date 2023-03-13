@@ -480,7 +480,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/x-template" id="list">
       <li>
-        <div class="date">{{ item.date }} <br> <span v-if="displayName === '管理' || displayName === '組長'">( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span> </div>
+        <div class="date">{{ item.date }} <br> <span>( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span> </div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
         <div class="phone">{{ phoneFormat }}</div>
@@ -1258,7 +1258,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;

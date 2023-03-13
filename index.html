@@ -1,106 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入頁面</title>
-    <link rel="stylesheet" href="./css/all.css" class="css">
-</head>
-<body>
-    <div id="app">
-        <div class="container">
-            <div class="login" v-if="checkIp == true">
-                <form action="#">
-                    <div class="form-control">
-                        <label for="account">帳號</label>
-                        <input type="text" id="account" v-model="account">
-                    </div>
-                    <div class="form-control">
-                        <label for="password">密碼</label>
-                        <input type="password" id="password" v-model="password">
-                    </div>
-                    <div class="form-control">
-                        <button class="btn-login" href="#" @keyup.enter="signin" @click.prevent="signin">登入</button>
-                    </div>
-                </form>
-            </div>
-            <div v-else class="err-page">
-                <p>404 error! not a right IP {{ ip }}</p>
-            </div>
-        </div>
-    </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
-    <script src="https://unpkg.com/vue@3"></script>
-    <script>
-        firebase.initializeApp({
-            apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
-            authDomain: "project-list-1bd84.firebaseapp.com",
-            projectId: "project-list-1bd84",
-            storageBucket: "project-list-1bd84.appspot.com",
-            messagingSenderId: "636865072797",
-            appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
-        });
-        const db = firebase.firestore();
-        const app = Vue.createApp({
-            data(){
-                return{
-                    account: '',
-                    password: '',
-                    checkIp: false,
-                    ip: ''
-                }
-            },
-            methods:{
-                signin(){
-                    firebase.auth().signInWithEmailAndPassword(this.account, this.password)
-                    .then( async (res) => {
-                        let member = await db.collection('MEMBERP').doc(res.user.uid).get();
-                        console.log(res.user.uid)
-                        let cookie = JSON.stringify(member.data());
-                        localStorage.setItem('cookie', cookie);
-                        document.location = './list.html';
-                    })
-                    .catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        alert(errorMessage);
-                    });
-                },
-                getIp(){
-                    axios.get("https://api.ipify.org/?format=json")
-                        .then(res => {
-                            let ip = res.data.ip;
-                            this.ip = ip;
-                            db.collection('IP').add({
-                                text: ip,
-                                time: new Date()
-                            })
-                            if( ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')){
-                                this.checkIp = true;
-                            } else {
-                                this.checkIp = false;
-                            }
-                            if(this.checkIp === false){
-                                localStorage.removeItem('cookie');
-                            }
-                        })
-                        .catch(err => {
-                            console.dir(err);
-                        })
-                    
-                }
-                
-            },
-            created(){
-                this.getIp();
-            },
-        })
-        app.mount('#app');
 
-    </script>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入頁面</title>
+  <link rel="stylesheet" href="./css/all.css" class="css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="login" v-if="checkIp == true">
+        <form action="#">
+          <div class="form-control">
+            <label for="account">帳號</label>
+            <input type="text" id="account" v-model="account">
+          </div>
+          <div class="form-control">
+            <label for="password">密碼</label>
+            <input type="password" id="password" v-model="password">
+          </div>
+          <div class="form-control">
+            <button class="btn-login" href="#" @keyup.enter="signin" @click.prevent="signin">登入</button>
+          </div>
+        </form>
+      </div>
+      <div v-else class="err-page">
+        <p>404 error! not a right IP {{ ip }}</p>
+      </div>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
+      authDomain: "project-list-1bd84.firebaseapp.com",
+      projectId: "project-list-1bd84",
+      storageBucket: "project-list-1bd84.appspot.com",
+      messagingSenderId: "636865072797",
+      appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
+    });
+    const db = firebase.firestore();
+    const app = Vue.createApp({
+      data() {
+        return {
+          account: '',
+          password: '',
+          checkIp: false,
+          ip: ''
+        }
+      },
+      methods: {
+        signin() {
+          firebase.auth().signInWithEmailAndPassword(this.account, this.password)
+            .then(async (res) => {
+              let member = await db.collection('MEMBERP').doc(res.user.uid).get();
+              console.log(res.user.uid)
+              let cookie = JSON.stringify(member.data());
+              localStorage.setItem('cookie', cookie);
+              document.location = './list.html';
+            })
+            .catch((error) => {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              alert(errorMessage);
+            });
+        },
+        getIp() {
+          axios.get("https://api.ipify.org/?format=json")
+            .then(res => {
+              let ip = res.data.ip;
+              this.ip = ip;
+              db.collection('IP').add({
+                text: ip,
+                time: new Date()
+              })
+              if (ip.startsWith('125.228') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+                this.checkIp = true;
+              } else {
+                this.checkIp = false;
+              }
+              if (this.checkIp === false) {
+                localStorage.removeItem('cookie');
+              }
+            })
+            .catch(err => {
+              console.dir(err);
+            })
+
+        }
+
+      },
+      created() {
+        this.getIp();
+      },
+    })
+    app.mount('#app');
+
+  </script>
 </body>
+
 </html>
