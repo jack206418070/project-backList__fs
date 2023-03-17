@@ -702,12 +702,13 @@
                   page: page,
                   query: this.searchText
                 }
-              }
-              data = {
-                hitsPerPage: 1000,
-                page: page,
-                query: this.searchText,
-                'filters':  `(uId:${this.userData_search[searchArray[0]]})`
+              } else {
+                data = {
+                  hitsPerPage: 1000,
+                  page: page,
+                  query: this.searchText,
+                  'filters':  `(uId:${this.userData_search[searchArray[0]]})`
+                }
               }
             }
             let response = await axios({
@@ -1260,7 +1261,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('49.216') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1336,7 +1337,7 @@
         this.checkLogin();
         this.getAllMname();
         this.userData_search = {}
-        if (displayName == '管理' || displayName == '組長') {
+        if (this.displayName == '管理' || this.displayName == '組長') {
           let mnameTemp = await db.collection('MEMBERP').get();
           mnameTemp.forEach(item => {
             console.log(item.data())

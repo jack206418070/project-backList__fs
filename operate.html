@@ -703,12 +703,13 @@
                   page: page,
                   query: this.searchText
                 }
-              }
-              data = {
-                hitsPerPage: 1000,
-                page: page,
-                query: this.searchText,
-                'filters':  `(uId:${this.userData_search[searchArray[0]]})`
+              } else {
+                data = {
+                  hitsPerPage: 1000,
+                  page: page,
+                  query: this.searchText,
+                  'filters':  `(uId:${this.userData_search[searchArray[0]]})`
+                }
               }
             }
             let response = await axios({
