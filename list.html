@@ -1275,11 +1275,35 @@
         this.getIp();
       },
       async mounted() {
-        // let testTemp = await db.collection('NORMALORDER').where('mname', '==', 'Try try').get()
+        let user = await db.collection('MEMBERP').get()
+        user.forEach(item => {
+          console.log(item.data())
+        })
+        // await db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').set(
+        //   {
+        //     displayName: '員工',
+        //     account: 'evan0812@gmail.com',
+        //     password: 'Tw761638',
+        //     phone: '0978-761638',
+        //     uid: 'mgHoZet7iaZyGNf6mmsxydlOQvu1',
+        //     name: 'Evan'
+        //   }
+        // )
+        // // let testTemp = await db.collection('NORMALORDER').where('mname', '==', 'Evan').get()
+        // let testUser = await db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').collection('naOrder').get()
+        // testUser.forEach(item => {
+        //   console.log(item.data())
+        // })
+        // await db.collection('MEMBERP').doc('JnXPMHgZSoe35S9gnoxy8DVQ9313').delete()
         // testTemp.forEach(item => {
-        //   db.collection('MEMBERP').doc('X6uYZzvz2TQvtGrury4W7OvsEFD2').collection('normalOrder').doc(item.id).set({
-        //     ...item.data()
-        //   })
+          // db.collection('NAORDER').doc(item.id).set({
+          //   ...item.data(),
+          //   mname: 'Evan',
+          //   uId: 'mgHoZet7iaZyGNf6mmsxydlOQvu1'
+          // })
+          // db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').collection('normalOrder').doc(item.id).set({
+          //   ...item.data()
+          // })
         // })
 
         this.checkLogin();

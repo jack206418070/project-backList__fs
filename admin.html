@@ -66,7 +66,7 @@
             <div class="lineId">{{ item.line }}</div>
             <div class="extra">{{ item.extra }}</div>
             <div class="btn-control">
-              <a class="edit" href="#" @click.prevent="modalControl.is_edit_member = true; member = {...item}">編輯</a>
+              <a class="edit" href="#" @click.prevent="modalControl.is_edit_member = true; member = {...item, new_password: ''}">編輯</a>
               <a class="delete" href="#"
                 @click.prevent="modalControl.is_delete_member = true; member = {...item}">刪除</a>
             </div>
