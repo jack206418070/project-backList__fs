@@ -1178,7 +1178,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('49.216') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('118.160') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1275,6 +1275,13 @@
         this.getIp();
       },
       async mounted() {
+        // let testTemp = await db.collection('NORMALORDER').where('mname', '==', 'Try try').get()
+        // testTemp.forEach(item => {
+        //   db.collection('MEMBERP').doc('X6uYZzvz2TQvtGrury4W7OvsEFD2').collection('normalOrder').doc(item.id).set({
+        //     ...item.data()
+        //   })
+        // })
+
         this.checkLogin();
         this.getAllMname();
         let data = await db.collection('ORDER').get();
@@ -1311,8 +1318,7 @@
   </script>
   <script>
     let { displayName } = JSON.parse(localStorage.getItem("cookie"));
-    console.log(displayName)
-    console.log('in')
+    
     if (displayName != '管理' && displayName != '組長') {
       document.body.oncopy = function () {
         var copyWarn = document.querySelector('#copyWarnId');

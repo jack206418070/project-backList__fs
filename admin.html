@@ -1,317 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>帳號管理</title>
-    <link rel="stylesheet" href="./css/all.css" class="css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>帳號管理</title>
+  <link rel="stylesheet" href="./css/all.css" class="css">
 </head>
+
 <body>
-    <div id="app">
-        <div class="header" v-if="displayName === '管理'">
-            <div class="container-lg d-flex jy-content-between align-items-center">
-                <div class="logo">
-                    <img src="https://static.wixstatic.com/media/a30359_51ace8f8de8143019b8d6b64011f9216~mv2.png/v1/fill/w_412,h_194,al_c,q_85,usm_0.66_1.00_0.01/%E6%96%B0logo-removebg-preview.webp" alt="" style="height: 100px">
-                </div>
-                <div class="menu">
-                    <ul class="d-flex">
-                        <li>
-                          <a class="list-control" href="./normal.html">一般頁面</a>
-                        </li>
-                        <li>
-                            <a class="list-control" href="./list.html">增量頁面</a>
-                        </li>
-                        <li>
-                          <a class="list-control" href="./na.html">N/A頁面</a>
-                        </li>
-                        <li>
-                          <a class="list-control" href="./operate.html">經營頁面</a>
-                        </li>
-                        <li>
-                          <a class="account-control" href="./admin.html">帳號管理</a>
-                        </li>
-                        <li>
-                            <a class="list-control" @click.prevent="logout">登出</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+  <div id="app">
+    <div class="header" v-if="displayName === '管理'">
+      <div class="container-lg d-flex jy-content-between align-items-center">
+        <div class="logo">
+          <img
+            src="https://static.wixstatic.com/media/a30359_51ace8f8de8143019b8d6b64011f9216~mv2.png/v1/fill/w_412,h_194,al_c,q_85,usm_0.66_1.00_0.01/%E6%96%B0logo-removebg-preview.webp"
+            alt="" style="height: 100px">
         </div>
-        <div class="container-lg">
-            <div class="list">
-                <div class="add__list">
-                    <a v-if="displayName === '管理'" class="add" href="#" @click.prevent="modalControl.is_add_member = true; member = {}">增加員工帳號</a>
-                </div>
-                <ul class="account-list">
-                    <li>
-                        <div class="name">姓名</div>
-                        <div class="account">帳號</div>
-                        <div class="phone">電話</div>
-                        <div class="permission">權限</div>
-                        <div class="lineId">LINE</div>
-                        <div class="extra">備註</div>
-                        <div class="btn-control">修改 / 刪除</div>
-                    </li>
-                    <li v-for="item in memberList" :key="item.uid">
-                        <div class="name">{{ item.name }}</div>
-                        <div class="account">{{ item.account }}</div>
-                        <div class="phone">{{ item.phone }}</div>
-                        <div class="permission">{{ item.displayName }}</div>
-                        <div class="lineId">{{ item.line }}</div>
-                        <div class="extra">{{ item.extra }}</div>
-                        <div class="btn-control">
-                            <a class="edit" href="#" @click.prevent="modalControl.is_edit_member = true; member = {...item}">編輯</a>
-                            <a class="delete" href="#" @click.prevent="modalControl.is_delete_member = true; member = {...item}">刪除</a>
-                        </div>
-                    </li>
-                </ul>
+        <div class="menu">
+          <ul class="d-flex">
+            <li>
+              <a class="list-control" href="./normal.html">一般頁面</a>
+            </li>
+            <li>
+              <a class="list-control" href="./list.html">增量頁面</a>
+            </li>
+            <li>
+              <a class="list-control" href="./na.html">N/A頁面</a>
+            </li>
+            <li>
+              <a class="list-control" href="./operate.html">經營頁面</a>
+            </li>
+            <li>
+              <a class="account-control" href="./admin.html">帳號管理</a>
+            </li>
+            <li>
+              <a class="list-control" @click.prevent="logout">登出</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container-lg">
+      <div class="list">
+        <div class="add__list">
+          <a v-if="displayName === '管理'" class="add" href="#"
+            @click.prevent="modalControl.is_add_member = true; member = {}">增加員工帳號</a>
+        </div>
+        <ul class="account-list">
+          <li>
+            <div class="name">姓名</div>
+            <div class="account">帳號</div>
+            <div class="phone">電話</div>
+            <div class="permission">權限</div>
+            <div class="lineId">LINE</div>
+            <div class="extra">備註</div>
+            <div class="btn-control">修改 / 刪除</div>
+          </li>
+          <li v-for="item in memberList" :key="item.uid">
+            <div class="name">{{ item.name }}</div>
+            <div class="account">{{ item.account }}</div>
+            <div class="phone">{{ item.phone }}</div>
+            <div class="permission">{{ item.displayName }}</div>
+            <div class="lineId">{{ item.line }}</div>
+            <div class="extra">{{ item.extra }}</div>
+            <div class="btn-control">
+              <a class="edit" href="#" @click.prevent="modalControl.is_edit_member = true; member = {...item}">編輯</a>
+              <a class="delete" href="#"
+                @click.prevent="modalControl.is_delete_member = true; member = {...item}">刪除</a>
             </div>
+          </li>
+        </ul>
+      </div>
 
 
-            <div class="add-member" v-if="displayName === '管理' && modalControl.is_add_member === true" :class="{'show': modalControl.is_add_member === true}">
-                    <div class="title">
-                        <h3>新增員工帳號</h3>
-                    </div>
-                    <form action="#">
-                        <div class="form-control">
-                            <label for="account">新增帳號</label>
-                            <input type="text" v-model="member.account">
-                        </div>
-                        <div class="form-control">
-                            <label for="password">新增密碼</label>
-                            <input type="text" v-model="member.password">
-                        </div>
-                        <div class="form-group">
-                            <div class="form-control">
-                                <label for="name">員工姓名</label>
-                                <input type="text" v-model="member.name">
-                            </div>
-                            <div class="form-control">
-                                <label for="phone">員工電話</label>
-                                <input type="text" v-model="member.phone">
-                            </div>
-                            <div class="form-control">
-                                <label for="line">員工Line</label>
-                                <input type="text" v-model="member.line">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-control">
-                                <label for="extra">備註</label>
-                                <textarea name="extra" id="extra" rows="10" cols="30" v-model="member.extra"></textarea>
-                            </div>
-                            <div class="form-control">
-                                <label for="permission">員工權限</label>
-                                <select name="permission" id="permission" v-model="member.displayName">
-                                    <option value="員工" :selected = "member.displayName === '員工'">員工</option>
-                                    <option value="組長">組長</option>
-                                    <option value="管理">管理</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="btn-group">
-                        <a class="add" href="#" @click.prevent="modalControl.is_add_member = false; member={}">取消</a>
-                        <a class="close" href="#" @click.prevent="addMember">新增</a>
-                    </div>
+      <div class="add-member" v-if="displayName === '管理' && modalControl.is_add_member === true"
+        :class="{'show': modalControl.is_add_member === true}">
+        <div class="title">
+          <h3>新增員工帳號</h3>
+        </div>
+        <form action="#">
+          <div class="form-control">
+            <label for="account">新增帳號</label>
+            <input type="text" v-model="member.account">
+          </div>
+          <div class="form-control">
+            <label for="password">新增密碼</label>
+            <input type="text" v-model="member.password">
+          </div>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="name">員工姓名</label>
+              <input type="text" v-model="member.name">
             </div>
-            <div class="add-member" v-if="displayName === '管理' && modalControl.is_edit_member === true" :class="{'show': modalControl.is_edit_member === true}">
-                <div class="title">
-                    <h3>編輯員工帳號</h3>
-                </div>
-                <form action="#">
-                    <div class="form-control">
-                        <label for="account">帳號</label>
-                        <input type="text" v-model="member.account" readonly disabled>
-                    </div>
-                    <div class="form-control">
-                        <label for="password">密碼</label>
-                        <input type="text" v-model="member.password" readonly disabled>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control">
-                            <label for="name">員工姓名</label>
-                            <input type="text" v-model="member.name">
-                        </div>
-                        <div class="form-control">
-                            <label for="phone">員工電話</label>
-                            <input type="text" v-model="member.phone">
-                        </div>
-                        <div class="form-control">
-                            <label for="line">員工Line</label>
-                            <input type="text" v-model="member.line">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control">
-                            <label for="extra">備註</label>
-                            <textarea name="extra" id="extra" rows="10" cols="30" v-model="member.extra"></textarea>
-                        </div>
-                        <div class="form-control">
-                            <label for="permission">員工權限</label>
-                            <select name="permission" id="permission" v-model="member.displayName">
-                                <option value="員工" :selected = "member.displayName === '員工'">員工</option>
-                                <option value="組長">組長</option>
-                                <option value="管理">管理</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-                <div class="btn-group">
-                    <a class="add" href="#" @click.prevent="modalControl.is_edit_member = false; member={}">取消</a>
-                    <a class="close" href="#" @click.prevent="editMember">修改</a>
-                </div>
+            <div class="form-control">
+              <label for="phone">員工電話</label>
+              <input type="text" v-model="member.phone">
             </div>
-            <div class="delete-modal" :class="{'show': modalControl.is_delete_member === true}">
-                <div class="title">
-                    <h3>刪除帳號</h3>
-                </div>
-                <div class="content">
-                    <p>確定要刪除  <span style="color: red">{{ member.name }} 的 {{ member.account }}</span> 帳號嗎 ？</p>
-                    <div class="btn-group">
-                        <a class="close"  href="#" @click.prevent="modalControl.is_delete_member = false; member = {}">取消</a>
-                        <a class="delete" href="#" @click.prevent="deleteMember">確定刪除</a>
-                    </div>
-                </div>
+            <div class="form-control">
+              <label for="line">員工Line</label>
+              <input type="text" v-model="member.line">
             </div>
+          </div>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="extra">備註</label>
+              <textarea name="extra" id="extra" rows="10" cols="30" v-model="member.extra"></textarea>
             </div>
-
+            <div class="form-control">
+              <label for="permission">員工權限</label>
+              <select name="permission" id="permission" v-model="member.displayName">
+                <option value="員工" :selected="member.displayName === '員工'">員工</option>
+                <option value="組長">組長</option>
+                <option value="管理">管理</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div class="btn-group">
+          <a class="add" href="#" @click.prevent="modalControl.is_add_member = false; member={}">取消</a>
+          <a class="close" href="#" @click.prevent="addMember">新增</a>
+        </div>
+      </div>
+      <div class="add-member" v-if="displayName === '管理' && modalControl.is_edit_member === true"
+        :class="{'show': modalControl.is_edit_member === true}">
+        <div class="title">
+          <h3>編輯員工帳號</h3>
+        </div>
+        <form action="#">
+          <div class="form-control">
+            <label for="account">帳號</label>
+            <input type="text" v-model="member.account" readonly disabled>
+          </div>
+          <div class="form-control">
+            <label for="password">密碼</label>
+            <input type="text" v-model="member.password" readonly disabled>
+          </div>
+          <div class="form-control">
+            <label for="password">修改密碼</label>
+            <input type="text" v-model="member.new_password" placeholder="不填寫就是不修改">
+          </div>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="name">員工姓名</label>
+              <input type="text" v-model="member.name">
+            </div>
+            <div class="form-control">
+              <label for="phone">員工電話</label>
+              <input type="text" v-model="member.phone">
+            </div>
+            <div class="form-control">
+              <label for="line">員工Line</label>
+              <input type="text" v-model="member.line">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="extra">備註</label>
+              <textarea name="extra" id="extra" rows="10" cols="30" v-model="member.extra"></textarea>
+            </div>
+            <div class="form-control">
+              <label for="permission">員工權限</label>
+              <select name="permission" id="permission" v-model="member.displayName">
+                <option value="員工" :selected="member.displayName === '員工'">員工</option>
+                <option value="組長">組長</option>
+                <option value="管理">管理</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div class="btn-group">
+          <a class="add" href="#" @click.prevent="modalControl.is_edit_member = false; member={}">取消</a>
+          <a class="close" href="#" @click.prevent="editMember">修改</a>
+        </div>
+      </div>
+      <div class="delete-modal" :class="{'show': modalControl.is_delete_member === true}">
+        <div class="title">
+          <h3>刪除帳號</h3>
+        </div>
+        <div class="content">
+          <p>確定要刪除 <span style="color: red">{{ member.name }} 的 {{ member.account }}</span> 帳號嗎 ？</p>
+          <div class="btn-group">
+            <a class="close" href="#" @click.prevent="modalControl.is_delete_member = false; member = {}">取消</a>
+            <a class="delete" href="#" @click.prevent="deleteMember">確定刪除</a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://unpkg.com/vue@3"></script>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://unpkg.com/vue@3"></script>
 
 
-    <script>
-        const fs = firebase.initializeApp({
-            apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
-            authDomain: "project-list-1bd84.firebaseapp.com",
-            projectId: "project-list-1bd84",
-            storageBucket: "project-list-1bd84.appspot.com",
-            messagingSenderId: "636865072797",
-            appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
-        });
-        const db = firebase.firestore();
-        const app = Vue.createApp({
-            data(){
-                return{
-                    memberList: [],
-                    uid: '',
-                    displayName: '',
-                    modalControl:{
-                        is_add_member: false,
-                        is_edit_member: false,
-                        is_delete_member: false
-                    },
-                    member:{
-                        account: '',
-                        password: '',
-                        name: '',
-                        phone: '',
-                        line: '',
-                        displayName: '員工',
-                        extra: ''
-                    },
-                }
-            },
-            methods:{
-                checkLogin(){
-                    if(localStorage.getItem("cookie")){
-                        let {uid, displayName} = JSON.parse(localStorage.getItem("cookie"));
-                        this.uid = uid;
-                        this.displayName = displayName;
-                        this.getMember();
-                    }else{
-                        window.location = './index.html'
-                    }
-                },
-                async getMember(){
-                    this.memberList = [];
-                    let data = await db.collection('MEMBERP').get();
-                    data.forEach(item => {
-                        this.memberList.push(item.data());
-                    })
-                },
-                addMember(){
-                    firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
-                    .then((res) => {
-                        let data = {
-                            ...this.member,
-                            uid: res.user.uid
-                        }
-                        db.collection('MEMBERP').doc(res.user.uid).set(data);
-                        this.member = {};
-                        this.modalControl.is_add_member = false;
-                        this.getMember();
-                    })
-                    .catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                    }); 
-                },
-                editMember(){
-                    db.collection('MEMBERP').doc(this.member.uid).set({
-                        ...this.member
-                    })
-                    this.modalControl.is_edit_member = false;
-                    this.member = {};
-                    this.getMember();
-                },
-                deleteMember(){
-                    firebase.auth().signInWithEmailAndPassword(this.member.account, this.member.password)
-                    .then( (res) => {
-                        db.collection('MEMBERP').doc(this.member.uid).delete();
-                        const user = firebase.auth().currentUser;
-                        user.delete().then(res => {
-                            alert('刪除成功');
-                            this.modalControl.is_delete_member = false;
-                            this.member = {};
-                            this.getMember();
-                        })
-                    })
-                    .catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        // ..
-                    });
-                },
-                logout(){
-                    localStorage.removeItem('cookie');
-                    window.location = './index.html'
-                },
-                // changePassword() {
-                //   firebase.auth().signInWithEmailAndPassword('admin@gmail.com', 'adminadmin')
-                //     .then( async (res) => {
-                //       const user = firebase.auth().currentUser;
-                //       user.updatePassword('admin123').then(() => {
-                //         console.log('成功')
-                //       }).catch((error) => {
-                //         console.dir(error)
-                //         // An error ocurred
-                //         // ...
-                //       });
-                //     })
-                //     .catch((error) => {
-                //         var errorCode = error.code;
-                //         var errorMessage = error.message;
-                //         alert(errorMessage);
-                //     });
-                  
-                // }
-            },
-            mounted(){
-                this.checkLogin();
-                // this.changePassword();
-                setTimeout(() => {
-                    localStorage.removeItem('cookie')
-                },60 * 60 * 1000);
-            }
-        })
-        app.mount('#app');
+  <script>
+    const fs = firebase.initializeApp({
+      apiKey: "AIzaSyBOkPr5NHtb-HcprqrXKIujPndGiSxjvyI",
+      authDomain: "project-list-1bd84.firebaseapp.com",
+      projectId: "project-list-1bd84",
+      storageBucket: "project-list-1bd84.appspot.com",
+      messagingSenderId: "636865072797",
+      appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
+    });
+    const db = firebase.firestore();
+    const app = Vue.createApp({
+      data() {
+        return {
+          memberList: [],
+          uid: '',
+          displayName: '',
+          modalControl: {
+            is_add_member: false,
+            is_edit_member: false,
+            is_delete_member: false
+          },
+          member: {
+            account: '',
+            password: '',
+            name: '',
+            phone: '',
+            line: '',
+            displayName: '員工',
+            extra: '',
+            new_password: ''
+          },
+        }
+      },
+      methods: {
+        checkLogin() {
+          if (localStorage.getItem("cookie")) {
+            let { uid, displayName } = JSON.parse(localStorage.getItem("cookie"));
+            this.uid = uid;
+            this.displayName = displayName;
+            this.getMember();
+          } else {`
+            window.location = './index.html'
+          }
+        },
+        async getMember() {
+          this.memberList = [];
+          let data = await db.collection('MEMBERP').get();
+          data.forEach(item => {
+            this.memberList.push(item.data());
+          })
+        },
+        addMember() {
+          firebase.auth().createUserWithEmailAndPassword(this.member.account, this.member.password)
+            .then((res) => {
+              let data = {
+                ...this.member,
+                uid: res.user.uid
+              }
+              db.collection('MEMBERP').doc(res.user.uid).set(data);
+              this.member = {};
+              this.modalControl.is_add_member = false;
+              this.getMember();
+            })
+            .catch((error) => {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+            });
+        },
+        editMember() {
+          const user = firebase.auth().currentUser;
+          if (this.member.new_password != '') {
+            firebase.auth().signInWithEmailAndPassword(this.member.account, this.member.password)
+            .then(() => {
+              // 验证成功，更新密码
+              user.updatePassword(this.member.new_password).then(() => {
+                // 密码更新成功
+                alert('密码已更新');
+                db.collection('MEMBERP').doc(this.member.uid).set({
+                  ...this.member,
+                  new_password: '',
+                  password: this.member.new_password
+                })
+                this.modalControl.is_edit_member = false;
+                this.member = {};
+                this.getMember();
+              }).catch((error) => {
+                // 密码更新失败
+                alert(error.message);
+              });
+            }).catch((error) => {
+              // 验证失败
+              alert(error.message);
+            });
+          } else {
+            db.collection('MEMBERP').doc(this.member.uid).set({
+              ...this.member,
+              new_password: '',
+              password: this.member.new_password
+            })
+            this.modalControl.is_edit_member = false;
+            this.member = {};
+            this.getMember();
+          }
+        },
+        deleteMember() {
+          firebase.auth().signInWithEmailAndPassword(this.member.account, this.member.password)
+            .then((res) => {
+              db.collection('MEMBERP').doc(this.member.uid).delete();
+              const user = firebase.auth().currentUser;
+              user.delete().then(res => {
+                alert('刪除成功');
+                this.modalControl.is_delete_member = false;
+                this.member = {};
+                this.getMember();
+              })
+            })
+            .catch((error) => {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // ..
+            });
+        },
+        logout() {
+          localStorage.removeItem('cookie');
+          window.location = './index.html'
+        },
+        // changePassword() {
+        //   firebase.auth().signInWithEmailAndPassword('admin@gmail.com', 'adminadmin')
+        //     .then( async (res) => {
+        //       const user = firebase.auth().currentUser;
+        //       user.updatePassword('admin123').then(() => {
+        //         console.log('成功')
+        //       }).catch((error) => {
+        //         console.dir(error)
+        //         // An error ocurred
+        //         // ...
+        //       });
+        //     })
+        //     .catch((error) => {
+        //         var errorCode = error.code;
+        //         var errorMessage = error.message;
+        //         alert(errorMessage);
+        //     });
 
-    </script>
+        // }
+      },
+      mounted() {
+        this.checkLogin();
+        // this.changePassword();
+        setTimeout(() => {
+          localStorage.removeItem('cookie')
+        }, 60 * 60 * 1000);
+      }
+    })
+    app.mount('#app');
+
+  </script>
 </body>
+
 </html>
