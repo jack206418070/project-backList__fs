@@ -293,8 +293,6 @@
           } else {
             db.collection('MEMBERP').doc(this.member.uid).set({
               ...this.member,
-              new_password: '',
-              password: this.member.new_password
             })
             this.modalControl.is_edit_member = false;
             this.member = {};
