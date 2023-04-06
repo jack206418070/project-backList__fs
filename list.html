@@ -222,13 +222,6 @@
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
                 <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
-                <label for="line">LineID</label>
-                <input type="text" id="line" v-model="tempOrderList.lineId">
-              </div>
-              <div class="form-control type">
-                <label for="type">分期類別</label>
-                汽<input type="radio" value="汽" v-model="tempOrderList.type">
-                機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
@@ -237,6 +230,15 @@
                 </div>
               </div>
               <div class="form-control">
+                <label for="line">LineID</label>
+                <input type="text" id="line" v-model="tempOrderList.lineId">
+                <label for="money">貸款金額</label>
+                <input type="text" id="money" v-model="tempOrderList.money">
+              </div>
+              <div class="form-control type">
+                <label for="type">分期類別</label>
+                汽<input type="radio" value="汽" v-model="tempOrderList.type">
+                機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
                 <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
                 <input type="text" id="staging_number" v-model="tempOrderList.staging_number">
                 <label for="staging.allNumber">總期數</label>
@@ -247,24 +249,20 @@
             </div>
             <div class="form-group">
               <div class="form-control">
-                <label for="money">貸款金額</label>
-                <input type="text" id="money" v-model="tempOrderList.money">
+                <label for="month">月付款</label>
+                <input type="number" id="month" v-model="tempOrderList.month">
               </div>
               <div class="form-control">
                 <label for="dieLine">應繳日</label>
                 <input type="text" id="dieLine" v-model="tempOrderList.dieLine">
               </div>
               <div class="form-control">
-                <label for="month">月付款</label>
-                <input type="number" id="month" v-model="tempOrderList.month">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-control">
                 <label for="latePay">遲繳天數</label>
                 <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay" placeholder="不填寫=無遲繳">
                 <span style="padding-left: 4px">天</span>
               </div>
+            </div>
+            <div class="form-group">
               <div class="form-control">
                 <label for="inDate">進件日期</label>
                 <input type="date" id="inDate" v-model="tempOrderList.inDate">
@@ -310,14 +308,6 @@
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
                 <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
-                <label for="line">LineID</label>
-                <input type="text" id="line" v-model="tempOrderList.lineId">
-              </div>
-              <div class="form-control type">
-                <label for="type">分期類別</label>
-                汽<input type="radio" v-model="tempOrderList.type" value="汽" :checked="tempOrderList.type === '汽'">
-                機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'"
-                  style="margin-bottom: 13px;">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
@@ -326,6 +316,16 @@
                 </div>
               </div>
               <div class="form-control">
+                <label for="line">LineID</label>
+                <input type="text" id="line" v-model="tempOrderList.lineId">
+                <label for="money">貸款金額</label>
+                <input type="text" id="money" v-model="tempOrderList.money">
+              </div>
+              <div class="form-control type">
+                <label for="type">分期類別</label>
+                汽<input type="radio" v-model="tempOrderList.type" value="汽" :checked="tempOrderList.type === '汽'">
+                機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'"
+                  style="margin-bottom: 13px;">
                 <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
                 <input type="text" id="staging_number" v-model="tempOrderList.staging_number">
                 <label for="staging.allNumber">總期數</label>
@@ -336,24 +336,20 @@
             </div>
             <div class="form-group">
               <div class="form-control">
-                <label for="money">貸款金額</label>
-                <input type="text" id="money" v-model="tempOrderList.money">
+                <label for="month">月付款</label>
+                <input type="number" id="month" v-model="tempOrderList.month">
               </div>
               <div class="form-control">
                 <label for="dieLine">應繳日</label>
                 <input type="text" id="dieLine" v-model="tempOrderList.dieLine">
               </div>
               <div class="form-control">
-                <label for="month">月付款</label>
-                <input type="number" id="month" v-model="tempOrderList.month">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-control">
                 <label for="latePay">遲繳天數</label>
                 <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay" placeholder="不填寫=無遲繳">
                 <span style="padding-left: 4px">天</span>
               </div>
+            </div>
+            <div class="form-group">
               <div class="form-control">
                 <label for="inDate">進件日期</label>
                 <input type="date" id="date" v-model="tempOrderList.inDate">
@@ -1178,7 +1174,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('118.160') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('125.228') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
