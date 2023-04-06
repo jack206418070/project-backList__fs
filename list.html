@@ -134,11 +134,20 @@
                 <p>汽</p>
                 <p>機</p>
               </div>
-              <div class="before">前貸</div>
+              <!-- <div class="before">前貸</div>
               <div class="staging">期數</div>
               <div class="money">貸款金額</div>
               <div class="dieLine">應繳日</div>
               <div class="month">月付款</div>
+              <div class="extra">備註</div>
+              <div class="inDate">進件日期</div>
+              <div class="reason">不良原因</div>
+              <div class="btn-control">操作</div> -->
+              <div class="before">前貸</div>
+              <div class="money">貸款金額</div>
+              <div class="staging">期數</div>
+              <div class="month">月付款</div>
+              <div class="dieLine">應繳日</div>
               <div class="extra">備註</div>
               <div class="inDate">進件日期</div>
               <div class="reason">不良原因</div>
@@ -164,11 +173,20 @@
                 <p>汽</p>
                 <p>機</p>
               </div>
-              <div class="before">前貸</div>
+              <!-- <div class="before">前貸</div>
               <div class="staging">期數</div>
               <div class="money">貸款金額</div>
               <div class="dieLine">應繳日</div>
               <div class="month">月付款</div>
+              <div class="extra">備註</div>
+              <div class="inDate">進件日期</div>
+              <div class="reason">不良原因</div>
+              <div class="btn-control">操作</div> -->
+              <div class="before">前貸</div>
+              <div class="money">貸款金額</div>
+              <div class="staging">期數</div>
+              <div class="month">月付款</div>
+              <div class="dieLine">應繳日</div>
               <div class="extra">備註</div>
               <div class="inDate">進件日期</div>
               <div class="reason">不良原因</div>
@@ -218,20 +236,20 @@
                 <input type="text" id="carId" @change="checkCarId" v-model="tempOrderList.carId">
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="align-items: center">
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
-                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
+                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')" style="margin-bottom: 40px">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                  <select name="before" id="before" v-model="tempOrderList.before" style="width: 100%;">
                     <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
                   </select>
                 </div>
               </div>
               <div class="form-control">
                 <label for="line">LineID</label>
-                <input type="text" id="line" v-model="tempOrderList.lineId">
+                <input type="text" id="line" v-model="tempOrderList.lineId" style="margin-bottom: 40px">
                 <label for="money">貸款金額</label>
                 <input type="text" id="money" v-model="tempOrderList.money">
               </div>
@@ -240,7 +258,7 @@
                 汽<input type="radio" value="汽" v-model="tempOrderList.type">
                 機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
                 <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
-                <input type="text" id="staging_number" v-model="tempOrderList.staging_number">
+                <input type="text" id="staging_number" v-model="tempOrderList.staging_number" style="width: 100%">
                 <label for="staging.allNumber">總期數</label>
                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
                   <option v-for="item in allNumberList" :value="item">{{item}}期</option>
@@ -304,20 +322,20 @@
                 <input type="text" id="carId" v-model="tempOrderList.carId">
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="align-items: center">
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
-                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')">
+                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')" style="margin-bottom: 40px">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <select name="before" id="before" v-model="tempOrderList.before" style="width: 60%;">
+                  <select name="before" id="before" v-model="tempOrderList.before" style="width: 100%;">
                     <option v-for="item in beforeList" :value="item" :key="item">{{ item }}</option>
                   </select>
                 </div>
               </div>
               <div class="form-control">
                 <label for="line">LineID</label>
-                <input type="text" id="line" v-model="tempOrderList.lineId">
+                <input type="text" id="line" v-model="tempOrderList.lineId" style="margin-bottom: 40px">
                 <label for="money">貸款金額</label>
                 <input type="text" id="money" v-model="tempOrderList.money">
               </div>
@@ -327,7 +345,7 @@
                 機<input type="radio" v-model="tempOrderList.type" value="機" :checked="tempOrderList.type === '機'"
                   style="margin-bottom: 13px;">
                 <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
-                <input type="text" id="staging_number" v-model="tempOrderList.staging_number">
+                <input type="text" id="staging_number" v-model="tempOrderList.staging_number" style="width: 100%">
                 <label for="staging.allNumber">總期數</label>
                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
                   <option v-for="item in allNumberList" :value="item">{{item}}期</option>
@@ -458,10 +476,10 @@
             <p>{{ item.type == '機' ? 'V' : ''}}</p>
         </div>
         <div class="before">{{ item.before }}</div>
-        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
         <div class="money">{{ item.money }}</div>
-        <div class="dieLine">{{ item.dieLine }}</div>
+        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
         <div class="month">{{ item.month }}</div>
+        <div class="dieLine">{{ item.dieLine }}</div>
         <div class="extra">{{ item.extra }}</div>
         <div class="inDate">{{ item.inDate }}</div>
         <div class="reason">{{ item.reason }}</div>
