@@ -319,7 +319,7 @@
               </div>
               <div class="form-control">
                 <label for="carId">車牌</label>
-                <input type="text" id="carId" v-model="tempOrderList.carId">
+                <input type="text" id="carId" v-model="tempOrderList.carId" @change="checkCarId">
               </div>
             </div>
             <div class="form-group" style="align-items: center">
@@ -1192,7 +1192,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('125.228') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1289,10 +1289,10 @@
         this.getIp();
       },
       async mounted() {
-        let user = await db.collection('MEMBERP').get()
-        user.forEach(item => {
-          console.log(item.data())
-        })
+        // let user = await db.collection('MEMBERP').get()
+        // user.forEach(item => {
+        //   console.log(item.data())
+        // })
         // await db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').set(
         //   {
         //     displayName: '員工',
@@ -1303,8 +1303,12 @@
         //     name: 'Evan'
         //   }
         // )
-        // // let testTemp = await db.collection('NORMALORDER').where('mname', '==', 'Evan').get()
-        // let testUser = await db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').collection('naOrder').get()
+        // let testTemp = await db.collection('MEMBERP').where('mname', '==', 'Evan').get()
+        // console.log(1)
+        // let testUser = await db.collection('MEMBERP').doc('xDZJ7cSLvRYFQlPfk88m5jNUbvz2').collection('operateOrder').where('mname', '==', 'Joey 繼承 Hank').get()
+        // testUser.forEach(item => {
+        //   item.ref.delete()
+        // })
         // testUser.forEach(item => {
         //   console.log(item.data())
         // })

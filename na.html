@@ -329,7 +329,7 @@
               </div>
               <div class="form-control">
                 <label for="carId">車牌</label>
-                <input type="text" id="carId" v-model="tempOrderList.carId">
+                <input type="text" id="carId" v-model="tempOrderList.carId" @change="checkCarId">
               </div>
             </div>
             <div class="form-group" style="align-items: center">
@@ -1257,7 +1257,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('49.216') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
