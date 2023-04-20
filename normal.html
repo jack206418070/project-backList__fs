@@ -1055,7 +1055,7 @@
             }
           }
           this.orderList.sort((a, b) => {
-            return (+b.oId) - (+a.oId)
+            return new Date(b.date) - new Date(a.date)
           })
         },
         async searchBtn(input = '') {
