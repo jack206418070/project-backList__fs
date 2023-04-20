@@ -286,6 +286,10 @@
                 <input type="date" id="inDate" v-model="tempOrderList.inDate">
               </div>
               <div class="form-control">
+                <label for="reason">聯絡日期</label>
+                <input type="date" id="inDate" v-model="tempOrderList.connectDate">
+              </div>
+              <div class="form-control">
                 <label for="reason">不良原因</label>
                 <input type="text" id="reason" v-model="tempOrderList.reason">
               </div>
@@ -371,6 +375,10 @@
               <div class="form-control">
                 <label for="inDate">進件日期</label>
                 <input type="date" id="date" v-model="tempOrderList.inDate">
+              </div>
+              <div class="form-control">
+                <label for="reason">聯絡日期</label>
+                <input type="date" id="inDate" v-model="tempOrderList.connectDate">
               </div>
               <div class="form-control">
                 <label for="reason">不良原因</label>
@@ -466,7 +474,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/x-template" id="list">
       <li>
-        <div class="date">{{ item.date }} <br> <span>( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span></div>
+        <div class="date">{{ item.date }} <br><span v-if="item.connectDate != '' && item.connectDate != undefined" style="display: block">( {{ item.connectDate }} )</span> <span>( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span></div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
         <div class="phone">{{ phoneFormat }}</div>
@@ -772,19 +780,26 @@
           if (sn !== 'N/A' && sn !== 'NaN') {
             sn = +sn
           }
+          let connectDate = ''
+          if (this.tempOrderList.connectDate != undefined) {
+            connectDate = this.tempOrderList.connectDate.replace(/-/g, '/')
+          }
           db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('order').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           });
           db.collection('ORDER').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           });
           this.isLoading = true
           setTimeout(() => {
             let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
             this.orderList[index] = {
-              ...this.tempOrderList
+              ...this.tempOrderList,
+              connectDate
             }
             this.isLoading = false;
             this.tempOrderList = {};
@@ -829,19 +844,25 @@
           if (sn !== 'N/A' && sn !== 'NaN') {
             sn = +sn
           }
+          let connectDate = ''
+          if (this.tempOrderList.connectDate != undefined) {
+            connectDate = this.tempOrderList.connectDate.replace(/-/g, '/')
+          }
           db.collection('ORDER').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           })
           db.collection('MEMBERP').doc(this.uid).collection('order').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           })
           this.isLoading = true
           setTimeout(() => {
@@ -850,7 +871,8 @@
               oId: id,
               uId: this.uid,
               mname: this.mname,
-              staging_number: sn
+              staging_number: sn,
+              connectDate
             });
             this.isLoading = false
             this.tempOrderList = {};
@@ -1192,7 +1214,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('211.23') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
