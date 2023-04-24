@@ -703,10 +703,32 @@
               data: data
             })
             this.allPage = response.data.nbPages;
-            this.printLen = Math.ceil(response.data.hits.length / 9);
+            real_data = []
+            if (this.searchText.split('+').length > 1) {
+              response.data.hits.forEach(item => {
+                console.log(this.searchText.split('+')[1].split('-'))
+                if (this.searchText.split('+')[1].split('-').length == 3) {
+                  console.log(item.date, this.searchText.split('+')[1])
+                  if (item.date == this.searchText.split('+')[1]) {
+                    real_data.push(item)
+                  }
+                } else if (this.searchText.split('+')[1].split('/').length == 3) {
+                  if (item.connectDate == this.searchText.split('+')[1]) {
+                    real_data.push(item)
+                  }
+                }
+              })
+            } else {
+              real_data = response.data.hits
+            }
+
+            // this.printLen = Math.ceil(response.data.hits.length / 9);
+            this.printLen = Math.ceil(real_data.length / 9);
             this.currentPage = page;
-            this.orderList = response.data.hits;
-            response.data.hits.forEach ((item, index) => {
+            // this.orderList = response.data.hits;
+            this.orderList = real_data;
+
+            real_data.forEach ((item, index) => {
               if (index % 9 == 0) {
                 this.printData.push([item])
               } else {
@@ -768,6 +790,8 @@
           }
         },
         editOrder(event, tempOrderList) {
+          tempOrderList.connectDate = tempOrderList.connectDate.replace(/\//g, '-');
+          console.log(tempOrderList)
           this.tempOrderList = tempOrderList;
           this.openEdit(event, tempOrderList)
         },
@@ -1214,7 +1238,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('211.23') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
