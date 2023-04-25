@@ -74,6 +74,9 @@
                 </li>
             </ul>
         </div>
+        <div v-if="search_count != ''">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">搜尋數量: {{ search_count }}</p>
+        </div>
           <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index: 99">
             <a class="add" href="#"
               @click.prevent="openAddOrder">新增訂單</a>
@@ -580,7 +583,8 @@
           printLen: 0,
           detail_content: '',
           show_page: true,
-          userData_search: {}
+          userData_search: {},
+          search_count: ''
         }
       },
       methods: {
@@ -735,13 +739,18 @@
                   }
                 } else if (this.searchText.split('+')[1].split('/').length == 3) {
                   if (item.connectDate == this.searchText.split('+')[1]) {
-                    console.log('in Date')
+                    real_data.push(item)
+                  } else if (item.date == this.searchText.split('+')[1].replace(/\//g, '-')) {
                     real_data.push(item)
                   }
                 }
               })
             } else {
               real_data = response.data.hits
+            }
+
+            if (this.searchText != '') {
+              this.search_count = real_data.length
             }
             // this.printLen = Math.ceil(response.data.hits.length / 9);
             this.printLen = Math.ceil(real_data.length / 9);
@@ -1305,7 +1314,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1380,8 +1389,9 @@
       async mounted() {
         this.checkLogin();
         this.getAllMname();
+        let { displayName } = JSON.parse(localStorage.getItem("cookie"));
         this.userData_search = {}
-        if (this.displayName == '管理' || this.displayName == '組長') {
+        if (displayName == '管理' || displayName == '組長') {
           let mnameTemp = await db.collection('MEMBERP').get();
           mnameTemp.forEach(item => {
             console.log(item.data())

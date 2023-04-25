@@ -77,6 +77,9 @@
               </li>
             </ul>
           </div>
+          <div v-if="search_count != ''">
+            <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">搜尋數量: {{ search_count }}</p>
+          </div>
           <div class="add__list">
             <a class="add" href="#" style="white-space: nowrap;" @click.prevent="changeIsPage"
               v-if="displayName !== '管理'">
@@ -215,7 +218,6 @@
           </ul>
         </div>
       </div>
-
       <div class="add-modal" :class="{'show': modalControl.is_add === true}">
         <div class="title">
           <h2>新增訂單</h2>
@@ -569,7 +571,8 @@
           is_page: true,
           detail_content: '',
           show_page: true,
-          userData_search: {}
+          userData_search: {},
+          search_count: ''
         }
       },
       methods: {
@@ -688,6 +691,7 @@
                   query: this.searchText
                 }
               } else {
+                console.log(this.userData_search[searchArray[0]], this.userData_search)
                 data = {
                   hitsPerPage: 1000,
                   page: page,
@@ -704,9 +708,11 @@
             })
             this.allPage = response.data.nbPages;
             real_data = []
+            console.log(this.searchText.split('+').length)
             if (this.searchText.split('+').length > 1) {
+              console.log('in')
               response.data.hits.forEach(item => {
-                console.log(this.searchText.split('+')[1].split('-'))
+                console.log(this.searchText)
                 if (this.searchText.split('+')[1].split('-').length == 3) {
                   console.log(item.date, this.searchText.split('+')[1])
                   if (item.date == this.searchText.split('+')[1]) {
@@ -715,13 +721,17 @@
                 } else if (this.searchText.split('+')[1].split('/').length == 3) {
                   if (item.connectDate == this.searchText.split('+')[1]) {
                     real_data.push(item)
+                  } else if (item.date == this.searchText.split('+')[1].replace(/\//g, '-')) {
+                    real_data.push(item)
                   }
                 }
               })
             } else {
               real_data = response.data.hits
             }
-
+            if (this.searchText != '') {
+              this.search_count = real_data.length
+            }
             // this.printLen = Math.ceil(response.data.hits.length / 9);
             this.printLen = Math.ceil(real_data.length / 9);
             this.currentPage = page;
@@ -1239,7 +1249,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1381,6 +1391,7 @@
           mnameTemp.forEach(item => {
             this.userData_search[item.data().name] = item.data().uid
           })
+          console.log(this.userData_search)
         }
       }
     })
