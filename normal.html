@@ -296,6 +296,10 @@
                 <input type="date" id="inDate" v-model="tempOrderList.inDate">
               </div>
               <div class="form-control">
+                <label for="reason">聯絡日期</label>
+                <input type="date" id="inDate" v-model="tempOrderList.connectDate">
+              </div>
+              <div class="form-control">
                 <label for="reason">不良原因</label>
                 <input type="text" id="reason" v-model="tempOrderList.reason">
               </div>
@@ -381,6 +385,10 @@
               <div class="form-control">
                 <label for="inDate">進件日期</label>
                 <input type="date" id="date" v-model="tempOrderList.inDate">
+              </div>
+              <div class="form-control">
+                <label for="reason">聯絡日期</label>
+                <input type="date" id="inDate" v-model="tempOrderList.connectDate">
               </div>
               <div class="form-control">
                 <label for="reason">不良原因</label>
@@ -476,7 +484,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/x-template" id="list">
       <li>
-        <div class="date">{{ item.date }} <br> <span>( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span> </div>
+        <div class="date">{{ item.date }} <br><span v-if="item.connectDate != '' && item.connectDate != undefined" style="display: block">( {{ item.connectDate }} )</span> <span>( {{ item.mname }} )</span> <span style="display:block" v-if="item.latePay != '' && item.latePay != undefined">( 遲繳 {{ item.latePay }} 天 )</span> </div>
         <div class="name">{{ item.name }}</div>
         <div class="carId">{{ item.carId }}</div>
         <div class="phone">{{ phoneFormat }}</div>
@@ -713,11 +721,35 @@
               headers: header,
               data: data
             })
+
+
             this.allPage = response.data.nbPages;
-            this.printLen = Math.ceil(response.data.hits.length / 9);
+            real_data = []
+            if (this.searchText.split('+').length > 1) {
+              response.data.hits.forEach(item => {
+                console.log(this.searchText.split('+')[1].split('-'))
+                if (this.searchText.split('+')[1].split('-').length == 3) {
+                  console.log(item.date, this.searchText.split('+')[1])
+                  if (item.date == this.searchText.split('+')[1]) {
+                    real_data.push(item)
+                  }
+                } else if (this.searchText.split('+')[1].split('/').length == 3) {
+                  if (item.connectDate == this.searchText.split('+')[1]) {
+                    console.log('in Date')
+                    real_data.push(item)
+                  }
+                }
+              })
+            } else {
+              real_data = response.data.hits
+            }
+            // this.printLen = Math.ceil(response.data.hits.length / 9);
+            this.printLen = Math.ceil(real_data.length / 9);
             this.currentPage = page;
-            this.orderList = response.data.hits;
-            response.data.hits.forEach ((item, index) => {
+            // this.orderList = response.data.hits;
+            this.orderList = real_data;
+
+            real_data.forEach ((item, index) => {
               if (index % 9 == 0) {
                 this.printData.push([item])
               } else {
@@ -746,6 +778,7 @@
               headers: header,
               data: data
             })
+
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits
@@ -835,6 +868,9 @@
           }
         },
         editOrder(event, tempOrderList) {
+          if (tempOrderList.connectDate != undefined && tempOrderList.connectDate != '') {
+            tempOrderList.connectDate = tempOrderList.connectDate.replace(/\//g, '-');
+          }
           this.tempOrderList = tempOrderList;
           this.openEdit(event, tempOrderList)
         },
@@ -847,18 +883,25 @@
           if (sn !== 'N/A' && sn !== 'NaN') {
             sn = +sn
           }
+          let connectDate = ''
+          if (this.tempOrderList.connectDate != undefined) {
+            connectDate = this.tempOrderList.connectDate.replace(/-/g, '/')
+          }
           db.collection('MEMBERP').doc(this.tempOrderList.uId).collection('normalOrder').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           });
           db.collection('NORMALORDER').doc(this.tempOrderList.oId).set({
             ...this.tempOrderList,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           });
           this.isLoading = true
           let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
           this.orderList[index] = {
-            ...this.tempOrderList
+            ...this.tempOrderList,
+            connectDate
           }
           setTimeout(() => {
             this.isLoading = false;
@@ -918,19 +961,25 @@
           if (sn !== 'N/A' && sn !== 'NaN') {
             sn = +sn
           }
+          let connectDate = ''
+          if (this.tempOrderList.connectDate != undefined) {
+            connectDate = this.tempOrderList.connectDate.replace(/-/g, '/')
+          }
           db.collection('NORMALORDER').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           })
           db.collection('MEMBERP').doc(this.uid).collection('normalOrder').doc(id).set({
             ...this.tempOrderList,
             oId: id,
             uId: this.uid,
             mname: this.mname,
-            staging_number: sn
+            staging_number: sn,
+            connectDate
           })
 
           this.isLoading = true
@@ -939,7 +988,8 @@
               ...this.tempOrderList,
               oId: id,
               uId: this.uid,
-              mname: this.mname
+              mname: this.mname,
+              connectDate
             });
             this.isLoading = false
             this.tempOrderList = {};
@@ -1331,7 +1381,7 @@
         this.checkLogin();
         this.getAllMname();
         this.userData_search = {}
-        if (displayName == '管理' || displayName == '組長') {
+        if (this.displayName == '管理' || this.displayName == '組長') {
           let mnameTemp = await db.collection('MEMBERP').get();
           mnameTemp.forEach(item => {
             console.log(item.data())
