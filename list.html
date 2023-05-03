@@ -1383,7 +1383,7 @@
 
         this.checkLogin();
         this.getAllMname();
-        let data = await db.collection('ORDER').get();
+        // let data = await db.collection('ORDER').get();
         let { displayName } = JSON.parse(localStorage.getItem("cookie"));
         this.userData_search = {}
         if (displayName == '管理' || displayName == '組長') {

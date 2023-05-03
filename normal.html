@@ -731,6 +731,7 @@
             real_data = []
             if (this.searchText.split('+').length > 1) {
               response.data.hits.forEach(item => {
+                console.log(item.connectDate, item)
                 console.log(this.searchText.split('+')[1].split('-'))
                 if (this.searchText.split('+')[1].split('-').length == 3) {
                   console.log(item.date, this.searchText.split('+')[1])
