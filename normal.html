@@ -527,10 +527,10 @@
       appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
     });
     const db = firebase.firestore();
-    let dns = `https://C5XEZ6LJMR-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com`
+    let dns = `https://9FASR13UBV-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com`
     let header = {
-      "X-Algolia-API-Key": "d73ab2c18074c91e8a80de315f27dd49",
-      "X-Algolia-Application-Id": "C5XEZ6LJMR"
+      "X-Algolia-API-Key": "6a7e8cab8e2a48fff79492c6900b31e0",
+      "X-Algolia-Application-Id": "9FASR13UBV"
     }
     const app = Vue.createApp({
       data() {
@@ -608,6 +608,14 @@
               ...this.tempOrderList,
               detail: this.detail_content
             })
+            let editData = await db.collection('NORMALORDER').where('oId', '==', this.tempOrderList.oId).get()
+            if (editData.size > 1) {
+              editData.forEach(item => {
+                if (item.data().objectID != this.tempOrderList.oId) {
+                  db.collection('NORMALORDER').doc(item.data().objectID).delete()
+                }
+              })
+            }
             await db.collection('MEMBERP').doc(this.uid).collection('normalOrder').doc(this.tempOrderList.oId).set({
               ...this.tempOrderList,
               detail: this.detail_content
@@ -884,7 +892,7 @@
           this.tempOrderList = tempOrderList;
           this.openEdit(event, tempOrderList)
         },
-        editModal() {
+        async editModal() {
           if (this.checkList.phone == false) {
             alert('請填寫正確電話號碼');
             return;
@@ -907,6 +915,14 @@
             staging_number: sn,
             connectDate
           });
+          let editData = await db.collection('NORMALORDER').where('oId', '==', this.tempOrderList.oId).get()
+          if (editData.size > 1) {
+            editData.forEach(item => {
+              if (item.data().objectID != this.tempOrderList.oId) {
+                db.collection('NORMALORDER').doc(item.data().objectID).delete()
+              }
+            })
+          }
           this.isLoading = true
           let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
           this.orderList[index] = {
@@ -1388,6 +1404,24 @@
         this.getIp();
       },
       async mounted() {
+        // await db.collection('NORMALORDER').doc('qc1NX20F2I1KoI4x0xZp').delete()
+        // let normal_data = await db.collection('NORMALORDER').doc;
+        // normal_data.update(
+        //     {
+        //       objectID: firebase.firestore.FieldValue.delete(),
+        //       path: firebase.firestore.FieldValue.delete(),
+        //       lastmodified: firebase.firestore.FieldValue.delete()
+        //     }
+        //   )
+        // normal_data.forEach(async (item) => {
+        //   await db.collection('NORMALORDER').doc(item.oId).update(
+        //     {
+        //       objectID: firebase.firestore.FieldValue.delete(),
+        //       path: firebase.firestore.FieldValue.delete(),
+        //       lastmodified: firebase.firestore.FieldValue.delete()
+        //     }
+        //   )
+        // })
         this.checkLogin();
         this.getAllMname();
         let { displayName } = JSON.parse(localStorage.getItem("cookie"));
@@ -1395,7 +1429,6 @@
         if (displayName == '管理' || displayName == '組長') {
           let mnameTemp = await db.collection('MEMBERP').get();
           mnameTemp.forEach(item => {
-            console.log(item.data())
             this.userData_search[item.data().name] = item.data().uid
           })
         }
