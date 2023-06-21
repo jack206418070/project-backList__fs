@@ -1152,9 +1152,24 @@
         },
         async getBefore() {
           this.beforeList = [];
+          let tempList = [];
+          let list = []
           let data = await db.collection('BEFORE').get();
           data.forEach(item => {
-            this.beforeList.push(item.data().title);
+            if (item.data().order != undefined) {
+              tempList.push(item.data())
+            } else {
+              list.push(item.data())
+            }
+          })
+          tempList.sort((a, b) => {
+            return a.order - b.order
+          })
+          tempList.forEach(item => {
+            this.beforeList.push(item.title)
+          })
+          list.forEach(item => {
+            this.beforeList.push(item.title)
           })
         },
         add_Before() {
@@ -1249,7 +1264,7 @@
           axios.get("https://api.ipify.org/?format=json")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('58.114') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
                 console.log(ip, 'list')
               } else {
@@ -1346,6 +1361,74 @@
         this.getIp();
       },
       async mounted() {
+        let setData = {}
+        let result_data = []
+        let oId_arr = []
+        let two_data = []
+        // let data = await db.collection('NORMALORDER').get()
+        // data.forEach(item => {
+        //   // if (isNaN(item.data().objectID) && item.data().objectID != undefined) {
+        //   //   if (item.data.objectID == 'MroP2SLOodraQR6NHdxD') {
+        //   //     console.log('has')
+        //   //     result_data.push(item.data())
+        //   //   }
+        //   // }
+        //   // if (item.data().name == '劉又瑋S') {
+        //   //   result_data.push(item.data())
+        //   // }
+        //   if (item.data().oId in setData) {
+        //     if (item.data().oId == setData[item.data().oId][0].oId) {
+        //       setData[item.data().oId].push(item.data())
+        //     }
+        //   } else {
+        //     setData[item.data().oId] = []
+        //     setData[item.data().oId].push(item.data())
+        //   }
+        // })
+        // for (let key in setData) {
+        //   if (setData[key].length == 2) {
+        //     if (setData[key][0].carId == setData[key][1].carId) {
+        //       if(!isNaN(setData[key][0].staging_number) && !isNaN(setData[key][1].staging_number)) {
+        //         let num1 = Number(setData[key][0].staging_number);
+        //         let num2 = Number(setData[key][1].staging_number);
+
+        //         let difference = Math.abs(num1 - num2);
+        //         if (difference == 1) {
+        //           result_data.push(setData[key])
+        //         }
+        //       } 
+        //     }
+        //   }
+        // }
+        // console.log(result_data, result_data.length)
+        // result_data.forEach(item => {
+        //   oId_arr.push(item[0].oId)
+        // })
+        // // console.log(oId_arr, oId_arr.length)
+        // for (let i = 0; i < oId_arr.length - 1; i++) {
+        //   temp_data = await db.collection('NORMALORDER').where('oId', '==', oId_arr[i]).get()
+        //   temp_data.forEach(item => {
+        //     if (isNaN(item.id)) {
+        //       console.log(item.id)
+        //       console.log(item.data().oId)
+        //       db.collection('NORMALORDER').doc(item.id).delete()
+        //     }
+        //   })
+        // }
+        // for (let key in setData) {
+        //   setData[key].forEach(item => {
+        //     if (item.new_aglia == 1 && setData[key].length == 2) {
+        //       result_data.push(true)
+        //     }
+        //   })
+        //   if (setData[key].length == 1) {
+        //     one_data.push(true)
+        //   } else if (setData[key].length == 2) {
+        //     two_data.push(true)
+        //   }
+        // }
+        // console.log(Object.keys(setData).length, result_data.length, one_data.length, two_data.length)
+        // console.log(Object.keys(setData).length, result_data.length)
         // let user = await db.collection('MEMBERP').get()
         // user.forEach(item => {
         //   console.log(item.data())
@@ -1418,7 +1501,8 @@
   </script>
   <script>
     let { displayName } = JSON.parse(localStorage.getItem("cookie"));
-    
+
+
     if (displayName != '管理' && displayName != '組長') {
       document.body.oncopy = function () {
         var copyWarn = document.querySelector('#copyWarnId');
