@@ -1254,7 +1254,7 @@
           return `${val.slice(0, 4)}-${val.slice(4, 7)}-${val.slice(7, 10)}`
         },
         getIp() {
-          axios.get("https://api.ipify.org/?format=json")
+          axios.get("https://keelung.unitrip.asia/api/get_ip")
             .then(res => {
               let ip = res.data.ip;
               if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
