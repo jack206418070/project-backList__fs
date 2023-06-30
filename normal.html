@@ -59,7 +59,7 @@
       <div class="container-lg">
         <div class="list">
           <div class="list-title">一般頁面</div>
-          <div v-if="show_page" class="pagnation" style="position: sticky; top: 0px; background: lightblue; padding: 15px 0; z-index: 99">
+          <div v-if="show_page" class="pagnation" style="position: sticky; top: 0px; background: #F8F9F0; padding: 15px 0; z-index: 99">
             <ul class="d-flex jy-content-center">
                 <li>
                     <a href="#" @click.prevent="getOrderList(currentPage - 1)">上一頁</a>
@@ -77,7 +77,7 @@
         <div v-if="search_count != ''">
           <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">搜尋數量: {{ search_count }}</p>
         </div>
-          <div class="add__list" style="position: sticky; top: 70px; background: lightblue; padding: 15px 0; z-index: 99">
+          <div class="add__list" style="position: sticky; top: 70px; background: #F8F9F0; padding: 15px 0; z-index: 99">
             <a class="add" href="#"
               @click.prevent="openAddOrder">新增訂單</a>
             <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
@@ -130,7 +130,7 @@
           </div>
 
           <ul class="no-print">
-            <li style="position: sticky; top: 130px; background: lightblue; z-index: 99">
+            <li style="position: sticky; top: 130px; background: #F8F9F0; z-index: 99">
               <div class="date">日期
                 <i v-if="modalControl.is_order_dec == 0 && modalControl.is_page == 0" class="fa-solid fa-angles-down"
                   @click="modalControl.is_order_dec = 1; filterData = 1"></i>

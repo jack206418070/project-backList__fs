@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: lightblue;
+  background-color: #F8F9F0;
 }
 
 .container {
@@ -89,7 +89,7 @@ body {
     .add {
       display: block;
       padding: 6px 10px;
-      background-color: blue;
+      background-color: #727880;
       color: white;
       text-align: center;
       width: 12%;
@@ -550,7 +550,7 @@ body {
 }
 
 .header {
-  background-color: #fff;
+  background-color: #617E89;
 
   .container-lg {
     padding: 10px 40px;
@@ -561,17 +561,31 @@ body {
 }
 
 .menu {
+  background: #617E89;
   a {
     display: block;
     padding: 8px 20px;
     font-size: 24px;
     font-weight: bold;
-    color: #000;
+    color: #fff;
     cursor: pointer;
-
+    transition: .5s;
     &:hover {
-      color: blue;
+      color: #000;
     }
+  }
+  input {
+    background-color: #617E89;
+    box-shadow: none;
+    outline: none;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 18px;
+    transition: .5s;
+  }
+  input:focus {
+    border: 2px solid #000;
   }
 }
 
@@ -634,11 +648,14 @@ body {
   margin: 0 auto;
   margin-bottom: 30px;
   text-align: center;
-  font-size: 32px;
   font-weight: 500;
-  width: 30%;
+  width: 20%;
   padding: 30px 0;
-  background: rgba(255, 255, 255, 0.8);
+  font-size: 55px;
+  color: #fff;
+  border-radius: 40px;
+  letter-spacing: 2px;
+  background:  #617E89;
 }
 
 .before-modal,
