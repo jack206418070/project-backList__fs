@@ -73,7 +73,7 @@
             });
         },
         getIp() {
-          axios.get("https://api.ipify.org/?format=json")
+          axios.get("http://104.155.212.175/get_ip")
             .then(res => {
               let ip = res.data.ip;
               this.ip = ip;
