@@ -73,7 +73,7 @@
             });
         },
         getIp() {
-          axios.get("https://keelung.unitrip.asia/get_ip")
+          axios.get("https://keelung.unitrip.asia/api/get_ip")
             .then(res => {
               let ip = res.data.ip;
               this.ip = ip;
