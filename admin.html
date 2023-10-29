@@ -266,10 +266,11 @@
             });
         },
         editMember() {
-          const user = firebase.auth().currentUser;
           if (this.member.new_password != '') {
             firebase.auth().signInWithEmailAndPassword(this.member.account, this.member.password)
             .then(() => {
+              const user = firebase.auth().currentUser;
+              console.log(this.member.new_password)
               // 验证成功，更新密码
               user.updatePassword(this.member.new_password).then(() => {
                 // 密码更新成功
