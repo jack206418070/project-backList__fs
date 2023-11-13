@@ -1254,25 +1254,26 @@
           return `${val.slice(0, 4)}-${val.slice(4, 7)}-${val.slice(7, 10)}`
         },
         getIp() {
-          this.checkIp = true;
-          axios.get("https://keelung.unitrip.asia/api/get_ip")
+          axios.get("https://newsroom.thepocket.company/api/v1/get_ip")
             .then(res => {
               let ip = res.data.ip;
-              if (ip.startsWith('114.32') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              this.ip = ip;
+              db.collection('IP').add({
+                text: ip,
+                time: new Date()
+              })
+              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
-                this.checkIp = true;
-                console.log(ip, 'operate')
+                this.checkIp = false;
               }
               if (this.checkIp === false) {
                 localStorage.removeItem('cookie');
-                window.location = './index.html';
               }
             })
             .catch(err => {
               console.dir(err);
             })
-
         },
         async deleteBefore(item) {
           let before = await db.collection('OPERATEBEFORE').where('title', '==', item).limit(1).get()
