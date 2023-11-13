@@ -1345,6 +1345,7 @@
           return `${val.slice(0, 4)}-${val.slice(4, 7)}-${val.slice(7, 10)}`
         },
         getIp() {
+          this.checkIp = true;
           axios.get("https://keelung.unitrip.asia/api/get_ip")
             .then(res => {
               let ip = res.data.ip;
