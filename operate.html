@@ -1015,21 +1015,31 @@
           if(before !== '不管有無貸款' && mname !== '所有業務') {
             if(before == '有前貸') {
               temp.forEach(item => {
-                if(item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
-                  this.orderList.push(item.data())
+                if (item.data().before !== '無貸款' && item.data().before != undefined) {
+                  if (item.data().mname != undefined) {
+                    if ((item.data().mname).trim() == mname) {
+                      this.orderList.push(item.data())
+                    }
+                  }
                 }
               })
             } else {
               temp.forEach(item => {
-                if((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
-                  this.orderList.push(item.data())
+                if (item.data().before !== '無貸款' && item.data().before == undefined) {
+                  if (item.data().mname != undefined) {
+                    if ((item.data().mname).trim() == mname) {
+                      this.orderList.push(item.data())
+                    }
+                  }
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname !== '所有業務') {
             temp.forEach(item => {
-              if(item.data().mname == mname) {
-                this.orderList.push(item.data())
+              if (item.data().mname != undefined) {
+                if ((item.data().mname).trim() == mname) {
+                  this.orderList.push(item.data())
+                }
               }
             })
           } else if (before !== '不管有無貸款' && mname == '所有業務') {
@@ -1262,7 +1272,7 @@
                 text: ip,
                 time: new Date()
               })
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.39') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;

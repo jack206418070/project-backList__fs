@@ -47,6 +47,7 @@
       appId: "1:636865072797:web:fd6917d1a3c15bb5fc8e74"
     });
     const db = firebase.firestore();
+    console.log(db)
     const app = Vue.createApp({
       data() {
         return {
@@ -81,7 +82,7 @@
                 text: ip,
                 time: new Date()
               })
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.39') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;

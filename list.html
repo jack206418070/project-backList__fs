@@ -87,8 +87,7 @@
               <span v-else>切換顯示方法(全部顯示)</span>
             </a>
           </div>
-          <div class="add__list"
-            style="position: sticky; top: 70px; background: #F8F9F0; padding: 15px 0; z-index:99;">
+          <div class="add__list" style="position: sticky; top: 70px; background: #F8F9F0; padding: 15px 0; z-index:99;">
             <a class="add" href="#" @click.prevent="openAddOrder">新增訂單</a>
             <a class="add" href="#" @click.prevent="openBefore">前貸管理</a>
             <a class="add" href="#" @click.prevent="openNumber">總期數管理</a>
@@ -196,7 +195,7 @@
               <div class="btn-control">操作</div>
             </li>
             <list v-for="item in printData[page - 1]" :key="item.id" :item="item" :uid="uid" :display-name="displayName"
-            @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList" @detail-order="detailOrder">
+              @delete-order="deleteOrder" @edit-order="editOrder" @trans-list="transList" @detail-order="detailOrder">
             </list>
           </ul>
         </div>
@@ -241,7 +240,8 @@
             <div class="form-group" style="align-items: center">
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
-                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')" style="margin-bottom: 40px">
+                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')"
+                  style="margin-bottom: 40px">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <select name="before" id="before" v-model="tempOrderList.before" style="width: 100%;">
@@ -278,7 +278,8 @@
               </div>
               <div class="form-control">
                 <label for="latePay">遲繳天數</label>
-                <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay" placeholder="不填寫=無遲繳">
+                <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay"
+                  placeholder="不填寫=無遲繳">
                 <span style="padding-left: 4px">天</span>
               </div>
             </div>
@@ -331,7 +332,8 @@
             <div class="form-group" style="align-items: center">
               <div class="form-control">
                 <label for="phone">電話(必填)</label>
-                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')" style="margin-bottom: 40px">
+                <input type="phone" id="phone" v-model="tempOrderList.phone" @blur="checkFormOrder('phone')"
+                  style="margin-bottom: 40px">
                 <label for="before">前貸</label>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <select name="before" id="before" v-model="tempOrderList.before" style="width: 100%;">
@@ -369,7 +371,8 @@
               </div>
               <div class="form-control">
                 <label for="latePay">遲繳天數</label>
-                <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay" placeholder="不填寫=無遲繳">
+                <input style="width: 90%" type="text" id="latePay" v-model="tempOrderList.latePay"
+                  placeholder="不填寫=無遲繳">
                 <span style="padding-left: 4px">天</span>
               </div>
             </div>
@@ -696,7 +699,7 @@
                   hitsPerPage: 1000,
                   page: page,
                   query: this.searchText,
-                  'filters':  `(uId:${this.userData_search[searchArray[0]]})`
+                  'filters': `(uId:${this.userData_search[searchArray[0]]})`
                 }
               }
             }
@@ -738,7 +741,7 @@
             // this.orderList = response.data.hits;
             this.orderList = real_data;
 
-            real_data.forEach ((item, index) => {
+            real_data.forEach((item, index) => {
               if (index % 9 == 0) {
                 this.printData.push([item])
               } else {
@@ -1064,6 +1067,7 @@
           let temp = []
           let before = this.search.before
           let mname = this.search.mname
+          console.log(mname)
           let Ctype = this.search.type
           if (type == '=') {
             if (Ctype == '') {
@@ -1105,28 +1109,37 @@
           if (before !== '不管有無貸款' && mname !== '所有業務') {
             if (before == '有前貸') {
               temp.forEach(item => {
-                if (item.data().before !== '無貸款' && item.data().before != undefined && item.data().mname == mname) {
-                  this.orderList.push(item.data())
+                if (item.data().before !== '無貸款' && item.data().before != undefined) {
+                  if (item.data().mname != undefined) {
+                    if ((item.data().mname).trim() == mname) {
+                      this.orderList.push(item.data())
+                    }
+                  }
                 }
               })
             } else {
               temp.forEach(item => {
-                if ((item.data().before == '無貸款' || item.data().before == undefined) && item.data().mname == mname) {
-                  this.orderList.push(item.data())
+                if ((item.data().before == '無貸款' || item.data().before == undefined)) {
+                  if (item.data().mname != undefined) {
+                    if ((item.data().mname).trim() == mname) {
+                      this.orderList.push(item.data())
+                    }
+                  }
                 }
               })
             }
           } else if (before == '不管有無貸款' && mname !== '所有業務') {
             temp.forEach(item => {
-              if (item.data().mname == mname) {
-                this.orderList.push(item.data())
+              if (item.data().mname != undefined) {
+                if ((item.data().mname).trim() == mname) {
+                  this.orderList.push(item.data())
+                }
               }
             })
           } else if (before !== '不管有無貸款' && mname == '所有業務') {
             if (before == '有前貸') {
               temp.forEach(item => {
                 if (item.data().before !== '無貸款' && item.data().before != undefined) {
-                  console.log(item.data())
                   this.orderList.push(item.data())
                 }
               })
@@ -1221,7 +1234,7 @@
           document.querySelector('.detail-modal').style.zIndex = -10;
           document.querySelector('.detail-modal').style.top = `-1200px`;
           this.tempOrderList = {
-            staging_allNumber:"N/A"
+            staging_allNumber: "N/A"
           }
         },
         openBefore() {
@@ -1269,7 +1282,7 @@
                 text: ip,
                 time: new Date()
               })
-              if (ip.startsWith('101.10') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.39') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1455,14 +1468,14 @@
         // })
         // await db.collection('MEMBERP').doc('JnXPMHgZSoe35S9gnoxy8DVQ9313').delete()
         // testTemp.forEach(item => {
-          // db.collection('NAORDER').doc(item.id).set({
-          //   ...item.data(),
-          //   mname: 'Evan',
-          //   uId: 'mgHoZet7iaZyGNf6mmsxydlOQvu1'
-          // })
-          // db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').collection('normalOrder').doc(item.id).set({
-          //   ...item.data()
-          // })
+        // db.collection('NAORDER').doc(item.id).set({
+        //   ...item.data(),
+        //   mname: 'Evan',
+        //   uId: 'mgHoZet7iaZyGNf6mmsxydlOQvu1'
+        // })
+        // db.collection('MEMBERP').doc('mgHoZet7iaZyGNf6mmsxydlOQvu1').collection('normalOrder').doc(item.id).set({
+        //   ...item.data()
+        // })
         // })
 
         this.checkLogin();
