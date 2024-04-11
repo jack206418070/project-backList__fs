@@ -1364,7 +1364,7 @@
                 text: ip,
                 time: new Date()
               })
-              if (ip.startsWith('114.34') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127')) {
+              if (ip.startsWith('114.39') || ip.startsWith('118.170') || ip.startsWith('116.241.172.18') || ip.startsWith('114.46') || ip.startsWith('59.127') || ip.startsWith('125.231')) {
                 this.checkIp = true;
               } else {
                 this.checkIp = false;
@@ -1434,6 +1434,10 @@
         this.getIp();
       },
       async mounted() {
+        const temp_data = await db.collection('NORMALORDER').get();
+        temp_data.forEach(item => {
+          console.log(item.data());
+        })
         // await db.collection('NORMALORDER').doc('qc1NX20F2I1KoI4x0xZp').delete()
         // let normal_data = await db.collection('NORMALORDER').doc;
         // normal_data.update(
