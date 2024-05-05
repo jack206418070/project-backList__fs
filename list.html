@@ -260,7 +260,7 @@
                 汽<input type="radio" value="汽" v-model="tempOrderList.type">
                 機<input type="radio" value="機" v-model="tempOrderList.type" style="margin-bottom: 13px;">
                 <label for="staging_number">已繳期數(必填)<br>(若無期數填寫 N/A)</label>
-                <input type="text" id="staging_number" v-model="tempOrderList.staging_number" style="width: 100%">
+                <input type="text" id="staging_number" v-model="tempOrderList.staging_number" style="width: 100%" placeholder="N/A">
                 <label for="staging.allNumber">總期數</label>
                 <select v-model="tempOrderList.staging_allNumber" name="staging_allNumber" id="staging_allNumber">
                   <option v-for="item in allNumberList" :value="item">{{item}}期</option>
@@ -864,14 +864,15 @@
           }
         },
         add() {
+          // set default staging number if it's empty
+          if (this.tempOrderList.staging_number == '') {
+            this.tempOrderList.staging_number = 'N/A';
+          }
           if (this.checkList.phone == false || this.tempOrderList.phone == '') {
             alert('請填寫正確電話號碼');
             return;
           } else if (this.tempOrderList.name == '') {
             alert('請填入姓名');
-            return;
-          } else if (this.tempOrderList.staging_number == '') {
-            alert('請填入期數');
             return;
           } else if (this.tempOrderList.date == '') {
             alert('請填入日期');
