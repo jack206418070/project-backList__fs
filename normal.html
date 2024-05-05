@@ -1491,14 +1491,14 @@
   <script>
     let { displayName } = JSON.parse(localStorage.getItem("cookie"));
     if (displayName != '管理' && displayName != '組長') {
-      document.body.oncopy = function () {
-        var copyWarn = document.querySelector('#copyWarnId');
-        console.log(copyWarn)
-        copyWarn.value = ''
-        copyWarn.select();
-        copyWarn.setSelectionRange(0, copyWarn.value.length);
-        document.execCommand('copy');
-      }
+      // document.body.oncopy = function () {
+      //   var copyWarn = document.querySelector('#copyWarnId');
+      //   console.log(copyWarn)
+      //   copyWarn.value = ''
+      //   copyWarn.select();
+      //   copyWarn.setSelectionRange(0, copyWarn.value.length);
+      //   document.execCommand('copy');
+      // }
       document.querySelector('body').addEventListener('keyup', function (e) {
         if (e.keyCode == 44) {
           var copyWarn = document.querySelector('#copyWarnId');
