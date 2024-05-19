@@ -490,7 +490,7 @@
         </div>
         <div class="before">{{ item.before }}</div>
         <div class="money">{{ item.money }}</div>
-        <div class="staging">{{ item.staging_number }} / {{ item.staging_allNumber }}</div>
+        <div class="staging"><div>{{ item.staging_number }} / {{ item.staging_allNumber }}</div><div>{{item.prev_staging_date}}</div></div>
         <div class="month">{{ item.month }}</div>
         <div class="dieLine">{{ item.dieLine }}</div>
         <div class="extra">{{ item.extra }}</div>
@@ -815,6 +815,20 @@
             return;
           }
           let sn = this.tempOrderList.staging_number
+          let san = this.tempOrderList.staging_allNumber
+          // update prev_staging_date if needed
+          if (sn !== 'N/A' && sn !== 'NaN' && san !== 'N/A' && san !== 'NaN') {
+            let index = this.orderList.findIndex(item => item.oId === this.tempOrderList.oId);
+            if (this.orderList[index].staging_number !== sn || this.orderList[index].staging_allNumber !== san) {
+              let date = new Date();
+              let year = date.getFullYear();
+              let month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-11, so add 1
+              let day = String(date.getDate()).padStart(2, '0');
+
+              let formattedDate = `${year}-${month}-${day}`;
+              this.tempOrderList.prev_staging_date = formattedDate;
+            }
+          }
           if (sn !== 'N/A' && sn !== 'NaN') {
             sn = +sn
           }
