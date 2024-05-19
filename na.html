@@ -74,6 +74,21 @@
                 </li>
             </ul>
         </div>
+        <div v-if="normal_search_count !== null">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">一般頁面: {{ normal_search_count }}</p>
+        </div>
+        <div v-if="order_search_count !== null">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">增量頁面: {{ order_search_count }}</p>
+        </div>
+        <div v-if="na_search_count !== null">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">NA頁面: {{ na_search_count }}</p>
+        </div>
+        <div v-if="operate_search_count !== null">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">經營頁面: {{ operate_search_count }}</p>
+        </div>
+        <div v-if="search_count !== null">
+          <p style="font-size: 24px; font-weight: bold; padding-left: 16px; color: red;">搜尋數量: {{ search_count }}</p>
+        </div>
           <div class="add__list" style="position: sticky; top: 70px; background: #F8F9F0; padding: 15px 0; z-index: 99">
             <a class="add" href="#"
               @click.prevent="openAddOrder">新增訂單</a>
@@ -572,7 +587,13 @@
           printLen: 0,
           detail_content: '',
           show_page: true,
-          userData_search: {}
+          userData_search: {},
+          search_count: null,
+          normal_search_count: null,
+          order_search_count: null,
+          na_search_count: null,
+          operate_search_count: null,
+          page_type: 'NAORDER',
         }
       },
       methods: {
@@ -714,6 +735,11 @@
               data: data
             })
             this.allPage = response.data.nbPages;
+            if (this.searchText != '') {
+              this.search_count = response.data.nbHits;
+              data.hitsPerPage = 0;
+              await this.getCounts(data);
+            }
             this.printLen = Math.ceil(response.data.hits.length / 9);
             this.currentPage = page;
             this.orderList = response.data.hits;
@@ -821,6 +847,56 @@
           //     }
           //   }
           // }
+        },
+        async getCounts(data) {
+          let indexes = [
+            {
+              "type": "NORMALORDER",
+              "X-Algolia-API-Key": "6a7e8cab8e2a48fff79492c6900b31e0",
+              "X-Algolia-Application-Id": "9FASR13UBV"
+            },
+            {
+              "type": "ORDER",
+              "X-Algolia-API-Key": "d73ab2c18074c91e8a80de315f27dd49",
+              "X-Algolia-Application-Id": "C5XEZ6LJMR"
+            },
+            {
+              "type": "NAORDER",
+              "X-Algolia-API-Key": "75c8e06cda710722f07aaf6ed770c8b6",
+              "X-Algolia-Application-Id": "XJWMY39KGA"
+            },
+            {
+              "type": "OPERATEORDER",
+              "X-Algolia-API-Key": "75c8e06cda710722f07aaf6ed770c8b6",
+              "X-Algolia-Application-Id": "XJWMY39KGA"
+            }
+          ];
+          await Promise.all(indexes.map(async index => {
+            if (index.type === this.page_type) {
+              return;
+            }
+            let key = index['X-Algolia-Application-Id']
+            let header = {
+              "X-Algolia-API-Key": index["X-Algolia-API-Key"],
+              "X-Algolia-Application-Id": index["X-Algolia-Application-Id"]
+            }
+            let url = `https://${key}-${(Math.floor(Math.random() * 3) + 1)}.algolianet.com/1/indexes/${index.type}/query`;
+            let response = await axios({
+              method: "post",
+              url: url,
+              headers: header,
+              data: data
+            });
+            if (index.type === 'NORMALORDER') {
+              this.normal_search_count = response.data.nbHits;
+            } else if (index.type === 'ORDER') {
+              this.order_search_count = response.data.nbHits;
+            } else if (index.type === 'NAORDER') {
+              this.na_search_count = response.data.nbHits;
+            } else if (index.type === 'OPERATEORDER') {
+              this.operate_search_count = response.data.nbHits;
+            }
+          }));
         },
         checkLogin() {
           if (localStorage.getItem("cookie")) {
