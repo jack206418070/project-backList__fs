@@ -806,6 +806,11 @@
             this.allPage = response.data.nbPages;
             this.currentPage = page;
             this.orderList = response.data.hits;
+            if (this.searchText != '') {
+              this.search_count = response.data.nbHits;
+              data.hitsPerPage = 0;
+              await this.getCounts(data);
+            }
           }
         },
         async getCounts(data) {
